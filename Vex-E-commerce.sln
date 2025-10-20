@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vex-E-commerce", "Vex-E-commerce.csproj", "{2A28DD87-F046-C85B-5F2D-088D0397BA09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A28DD87-F046-C85B-5F2D-088D0397BA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A28DD87-F046-C85B-5F2D-088D0397BA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A28DD87-F046-C85B-5F2D-088D0397BA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A28DD87-F046-C85B-5F2D-088D0397BA09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05628194-58F4-4475-A283-88254A63C2C9}
+	EndGlobalSection
+EndGlobal
