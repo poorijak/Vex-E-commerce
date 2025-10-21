@@ -10,12 +10,10 @@
     <link rel="stylesheet" href="~/Vex_E_commerce.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
     <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="_content/Sysinfocus.AspNetCore.Components/styles.css" />
-    <link rel="stylesheet" href="_content/Sysinfocus.AspNetCore.Components/Sysinfocus.AspNetCore.Components.bundle.scp.css" />
 
 </head>
 <body>
-    <header>
+    <header class="fixed min-w-svw bg-[#fafafa] shadow-sm">
             <div class="flex items-start justify-between px-14 py-5">
             <div class="text-2xl font-bold">
                 <a href="/">Vex</a>
@@ -44,6 +42,7 @@
     </header>
 
     @RenderBody()
+    <script src="_framework/blazor.server.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
