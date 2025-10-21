@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Vex_E_commerce.Data;
@@ -11,7 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
@@ -21,6 +23,13 @@ builder.Services.AddAuthentication().AddGoogle(googleOption =>
 {
     googleOption.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     googleOption.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+    googleOption.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+    googleOption.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+
+
+    googleOption.ClaimActions.MapJsonKey("picture", "picture", "url");
+
 });
 
 var app = builder.Build();
