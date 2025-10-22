@@ -120,6 +120,7 @@ namespace Vex_E_commerce.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 user.Status = UserStatus.Active;
+                user.Role = UserRole.Customer;
 
                 if (result.Succeeded)
                 {

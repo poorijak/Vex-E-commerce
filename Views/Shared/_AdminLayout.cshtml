@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vex_E_commerce</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Vex_E_commerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <link href="
+https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css
+" rel="stylesheet">
+
+</head>
+<body>
+   <div class="min-h-svh">
+       @* header *@
+        <div class="fixed h-[76px] w-full border-b border-border bg-white">
+           <div class="flex items-center justify-end p-4">
+                <partial name="AdminPartial/_AdminProfilePartial" />
+            </div>
+        </div>
+            
+
+
+        <div class="flex">
+            @* Side *@
+            <partial name="AdminPartial/_SideAdminPartial" />
+
+            @* content *@
+            <div class="mt-24 mr-20 ml-80 flex-1 bg-[#FAFAFA]">
+                @RenderBody()
+            </div>
+        </div>
+   </div>
+</body>
+</html>
+<script src="
+https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js
+"></script>

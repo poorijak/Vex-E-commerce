@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Customer> SignInManager
+@inject UserManager<Customer> userManager
+
+@{
+    var user = await userManager.GetUserAsync(User);
+    var menuList = new[]
+    {
+        new {
+            Label = "Product",
+            Icon = "ph ph-shopping-cart",
+
+            Url = "/Admin"
+        },
+        new {
+            Label = "Orders",
+            Icon = "ph ph-clipboard-text",
+
+            Url = "/Admin/Orders"
+        },
+        new {
+            Label = "Customer",
+            Icon = "ph ph-users-three",
+            Url = "/Admin/Customer"
+        }
+    };
+
+    var pathname = Context.Request.Path;
+
+
+}
+
+<div class="border- fixed z-50 h-screen w-[280px] border-r border-border bg-white pt-5">
+    <div class="bg-whhite h-14 border-b border-border">
+        <a class="ml-10 flex items-center gap-2 text-4xl font-bold hover:cursor-pointer" asp-controller="Admin" asp-action="Index">Vex <span class="rounded-sm bg-primary px-3 py-1 text-lg text-white">Admin</span></a>
+    </div>
+    <div class="my-5 ml-10">
+        <div>
+            <p class="text-muted-foreground text-base">Welcome back,</p>
+            <p class="w-20 text-sm font-bold text-wrap">@user.Email</p>
+        </div>
+    </div>
+    <div class="h-px border-b border-border"></div>
+    <div class="mt-5 ml-10 flex flex-col gap-5">
+        @foreach (var item in menuList)
+        {
+            var isActive = pathname == item.Url;
+            <div>
+
+                <a href="@item.Url" class="font flex items-center gap-5 text-center text-base font-semibold @(isActive ? "text-primary" : "text-gray-500 hover:text-gray-900")"><i class='@item.Icon text-xl'></i> <span>@item.Label</span></a>
+            </div>
+        }
+
+    </div>
+ </div>

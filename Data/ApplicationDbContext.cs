@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext
         base.OnModelCreating(builder);
 
         builder.Entity<Customer>().Property(u => u.Status).HasConversion<string>();
+        builder.Entity<Customer>().Property(u => u.Role).HasConversion<string>();
         
 
     }

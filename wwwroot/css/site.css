@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 
 
@@ -115,59 +115,70 @@
 
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-Thin.woff2') format('woff2');
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-Thin.woff2') format('woff2');
     font-weight: 100;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-ExtraLight.woff2') format('woff2');
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-ExtraLight.woff2') format('woff2');
     font-weight: 200;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-Light.woff2') format('woff2');
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-Light.woff2') format('woff2');
     font-weight: 300;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-Regular.woff2') format('woff2');
-    font-weight: 400; /* Regular / Normal */
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-Medium.woff2') format('woff2');
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-Medium.woff2') format('woff2');
     font-weight: 500;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-SemiBold.woff2') format('woff2');
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-SemiBold.woff2') format('woff2');
     font-weight: 600;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-Bold.woff2') format('woff2');
-    font-weight: 700; /* Bold */
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-ExtraBold.woff2') format('woff2');
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-ExtraBold.woff2') format('woff2');
     font-weight: 800;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Nohemi';
-    src: url('../font/Nohemi-Black.woff2') format('woff2');
-    font-weight: 900; /* Black */
+    font-family: 'Geist Sans';
+    src: url('../font/Geist-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
 }
+
+/* ใช้งานทั่วทั้งเว็บ */
 body {
-    font-family: 'Nohemi', sans-serif;
-    background-color : #fafafa
+    font-family: 'Geist Sans', sans-serif;
+    background-color: #fafafa;
 }
