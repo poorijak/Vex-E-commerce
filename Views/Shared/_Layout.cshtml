@@ -13,32 +13,33 @@
 
 </head>
 <body>
-    <header class="fixed min-w-svw bg-[#fafafa] shadow-sm">
-            <div class="flex items-start justify-between px-14 py-5">
-            <div class="text-2xl font-bold">
+    <header class="fixed min-w-svw shadow-sm">
+        <div class="flex items-center justify-between bg-[#fafafa] px-14 py-5">
+            <div class="text-3xl font-bold">
                 <a href="/">Vex</a>
             </div>
 
             <div class="flex flex-col items-center justify-center gap-5">
-                <div class="relative flex items-center justify-center">
+                @* <div class="relative flex items-center justify-center">
                     <input type="text"
                            placeholder="Search..."
                            aria-label="Search"
                            class="relative w-[500px] rounded-full bg-[#F3F3F3] py-1 pr-4 pl-10 placeholder:text-muted-foreground placeholder:text-sm" />
 
                     <i class='bx bx-search absolute top-1/2 left-4 -translate-y-1/2 text-gray-500'></i>
+                </div> *@
+                <div class="flex items-center justify-center gap-10">
+                    <a class="hover:underline" href="/category">Category</a>
+                    <a class="hover:underline" href="/Shop">Shop</a>
+                    <a class="hover:underline" href="/About-us">About</a>
+                    <a class="hover:underline" href="/Contact">Contact</a>
+
                 </div>
 
-                <div class="flex gap-10">
-                    <a href="/category">Category</a>
-                    <a href="/Shop">Shop</a>
-                    <a href="/About-us">About</a>
-                    <a href="/Contact">Contact</a>
-                    
-                </div>
             </div>
             <partial name="_LoginPartial" />
         </div>
+       
     </header>
 
     @RenderBody()
