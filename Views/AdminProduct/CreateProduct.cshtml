@@ -1,26 +1,163 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Vex_E_commerce.Models.Category>
+
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="w-full">
     <h1 class="text-2xl font-bold">Add New Product</h1>
-    <div class="my-5 h-px border-b border-border"></div>
+    <div class="mt-5 h-px border-b border-border"></div>
 
-        <form action="/" method="post">
-        <div class="grid grid-cols-2 md:grid-col-1">
-
-            <div>
+    <div class="grid grid-cols-1 md:grid-cols-3">
+        <div class="col-span-1 mt-3 border-r border-border pr-5">
+            <div class="flex flex-col gap-3">
+                <!-- General Information -->
                 <div>
-                    <h2 class="text-lg font-medium">General Infomation</h2>
+                    <h2 class="my-3 font-medium">General Information</h2>
+                    <form method="post" asp-controller="Admin" asp-action="CreateCategory">
+                        <div class="flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="font-mono text-sm">
+                                    Title <span class="text-red-500">*</span>
+                                </label>
+                                <input aria-required="true"
+                                       placeholder="Enter your category title..."
+                                       class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                                <span></span>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="font-mono text-sm text-gray-900">
+                                    Description <span class="text-red-500">*</span>
+                                </label>
+                                <textarea id="message"
+                                          rows="4"
+                                          class="block w-full rounded-sm border border-border bg-white p-2.5 text-sm text-gray-900 placeholder:text-muted-foreground"
+                                          placeholder="...">
+                                </textarea>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="mt-6">
-                    <label>Product Name</label>
+
+                <div class="my-2 h-px flex-1 border-b border-border"></div>
+
+                <!-- Category Dropdown -->
+                <h2 class="font-medium">Pricing and stock</h2>
+                <div class="flex flex-col gap-2">
+                    <label class="font-mono text-sm text-gray-900">
+                        Category <span class="text-red-500">*</span>
+                    </label>
+
+                    <input type="hidden" id="selectedCategoryId" name="Product.CategoryId" />
+
+                    <div class="relative">
+                        <button id="dropdownDefaultButton"
+                                data-dropdown-toggle="dropdown"
+                                type="button"
+                                class="flex items-center justify-between rounded-sm border border-border bg-white px-4 py-2.5 text-center text-sm font-medium text-primary hover:cursor-pointer">
+                            <span id="selectedCategorySpan">Select Category</span>
+                            <svg class="ms-3 h-2.5 w-2.5"
+                                 aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 10 6">
+                                <path stroke="currentColor"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="1"
+                                      d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+
+                        <div id="dropdown"
+                             class="absolute top-14 z-40 hidden w-full divide-y divide-gray-100 rounded-lg bg-white shadow-sm hover:cursor-pointer dark:bg-gray-700">
+                            <ul class="w-full border border-border p-2 text-sm text-gray-700 dark:text-gray-200"
+                                aria-labelledby="dropdownDefaultButton">
+                                @foreach (var cate in Model)
+                                {
+                                    <li>
+                                        <a href="#"
+                                           data-id="@cate.Id"
+                                           data-title="@cate.Title"
+                                           class="category-item block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            @cate.Title
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="my-2 h-px flex-1 border-b border-border"></div>
+
+                <!-- Pricing and Stock -->
+                <div>
+                    <h2 class="mb-3 font-medium">Pricing and stock</h2>
+                    <form method="post" asp-controller="Admin" asp-action="CreateCategory">
+                        <div class="flex gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="font-mono text-sm">
+                                    Discount <span class="text-red-500">*</span>
+                                </label>
+                                <input aria-required="true"
+                                       placeholder="0.00"
+                                       class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                                <span></span>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="font-mono text-sm">
+                                    Sale Price <span class="text-red-500">*</span>
+                                </label>
+                                <input aria-required="true"
+                                       placeholder="0.00"
+                                       class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                                <span></span>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div>Product Image</div>
-            </div>
-        </form>
+        </div>
+        <div class="col-span-2">
+            <partial name="AdminPartial/_Product_variant" />
+        </div>
+    </div>
 </div>
+
+<script>
+    const button = document.getElementById("dropdownDefaultButton");
+    const menu = document.getElementById("dropdown");
+    const categoryIdInput = document.getElementById("selectedCategoryId");
+    const categoryTitleSpan = document.getElementById("selectedCategorySpan");
+    const categoryItems = document.querySelectorAll(".category-item");
+
+    // Toggle dropdown
+    button.addEventListener("click", (event) => {
+        event.preventDefault();
+        menu.classList.toggle("hidden");
+    });
+
+    // Select category
+    categoryItems.forEach((item) => {
+        item.addEventListener("click", (event) => {
+            event.preventDefault();
+            const id = item.getAttribute("data-id");
+            const title = item.getAttribute("data-title");
+            categoryIdInput.value = id;
+            categoryTitleSpan.textContent = title;
+            menu.classList.add("hidden");
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!button.contains(event.target) && !menu.contains(event.target)) {
+            if (!menu.classList.contains("hidden")) {
+                menu.classList.add("hidden");
+            }
+        }
+    });
+</script>

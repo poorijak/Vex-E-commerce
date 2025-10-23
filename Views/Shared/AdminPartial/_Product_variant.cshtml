@@ -1,0 +1,154 @@
+﻿<!-- ตัวเลือก -->
+<div class="space-y-6">
+    <section>
+        <h3 class="text-lg font-semibold">Size</h3>
+        <div id="size-options" class="mt-3 flex flex-wrap gap-3">
+            <button type="button" class="opt size border px-6 py-3" data-value="XS">XS</button>
+            <button type="button" class="opt size border px-6 py-3" data-value="S">S</button>
+            <button type="button" class="opt size border px-6 py-3" data-value="M">M</button>
+            <button type="button" class="opt size border px-6 py-3" data-value="L">L</button>
+            <button type="button" class="opt size border px-6 py-3" data-value="XL">XL</button>
+            <button type="button" class="opt size border px-6 py-3" data-value="XXL">XXL</button>
+        </div>
+    </section>
+
+    <section>
+        <h3 class="text-lg font-semibold">Color</h3>
+        <div id="color-options" class="mt-3 flex gap-3">
+            <button type="button" class="opt color h-10 w-10 rounded bg-red-600" data-value="Red" title="Red"></button>
+            <button type="button" class="opt color h-10 w-10 rounded bg-neutral-900" data-value="Black" title="Black"></button>
+            <button type="button" class="opt color h-10 w-10 rounded border bg-white" data-value="White" title="White"></button>
+        </div>
+    </section>
+</div>
+
+<hr class="my-6" />
+
+<!-- ตารางผลลัพธ์ -->
+<div>
+    <h3 class="mb-3 text-lg font-semibold">Generated Variants</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full border text-sm" id="variant-table">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="border px-3 py-2 text-left">#</th>
+                    <th class="border px-3 py-2 text-left">Size</th>
+                    <th class="border px-3 py-2 text-left">Color</th>
+                    <th class="border px-3 py-2 text-left">SKU</th>
+                    <th class="border px-3 py-2 text-left">Price</th>
+                    <th class="border px-3 py-2 text-left">Stock</th>
+                    <th class="border px-3 py-2 text-left">Enable</th>
+                </tr>
+            </thead>
+            <tbody id="variant-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- เก็บ JSON เพื่อ submit กลับหลังบ้าน -->
+<input type="hidden" name="VariantsJson" id="VariantsJson" />
+
+<script>
+    // ----- UI select toggle -----
+    function toggleSelected(el, activeClasses = ["bg-black","text-white"]) {
+      const isSelected = el.classList.contains("is-selected");
+      if (isSelected) {
+        el.classList.remove("is-selected", ...activeClasses);
+      } else {
+        el.classList.add("is-selected", ...activeClasses);
+      }
+      generateVariants();
+    }
+
+    document.querySelectorAll("#size-options .opt").forEach(btn => {
+      btn.addEventListener("click", () => toggleSelected(btn));
+    });
+
+    document.querySelectorAll("#color-options .opt").forEach(btn => {
+      btn.addEventListener("click", () =>
+        toggleSelected(btn, ["ring-4","ring-offset-2","ring-gray-400"])
+      );
+    });
+
+    // ----- สร้าง Cartesian product -----
+    function getSelectedValues(selector) {
+      return [...document.querySelectorAll(selector + " .is-selected")].map(b => b.dataset.value);
+    }
+
+    function cartesian(arrays) {
+      return arrays.reduce(
+        (acc, cur) => acc.flatMap(a => cur.map(c => [].concat(a, c))),
+        [[]]
+      );
+    }
+
+    function generateVariants() {
+      const sizes  = getSelectedValues("#size-options");
+      const colors = getSelectedValues("#color-options");
+
+      const tbody = document.getElementById("variant-body");
+      tbody.innerHTML = "";
+
+      if (sizes.length === 0 || colors.length === 0) {
+        document.getElementById("VariantsJson").value = "[]";
+        return;
+      }
+
+      const combos = cartesian([sizes, colors]); // [ [size, color], ... ]
+      const rowsData = combos.map((c, idx) => {
+        const [size, color] = c;
+        return {
+          index: idx + 1,
+          size,
+          color,
+          sku: `${size}-${color}`.toUpperCase().replace(/\s+/g, ""),
+          price: 0,
+          stock: 0,
+          enabled: true
+        };
+      });
+
+      // สร้างแถว UI + bind input ให้ sync กลับ JSON
+      rowsData.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="border px-3 py-2">${row.index}</td>
+          <td class="border px-3 py-2">${row.size}</td>
+          <td class="border px-3 py-2">${row.color}</td>
+          <td class="border px-3 py-2">
+            <input class="sku-input w-40 border px-2 py-1" value="${row.sku}">
+          </td>
+          <td class="border px-3 py-2">
+            <input type="number" step="0.01" class="price-input w-24 border px-2 py-1" value="${row.price}">
+          </td>
+          <td class="border px-3 py-2">
+            <input type="number" class="stock-input w-20 border px-2 py-1" value="${row.stock}">
+          </td>
+          <td class="border px-3 py-2">
+            <input type="checkbox" class="enabled-input" ${row.enabled ? "checked" : ""}>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      syncJson();
+      // อัปเดต JSON เมื่อ user พิมพ์แก้
+      tbody.querySelectorAll("input").forEach(i => i.addEventListener("input", syncJson));
+      tbody.querySelectorAll("input[type=checkbox]").forEach(i => i.addEventListener("change", syncJson));
+    }
+
+    function syncJson() {
+      const rows = [...document.querySelectorAll("#variant-body tr")].map(tr => ({
+        size:   tr.children[1].textContent.trim(),
+        color:  tr.children[2].textContent.trim(),
+        sku:    tr.querySelector(".sku-input").value.trim(),
+        price:  parseFloat(tr.querySelector(".price-input").value || 0),
+        stock:  parseInt(tr.querySelector(".stock-input").value || 0, 10),
+        enabled: tr.querySelector(".enabled-input").checked
+      }));
+      document.getElementById("VariantsJson").value = JSON.stringify(rows);
+    }
+
+    // เรียกครั้งแรกให้ตารางว่าง
+    generateVariants();
+</script>
