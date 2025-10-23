@@ -1,0 +1,87 @@
+﻿@model CategoryPageViewModel;
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+
+<div class="flex w-full flex-col gap-4">
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+                <h1 class="text-2xl font-bold">Category Manager</h1>
+                <p class="text-muted-foreground text-sm">Manage your product inventory and details</p>
+        </div>
+        <div class="h-px flex-1 border-b border-border"></div>
+    </div>
+
+
+    <div class="mt-5 grid grid-cols-1 gap-10 md:grid-cols-3">
+        <div class="col-span-1">
+            <div class="flex flex-col gap-3 rounded-sm border border-border bg-white p-5">
+                <h1 class="text-base font-semibold">Add Category</h1>
+                <div class="h-px flex-1 border-b border-border"></div>
+               <form method="post" aspasp-controller="Admin" asp-action="CreateCategory">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium" asp-for="Category.Title">Title</label>
+                        <input asp-for="Category.Title" aria-required="true" placeholder="Enter your category title..."
+                               class="h-9 w-full rounded-xs border-[#D9D9D9] border-[0.5px] pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]"/>
+                        <span></span>
+                        <button type="submit" class="flex w-full items-center justify-center gap-4 border-[0.5px] bg-primary px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:cursor-pointer hover:border-primary hover:bg-transparent hover:text-primary">Add Category</button>
+                    </div>
+               </form>
+            </div>
+        </div>
+        <div class="col-span-2">
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                    <thead class="bg-[#f4f4f5] text-primary">
+                        <tr>
+                            <th scope="col" class="rounded-sm px-6 py-3">
+                                Id
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Title
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Create at
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in Model.Categories)
+                        {
+                            <tr class="border-b border-gray-200 text-primary">
+                                <th scope="row" class="px-6 py-4 whitespace-nowrap">
+                                    @item.Id
+                                </th>
+                                <td class="px-6 py-4">
+                                    @item.Title
+                                </td>
+                                <td class="px-6 py-4">
+                                   @item.CreatedAt
+                                </td>
+                                <td class="px-6 py-4">
+                                    <form asp-action="DeleteCategory"
+                                          asp-controller="Admin"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="flex items-center justify-center rounded-xs bg-destructive px-2 py-1 text-white hover:cursor-pointer hover:bg-destructive/70" title="Delete">
+                                            <i class="ph ph-x"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

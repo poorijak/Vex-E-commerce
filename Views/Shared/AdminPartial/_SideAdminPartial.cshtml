@@ -15,13 +15,17 @@
         new {
             Label = "Orders",
             Icon = "ph ph-clipboard-text",
-
             Url = "/Admin/Orders"
         },
         new {
             Label = "Customer",
             Icon = "ph ph-users-three",
             Url = "/Admin/Customer"
+        },
+        new {
+            Label = "Categroy",
+            Icon = "ph ph-folder",
+            Url = "/Admin/Category"
         }
     };
 
@@ -41,7 +45,7 @@
         </div>
     </div>
     <div class="h-px border-b border-border"></div>
-    <div class="mt-5 ml-10 flex flex-col gap-5">
+    <div class="mt-5 ml-10 flex flex-col gap-8">
         @foreach (var item in menuList)
         {
             var isActive = pathname == item.Url;

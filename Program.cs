@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+using System.Net.WebSockets;
 using Vex_E_commerce.Data;
 using Vex_E_commerce.Models;
 
@@ -49,8 +51,51 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+
+
+
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value;
+    if (path != null && path.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
+    {
+        if (!context.User.Identity?.IsAuthenticated ?? true)
+        {
+            context.Response.Redirect("/Account/login");
+            return;
+        }
+
+        using var scope = context.RequestServices.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Customer>>();
+
+        var user = await userManager.GetUserAsync(context.User);
+
+        if (user == null)
+        {
+            context.Response.Redirect("/Identity/Accout/login");
+            return;
+        }
+        var role = user.Role;
+
+
+
+
+        if (user.Role.ToString() != "Admin")
+        {
+            context.Response.Redirect("/");
+            return;
+        }
+    }
+    await next();
+
+});
+
+
 
 app.MapControllerRoute(
     name: "default",
@@ -58,6 +103,7 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 await SeedRole(app);
+
 
 
 app.Run();
@@ -69,7 +115,7 @@ async Task SeedRole(IHost app)
     {
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        if (!await roleManager.RoleExistsAsync("Cutomer"))
+        if (!await roleManager.RoleExistsAsync("Customer"))
         {
             await roleManager.CreateAsync(new IdentityRole("Customer"));
         }
@@ -80,3 +126,5 @@ async Task SeedRole(IHost app)
         }
     }
 }
+
+

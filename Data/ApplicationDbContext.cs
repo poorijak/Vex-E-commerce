@@ -11,13 +11,15 @@ public class ApplicationDbContext : IdentityDbContext
     {
     }
 
+    public DbSet<Category> Categories { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
         builder.Entity<Customer>().Property(u => u.Status).HasConversion<string>();
         builder.Entity<Customer>().Property(u => u.Role).HasConversion<string>();
-        
+
 
     }
 
