@@ -1,0 +1,67 @@
+﻿@model Vex_E_commerce.Models.ProductCreateViewModel
+
+<h2 class="my-3 font-semibold">
+    Product Image URL <span class="text-red-500">*</span>
+</h2>
+
+<div class="flex flex-col gap-2">
+    <label class="font-mono text-sm" asp-for="PhotoUrl">
+        Image URL <span class="text-red-500">*</span>
+    </label>
+
+    <input asp-for="PhotoUrl"
+           id="urlInput"
+           type="text"
+           placeholder="Paste image URL here..."
+           class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+    <span class="text-xs text-red-500" asp-validation-for="PhotoUrl"></span>
+</div>
+
+
+<div class="relative mt-4 hidden size-52 w-full rounded-sm border-2 border-border p-3" id="previewArea">
+    <img id="productImagePreview" class="h-full w-full rounded-sm object-contain" src="" alt="Product Image Preview" />
+    <button type="button" id="removeImageButton" class="absolute top-3 right-4 h-5 w-5 rounded-full bg-red-500 text-white">
+        <i class="ph ph-x text-sm"></i>
+    </button>
+</div>
+
+
+<script>
+    (function () {
+      const urlInput = document.getElementById("urlInput");
+      const previewArea = document.getElementById("previewArea");
+      const productImagePreview = document.getElementById("productImagePreview");
+      const removeImageButton = document.getElementById("removeImageButton");
+      const errorSpan = document.querySelector('span[data-valmsg-for="PhotoUrl"]');
+
+      const updatePreview = (url) => {
+          if (url) {
+              productImagePreview.src = url;
+              previewArea?.classList.remove("hidden");
+              previewArea?.classList.add("flex");
+          } else {
+              productImagePreview.src = "";
+              previewArea?.classList.add("hidden");
+              previewArea?.classList.remove("flex");
+          }
+      };
+
+     urlInput?.addEventListener("input", (e) => {
+          const url = e.target.value;
+          updatePreview(url);
+
+          // โค้ดนี้จะทำงานเมื่อมีการพิมพ์ (input) หรือวาง (paste)
+          if (errorSpan) errorSpan.textContent = "";
+      });
+
+      removeImageButton?.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          urlInput.value = "";
+          updatePreview(null);
+      });
+
+      updatePreview(urlInput?.value);
+    })();
+</script>

@@ -12,6 +12,8 @@ public class ApplicationDbContext : IdentityDbContext
     }
 
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductVariant> ProductVariants { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -19,8 +21,21 @@ public class ApplicationDbContext : IdentityDbContext
 
         builder.Entity<Customer>().Property(u => u.Status).HasConversion<string>();
         builder.Entity<Customer>().Property(u => u.Role).HasConversion<string>();
+        builder.Entity<Product>()
+            .HasOne(p => p.Category)
+            .WithMany(c => c.products)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Entity<ProductVariant>()
+            .HasOne(v => v.Product)
+            .WithMany(p => p.ProductVariants)
+            .HasForeignKey(v => v.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Entity<Product>().Property(p => p.Status).HasConversion<string>();
+        builder.Entity<ProductVariant>().Property(v => v.Size).HasConversion<string>();
+        builder.Entity<ProductVariant>().Property(v => v.Color).HasConversion<string>();
     }
 
 }

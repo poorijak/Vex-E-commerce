@@ -1,154 +1,341 @@
-﻿<!-- ตัวเลือก -->
-<div class="space-y-6">
-    <section>
-        <h3 class="text-lg font-semibold">Size</h3>
-        <div id="size-options" class="mt-3 flex flex-wrap gap-3">
-            <button type="button" class="opt size border px-6 py-3" data-value="XS">XS</button>
-            <button type="button" class="opt size border px-6 py-3" data-value="S">S</button>
-            <button type="button" class="opt size border px-6 py-3" data-value="M">M</button>
-            <button type="button" class="opt size border px-6 py-3" data-value="L">L</button>
-            <button type="button" class="opt size border px-6 py-3" data-value="XL">XL</button>
-            <button type="button" class="opt size border px-6 py-3" data-value="XXL">XXL</button>
-        </div>
-    </section>
+﻿@model Vex_E_commerce.Models.ProductCreateViewModel
 
-    <section>
-        <h3 class="text-lg font-semibold">Color</h3>
-        <div id="color-options" class="mt-3 flex gap-3">
-            <button type="button" class="opt color h-10 w-10 rounded bg-red-600" data-value="Red" title="Red"></button>
-            <button type="button" class="opt color h-10 w-10 rounded bg-neutral-900" data-value="Black" title="Black"></button>
-            <button type="button" class="opt color h-10 w-10 rounded border bg-white" data-value="White" title="White"></button>
-        </div>
-    </section>
-</div>
+@{
+    var sizeList = new[]
+    {
+        new { Label = "XS",  data = "XS"  },
+        new { Label = "S",   data = "S"   },
+        new { Label = "M",   data = "M"   },
+        new { Label = "L",   data = "L"   },
+        new { Label = "XL",  data = "XL"  },
+        new { Label = "XXL", data = "XXL" },
+    };
 
-<hr class="my-6" />
+    var colorList = new[]
+    {
+        new { Label = "Red",   data = "Red",   style = "bg-red-600"      },
+        new { Label = "Black", data = "Black", style = "bg-neutral-900"  },
+        new { Label = "White", data = "White", style = "bg-white border" },
+    };
+}
 
-<!-- ตารางผลลัพธ์ -->
 <div>
-    <h3 class="mb-3 text-lg font-semibold">Generated Variants</h3>
-    <div class="overflow-x-auto">
-        <table class="min-w-full border text-sm" id="variant-table">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="border px-3 py-2 text-left">#</th>
-                    <th class="border px-3 py-2 text-left">Size</th>
-                    <th class="border px-3 py-2 text-left">Color</th>
-                    <th class="border px-3 py-2 text-left">SKU</th>
-                    <th class="border px-3 py-2 text-left">Price</th>
-                    <th class="border px-3 py-2 text-left">Stock</th>
-                    <th class="border px-3 py-2 text-left">Enable</th>
-                </tr>
-            </thead>
-            <tbody id="variant-body"></tbody>
-        </table>
+    <h3 class="my-3 font-semibold">Product Variant</h3>
+    <div class="flex flex-col gap-4">
+        <section class="flex flex-col gap-4">
+            <label class="font-mono text-sm">Size</label>
+            <div id="size-options" class="flex flex-wrap gap-3">
+                @foreach (var i in sizeList)
+                {
+                    <button type="button"
+                            class="opt border border-border px-7 py-1.5 text-sm hover:cursor-pointer"
+                            data-value="@i.data">
+                        @i.Label
+                    </button>
+                }
+            </div>
+        </section>
+
+        <section class="flex flex-col gap-4">
+            <label class="font-mono text-sm">Color</label>
+            <div id="color-options" class="flex flex-wrap gap-3">
+                @foreach (var i in colorList)
+                {
+                    <button type="button"
+                            data-value="@i.data"
+                            title="@i.Label"
+                            class="@i.style opt size-8 rounded-sm border border-border hover:cursor-pointer">
+                    </button>
+                }
+            </div>
+        </section>
+        <button type="button" id="generate-button" class="w-full border border-border px-3 py-2 text-primary transition-colors duration-100 hover:cursor-pointer hover:bg-primary hover:text-white">Generate Variant</button>
     </div>
 </div>
 
-<!-- เก็บ JSON เพื่อ submit กลับหลังบ้าน -->
-<input type="hidden" name="VariantsJson" id="VariantsJson" />
+<div class="mt-5">
+    <h2 class="my-3">Variant of product</h2>
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-left text-sm">
+            <thead class="text-muted-foreground bg-[#f4f4f5] font-medium">
+                <tr>
+                    <th class="rounded-sm px-6 py-3 font-medium">#</th>
+                    <th class="px-6 py-3 font-medium">SKU</th>
+                    <th class="px-6 py-3 font-medium">Color</th>
+                    <th class="px-6 py-3 font-medium">Size</th>
+                    <th class="px-6 py-3 font-medium">Price</th>   <!-- เพิ่ม -->
+                    <th class="px-6 py-3 font-medium">Stock</th>
+                    <th class="py-3 font-medium">Action</th>
+                </tr>
+            </thead>
+            <tbody id="variant-body" class="font-medium"></tbody>
+        </table>
+    </div>
+    <div id="pager" class="mt-3 flex items-center justify-center gap-2"></div>
+</div>
+
+<input type="hidden" name="VariantJson" id="VariantJson" />
 
 <script>
-    // ----- UI select toggle -----
-    function toggleSelected(el, activeClasses = ["bg-black","text-white"]) {
-      const isSelected = el.classList.contains("is-selected");
-      if (isSelected) {
-        el.classList.remove("is-selected", ...activeClasses);
-      } else {
-        el.classList.add("is-selected", ...activeClasses);
-      }
-      generateVariants();
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const pageSize = 5;
+      let currentPage = 1;
+      let variantsState = [];
 
-    document.querySelectorAll("#size-options .opt").forEach(btn => {
-      btn.addEventListener("click", () => toggleSelected(btn));
-    });
-
-    document.querySelectorAll("#color-options .opt").forEach(btn => {
-      btn.addEventListener("click", () =>
-        toggleSelected(btn, ["ring-4","ring-offset-2","ring-gray-400"])
-      );
-    });
-
-    // ----- สร้าง Cartesian product -----
-    function getSelectedValues(selector) {
-      return [...document.querySelectorAll(selector + " .is-selected")].map(b => b.dataset.value);
-    }
-
-    function cartesian(arrays) {
-      return arrays.reduce(
-        (acc, cur) => acc.flatMap(a => cur.map(c => [].concat(a, c))),
-        [[]]
-      );
-    }
-
-    function generateVariants() {
-      const sizes  = getSelectedValues("#size-options");
-      const colors = getSelectedValues("#color-options");
-
-      const tbody = document.getElementById("variant-body");
-      tbody.innerHTML = "";
-
-      if (sizes.length === 0 || colors.length === 0) {
-        document.getElementById("VariantsJson").value = "[]";
-        return;
+      function toggleSelected(el, activeClasses = ["bg-black","text-white"]) {
+        const isSelected = el.classList.contains("is-selected");
+        if (isSelected) {
+          el.classList.remove("is-selected", ...activeClasses);
+        } else {
+          el.classList.add("is-selected", ...activeClasses);
+        }
       }
 
-      const combos = cartesian([sizes, colors]); // [ [size, color], ... ]
-      const rowsData = combos.map((c, idx) => {
-        const [size, color] = c;
-        return {
-          index: idx + 1,
-          size,
-          color,
-          sku: `${size}-${color}`.toUpperCase().replace(/\s+/g, ""),
-          price: 0,
-          stock: 0,
-          enabled: true
-        };
+      const generateButton = document.getElementById("generate-button");
+      generateButton.addEventListener("click", generateVariants);
+
+      function getSelectedValue(selector) {
+        return [...document.querySelectorAll(`${selector} .is-selected`)].map(b => b.dataset.value);
+      }
+
+      function cartesian(arrays) {
+        return arrays.reduce((acc, cur) => acc.flatMap(a => cur.map(c => [].concat(a, c))), [[]]);
+      }
+
+      // Bind Size/Color click
+      document.querySelectorAll("#size-options .opt").forEach(btn => {
+        btn.addEventListener("click", () => toggleSelected(btn));
+      });
+      document.querySelectorAll("#color-options .opt").forEach(btn => {
+        btn.addEventListener("click", () => toggleSelected(btn, ["ring-2","ring-offset-1","ring-primary/50"]));
       });
 
-      // สร้างแถว UI + bind input ให้ sync กลับ JSON
-      rowsData.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="border px-3 py-2">${row.index}</td>
-          <td class="border px-3 py-2">${row.size}</td>
-          <td class="border px-3 py-2">${row.color}</td>
-          <td class="border px-3 py-2">
-            <input class="sku-input w-40 border px-2 py-1" value="${row.sku}">
-          </td>
-          <td class="border px-3 py-2">
-            <input type="number" step="0.01" class="price-input w-24 border px-2 py-1" value="${row.price}">
-          </td>
-          <td class="border px-3 py-2">
-            <input type="number" class="stock-input w-20 border px-2 py-1" value="${row.stock}">
-          </td>
-          <td class="border px-3 py-2">
-            <input type="checkbox" class="enabled-input" ${row.enabled ? "checked" : ""}>
-          </td>
+      function generateVariants() {
+        const sizes  = getSelectedValue("#size-options");
+        const colors = getSelectedValue("#color-options");
+
+        if (sizes.length === 0 || colors.length === 0) {
+          variantsState = [];
+          syncJson();
+          renderPage();
+          renderPager();
+          return;
+        }
+
+        const combos = cartesian([sizes, colors]); // [[size,color], ...]
+        const oldMap = new Map(variantsState.map(v => [`${v.size}|${v.color}`, v]));
+
+        variantsState = combos.map(([size, color], idx) => {
+          const key = `${size}|${color}`;
+          const keep = oldMap.get(key);
+          return keep ?? {
+            index: idx + 1,
+            size,
+            color,
+            sku: `VEXSHIRT-${size}-${color}`.toUpperCase().replace(/\s+/g, ""),
+            price: 0,     // ค่าเริ่มต้นราคา
+            stock: 0,
+          };
+        });
+
+        currentPage = 1;
+        syncJson();
+        renderPage();
+        renderPager();
+      }
+
+      function renderEmptyRow() {
+        const tbody = document.getElementById("variant-body");
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-muted-foreground px-6 py-6 text-center">
+              ยังไม่มี Variant — โปรดเลือก <span class="font-medium">Size</span> และ <span class="font-medium">Color</span> แล้วกด <span class="font-medium">Generate Variant</span>
+            </td>
+          </tr>
         `;
-        tbody.appendChild(tr);
+      }
+
+      function renderPage() {
+        const tbody = document.getElementById("variant-body");
+        tbody.innerHTML = "";
+
+        if (variantsState.length === 0) {
+          renderEmptyRow();
+          return;
+        }
+
+        const start = (currentPage - 1) * pageSize;
+        const end   = start + pageSize;
+        const pageItems = variantsState.slice(start, end);
+
+        pageItems.forEach((row, i) => {
+          const tr = document.createElement("tr");
+          tr.dataset.key = `${row.size}|${row.color}`;
+          tr.innerHTML = `
+            <td class="px-3 py-2">${start + i + 1}</td>
+            <td class="px-3 py-2">
+              <input class="sku-input w-44 px-2 py-1" value="${row.sku}">
+            </td>
+            <td class="px-3 py-2">${row.color}</td>
+            <td class="px-3 py-2">${row.size}</td>
+            <td class="px-3 py-2">
+              <input type="number" min="0" step="0.01" class="price-input ml-2 w-20 px-2 py-1" value="${row.price ?? 0}">
+            </td>
+            <td class="px-3 py-2">
+              <input type="number" class="stock-input ml-2 w-20 px-2 py-1" value="${row.stock}">
+            </td>
+            <td class="px-3 py-2">
+              <button type="button" class="remove-btn rounded-sm border border-red-500 px-2 py-1 text-red-500 transition hover:bg-red-500 hover:text-white">
+                Remove
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        bindRowInputs();
+      }
+
+      function renderPager() {
+        const pager = document.getElementById("pager");
+        pager.innerHTML = "";
+
+        const total = variantsState.length;
+        if (total === 0) return;
+
+        const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+        // Prev
+        const prev = document.createElement("button");
+        prev.className = "border px-4 py-2 text-sm border border-border hover:cursor-pointer hover:bg-muted-foreground/10 rounded-sm";
+        prev.textContent = "Prev";
+        prev.disabled = currentPage <= 1;
+        prev.addEventListener("click", () => {
+          if (currentPage > 1) {
+            syncJsonFromCurrentPage();
+            currentPage--;
+            renderPage();
+            renderPager();
+          }
+        });
+        pager.appendChild(prev);
+
+        const totalPagesToShow = 7;
+        let start = Math.max(1, currentPage - 3);
+        let end   = Math.min(totalPages, start + totalPagesToShow - 1);
+        start = Math.max(1, end - totalPagesToShow + 1);
+
+        for (let p = start; p <= end; p++) {
+          const btn = document.createElement("button");
+          btn.className = `border border-border px-4 py-2 rounded-sm hover:cursor-pointer text-sm ${p === currentPage ? "bg-primary text-white hover:bg-primary/90" : "hover:bg-white/90"}`;
+          btn.textContent = p;
+          btn.addEventListener("click", () => {
+            if (p !== currentPage) {
+              syncJsonFromCurrentPage();
+              currentPage = p;
+              renderPage();
+              renderPager();
+            }
+          });
+          pager.appendChild(btn);
+        }
+
+        // Next
+        const next = document.createElement("button");
+        next.className = "border px-4 py-2 text-sm border border-border hover:cursor-pointer hover:bg-muted-foreground/10 rounded-sm";
+        next.textContent = "Next";
+        next.disabled = currentPage >= totalPages;
+        next.addEventListener("click", () => {
+          if (currentPage < totalPages) {
+            syncJsonFromCurrentPage();
+            currentPage++;
+            renderPage();
+            renderPager();
+          }
+        });
+        pager.appendChild(next);
+      }
+
+      function bindRowInputs() {
+        const tbody = document.getElementById("variant-body");
+        tbody.querySelectorAll("tr").forEach(tr => {
+          const key = tr.dataset.key;
+          const itemIndex = variantsState.findIndex(v => `${v.size}|${v.color}` === key);
+          if (itemIndex === -1) return;
+
+          const skuEl   = tr.querySelector(".sku-input");
+          const priceEl = tr.querySelector(".price-input");
+          const stockEl = tr.querySelector(".stock-input");
+
+          if (skuEl) {
+            skuEl.addEventListener("input", e => {
+              variantsState[itemIndex].sku = e.target.value;
+              syncJson();
+            });
+          }
+          if (priceEl) {
+            priceEl.addEventListener("input", e => {
+              const val = parseFloat(e.target.value || "0");
+              variantsState[itemIndex].price = isNaN(val) ? 0 : val;
+              syncJson();
+            });
+          }
+          if (stockEl) {
+            stockEl.addEventListener("input", e => {
+              variantsState[itemIndex].stock = parseInt(e.target.value || 0, 10);
+              syncJson();
+            });
+          }
+        });
+      }
+
+      document.getElementById("variant-body").addEventListener("click", (e) => {
+        const btn = e.target.closest(".remove-btn");
+        if (!btn) return;
+
+        const tr = btn.closest("tr");
+        const key = tr?.dataset.key;
+        if (!key) return;
+
+        const idx = variantsState.findIndex(v => `${v.size}|${v.color}` === key);
+        if (idx !== -1) {
+          variantsState.splice(idx, 1);
+          const totalPages = Math.max(1, Math.ceil(variantsState.length / pageSize));
+          if (currentPage > totalPages) currentPage = totalPages;
+
+          syncJson();
+          renderPage();
+          renderPager();
+        }
       });
 
-      syncJson();
-      // อัปเดต JSON เมื่อ user พิมพ์แก้
-      tbody.querySelectorAll("input").forEach(i => i.addEventListener("input", syncJson));
-      tbody.querySelectorAll("input[type=checkbox]").forEach(i => i.addEventListener("change", syncJson));
-    }
+      function syncJsonFromCurrentPage() {
+        const rows = [...document.querySelectorAll("#variant-body tr")];
+        rows.forEach(tr => {
+          const key = tr.dataset.key;
+          const item = variantsState.find(v => `${v.size}|${v.color}` === key);
+          if (!item) return;
 
-    function syncJson() {
-      const rows = [...document.querySelectorAll("#variant-body tr")].map(tr => ({
-        size:   tr.children[1].textContent.trim(),
-        color:  tr.children[2].textContent.trim(),
-        sku:    tr.querySelector(".sku-input").value.trim(),
-        price:  parseFloat(tr.querySelector(".price-input").value || 0),
-        stock:  parseInt(tr.querySelector(".stock-input").value || 0, 10),
-        enabled: tr.querySelector(".enabled-input").checked
-      }));
-      document.getElementById("VariantsJson").value = JSON.stringify(rows);
-    }
+          const skuEl   = tr.querySelector(".sku-input");
+          const priceEl = tr.querySelector(".price-input");
+          const stockEl = tr.querySelector(".stock-input");
 
-    // เรียกครั้งแรกให้ตารางว่าง
-    generateVariants();
+          if (skuEl)   item.sku   = skuEl.value.trim();
+          if (priceEl) {
+            const v = parseFloat(priceEl.value || "0");
+            item.price = isNaN(v) ? 0 : v;
+          }
+          if (stockEl) item.stock = parseInt(stockEl.value || 0, 10);
+        });
+        syncJson();
+      }
+
+      function syncJson() {
+        document.getElementById("VariantJson").value = JSON.stringify(variantsState);
+      }
+
+      // แสดง empty state / ซ่อน pager ตอนโหลดหน้า
+      renderPage();
+      renderPager();
+    });
 </script>

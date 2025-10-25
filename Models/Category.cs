@@ -12,6 +12,8 @@ namespace Vex_E_commerce.Models
         public string Title { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<Product> products { get; set; } = new List<Product>();
     }
 
     public class CategoryPageViewModel
