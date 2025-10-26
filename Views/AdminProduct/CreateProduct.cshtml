@@ -1,4 +1,4 @@
-﻿@model Vex_E_commerce.Models.ProductCreateViewModel
+﻿@model Vex_E_commerce.Models.ProductFormVm
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -6,8 +6,16 @@
 <div class="w-full">
     <form asp-action="CreateProduct" method="post">
         @Html.AntiForgeryToken()
-
-        <h1 class="text-2xl font-bold">Add New Product</h1>
+            
+       <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold">Add New Product</h1>
+                <div >
+                    <button type="submit"
+                            class="cursor-pointer bg-primary px-7 py-2 text-white hover:bg-primary/90">
+                        Save Product
+                    </button>
+                </div>
+       </div>
         <div class="mt-5 h-px border-b border-border"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-3">
@@ -38,8 +46,8 @@
                                 </label>
                                 <textarea asp-for="Description"
                                           rows="4"
-                                          class="block w-full rounded-sm border border-border bg-white p-2.5 text-sm text-gray-900 placeholder:text-muted-foreground"
-                                          placeholder="..."></textarea>
+                                          class="block w-full rounded-sm border border-border bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#D9D9D9]"
+                                          placeholder="Enter product description"></textarea>
                                 <span class="text-xs text-red-500" asp-validation-for="Description"></span>
                             </div>
                         </div>
@@ -85,12 +93,7 @@
             </div>
         </div>
 
-        <div class="mt-6">
-            <button type="submit"
-                    class="rounded-sm bg-primary px-4 py-2 text-white hover:bg-primary/90">
-                Save Product
-            </button>
-        </div>
+       
     </form>
 </div>
 

@@ -36,16 +36,16 @@
                 <table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
                     <thead class="bg-[#f4f4f5] text-primary">
                         <tr>
-                            <th scope="col" class="rounded-sm px-6 py-3">
+                            <th scope="col" class="text-muted-foreground rounded-sm px-6 py-3 font-medium">
                                 Id
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="text-muted-foreground px-6 py-3 font-medium">
                                 Title
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="text-muted-foreground px-6 py-3 font-medium">
                                 Create at
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="text-muted-foreground px-6 py-3 font-medium">
                                 Action
                             </th>
                         </tr>
@@ -54,7 +54,7 @@
                         @foreach(var item in Model.Categories)
                         {
                             <tr class="border-b border-gray-200 text-primary">
-                                <th scope="row" class="px-6 py-4 whitespace-nowrap">
+                                <th scope="row" class="px-6 py-4 font-semibold whitespace-nowrap">
                                     @item.Id
                                 </th>
                                 <td class="px-6 py-4">

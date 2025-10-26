@@ -25,15 +25,42 @@ namespace Vex_E_commerce.Controllers.Admin
             _db = db;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
             var user = await _userManager.GetUserAsync(User);
 
             if (user != null && user.Role.ToString() == "Admin")
             {
-                return View();
+
+                var products = await _db.Products
+                    .OrderBy(p => p.Id)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var total = await _db.Products.CountAsync();
+                var totalPages = (int)Math.Ceiling(total / (double)pageSize);
+
+                ViewBag.Page = page;
+                ViewBag.TotalPages = totalPages;
+
+                return View(products);
             }
             return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct(Guid? id)
+        {
+            var product = await _db.Products.FindAsync(id);
+
+            if (product == null) return NotFound();
+
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Admin");
         }
 
         public async Task<IActionResult> Orders()

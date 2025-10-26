@@ -21,21 +21,23 @@ public class ApplicationDbContext : IdentityDbContext
 
         builder.Entity<Customer>().Property(u => u.Status).HasConversion<string>();
         builder.Entity<Customer>().Property(u => u.Role).HasConversion<string>();
+
         builder.Entity<Product>()
             .HasOne(p => p.Category)
             .WithMany(c => c.products)
             .HasForeignKey(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<ProductVariant>()
             .HasOne(v => v.Product)
             .WithMany(p => p.ProductVariants)
             .HasForeignKey(v => v.ProductId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade); // 👈 เปลี่ยนเป็น Cascade
 
         builder.Entity<Product>().Property(p => p.Status).HasConversion<string>();
         builder.Entity<ProductVariant>().Property(v => v.Size).HasConversion<string>();
         builder.Entity<ProductVariant>().Property(v => v.Color).HasConversion<string>();
     }
+
 
 }

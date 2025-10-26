@@ -5,9 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Vex_E_commerce.Models
 {
-    // ───────────────────────────────
-    // ENUM
-    // ───────────────────────────────
 
     public enum ProductStatus
     {
@@ -44,6 +41,8 @@ namespace Vex_E_commerce.Models
         [MaxLength(500)]
         public string? Description { get; set; }
 
+        public int? TotalStock { get; set; } = 0;
+
         [MaxLength(255)]
         public string? PictureUrl { get; set; }
 
@@ -72,10 +71,13 @@ namespace Vex_E_commerce.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal BasePrice { get; set; } = 0;
 
+        [Required, MaxLength(50)]
+        public string ProductTitle { get; set; } = "";
+
+
         public int Sold { get; set; } = 0;
         public int Stock { get; set; } = 0;
 
-        [Required, MaxLength(50)]
         public string Sku { get; set; }
 
         // FK → Product
@@ -92,8 +94,9 @@ namespace Vex_E_commerce.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
-    public class ProductCreateViewModel
+    public class ProductFormVm
     {
+        public Guid? Id { get; set; }
         // ฟิลด์จากฟอร์ม
         [Required, MaxLength(255)]
         public string Title { get; set; } = string.Empty;
@@ -114,13 +117,17 @@ namespace Vex_E_commerce.Models
 
         public string? VariantJson { get; set; }
 
+
+        public List<TemporaryVariantData> Variants { get; set; } = new();
+
+        
+
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }
-
+  
     // เพิ่มคลาสนี้ใน Vex_E_commerce.Models namespace
     public class TemporaryVariantData
     {
-        // ต้องตรงกับ key ที่ใช้ใน JavaScript (size, color, price, stock, sku)
         public string Size { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
         public decimal Price { get; set; } // ใช้ decimal เพื่อรองรับ BasePrice

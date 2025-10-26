@@ -1,18 +1,115 @@
-﻿@{
+﻿@model List<Product>
+
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<div class="w-full">
 
+<div class="w-full">
     <div class="mb-3 flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold">Product Manager</h1>
             <p class="text-muted-foreground text-sm">Manage your product inventory and details</p>
         </div>
-        <a asp-action="CreateProduct" asp-controller="AdminProduct" class="border-[0.5px] bg-primary px-4 py-2 text-base text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary">Add Product</a>
+            <a asp-action="CreateProduct" asp-controller="AdminProduct"
+               class="border-[0.5px] bg-primary px-4 py-2 text-base text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary">
+                Add Product
+            </a>
+       </div>
     </div>
+
     <div class="h-px flex-1 border-b border-border"></div>
 
+    <div class="relative mt-4">
+        <table class="w-full text-left text-sm text-gray-500 rtl:text-right">
+            <thead class="bg-[#f4f4f5] text-primary">
+                <tr class="text-muted-foreground">
+                    <th class="rounded-sm px-6 py-3 font-medium">#</th>
+                    <th class="px-6 py-3 font-medium">Product Name</th>
+                    <th class="px-6 py-3 font-medium">Price</th>
+                    <th class="px-6 py-3 font-medium">Status</th>
+                    <th class="px-6 py-3 font-medium">Total Stock</th>
+                    <th class="px-6 py-3 font-medium">Created At</th>
+                    <th class="py-3 font-medium">Action</th>
+                </tr>
+            </thead>
 
-    
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="z-10 border-b border-gray-200 text-primary">
+                        <th scope="row" class="px-6 py-4 font-semibold whitespace-nowrap">
+                            @item.Id
+                        </th>
+
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <img class="size-8 rounded-sm object-cover" src="@item.PictureUrl" alt="@item.Title" />
+                                <h3>@item.Title</h3>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4">@item.BasePrice</td>
+                        <td class="px-6 py-4">@item.Status</td>
+                        <td class="px-6 py-4">@item.TotalStock</td>
+                        <td class="px-6 py-4">@item.CreatedAt.ToString("yyyy-MM-dd")</td>
+
+                        <td class="relative px-6 py-4">
+                            <button type="button"
+                                    class="flex size-10 items-center justify-center rounded-sm hover:bg-muted-foreground/10"
+                                    onclick="toggleMenu('menu-@item.Id')">
+                                <i class="ph-bold ph-dots-three-vertical text-2xl"></i>
+                            </button>
+
+                            <div id="menu-@item.Id"
+                                 class="absolute right-0 z-50 mt-2 hidden w-32 rounded-sm border border-border bg-white">
+                                <a asp-action="EditProduct" asp-controller="AdminProduct" asp-route-id="@item.Id"
+                                   class="block px-4 py-2 text-sm hover:bg-muted-foreground/10">
+                                    <i class="ph ph-pencil-simple mr-2"></i> Edit
+                                </a>
+                                <form method="post" asp-action="DeleteProduct" asp-route-id="@item.Id">
+                                    <button type="submit"
+                                            class="flex w-full items-center px-4 py-2 text-sm text-destructive hover:bg-destructive/10">
+                                        <i class="ph ph-trash mr-2"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        @if (ViewBag.Page > 1)
+        {
+            <a asp-action="Index" asp-route-page="@(ViewBag.Page - 1)">Prev</a>
+        }
+
+        <span>Page @ViewBag.Page / @ViewBag.TotalPages</span>
+
+        @if (ViewBag.Page < ViewBag.TotalPages)
+        {
+            <a asp-action="Index" asp-route-page="@(ViewBag.Page + 1)">Next</a>
+        }
+    </div>
 </div>
+
+    <script>
+        function toggleMenu(id) {
+            const menu = document.getElementById(id);
+            // ปิดเมนูอื่นก่อน
+            document.querySelectorAll('[id^="menu-"]').forEach(m => {
+                if (m.id !== id) m.classList.add('hidden');
+            });
+            // toggle เมนูที่กด
+            menu.classList.toggle('hidden');
+        }
+
+        // ปิด dropdown ถ้าคลิกนอกพื้นที่
+        window.addEventListener('click', function (e) {
+            if (!e.target.closest('td')) {
+                document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+            }
+        });
+    </script>
 

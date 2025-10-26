@@ -7,11 +7,9 @@ using Newtonsoft.Json.Serialization;
 using System.Net.WebSockets;
 using Vex_E_commerce.Data;
 using Vex_E_commerce.Models;
-using Vex_E_commerce.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -20,22 +18,7 @@ builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireC
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IFileService, ImagekitFileService>();
 builder.Services.AddHttpClient();
-// 👇 เพิ่มโค้ดนี้
-// กำหนดขีดจำกัดสำหรับ IIS Express (เช่น 30MB)
-builder.Services.Configure<IISServerOptions>(options =>
-{
-    // ตัว IISServerOptions จะใช้งานได้แล้ว
-    options.MaxRequestBodySize = 30 * 1024 * 1024;
-});
-
-// กำหนดขีดจำกัดสำหรับ Kestrel (ใช้ FormOptions)
-builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 30 * 1024 * 1024;
-});
-
 
 builder.Services.AddAuthentication().AddGoogle(googleOption =>
 {
@@ -52,7 +35,6 @@ builder.Services.AddAuthentication().AddGoogle(googleOption =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -60,7 +42,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

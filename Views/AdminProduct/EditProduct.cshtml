@@ -1,0 +1,175 @@
+﻿@model Vex_E_commerce.Models.ProductFormVm
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="w-full">
+    <form asp-action="EditProduct" asp-controller="AdminProduct" method="post">
+        @Html.AntiForgeryToken()
+         <input type="hidden" asp-for="Id" />
+
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Edit Product</h1>
+            <div>
+                <button type="submit"
+                        class="cursor-pointer bg-primary px-7 py-2 text-white hover:bg-primary/90">
+                    Save Product
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-5 h-px border-b border-border"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3">
+            <div class="col-span-1 mt-3 border-r border-border pr-5">
+                <div class="flex flex-col gap-3">
+                    <div>
+                        @* ส่ง model เข้า partial เพื่อใช้ asp-for ใน partial ได้ *@
+                         <partial name="AdminPartial/_ProductImage" model="Model" /> 
+
+                    </div>
+
+                    <div>
+                        <h2 class="my-3 font-semibold">General Information</h2>
+                        <div class="flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="font-mono text-sm" asp-for="Title">
+                                    Title <span class="text-red-500">*</span>
+                                </label>
+                                <input asp-for="Title"
+                                       placeholder="Enter product title..."
+                                       class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                                <span class="text-xs text-red-500" asp-validation-for="Title"></span>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="font-mono text-sm text-gray-900" asp-for="Description">
+                                    Description
+                                </label>
+                                <textarea asp-for="Description"
+                                          rows="4"
+                                          class="block w-full rounded-sm border border-border bg-white p-2.5 text-sm text-gray-900 placeholder:text-[#D9D9D9]"
+                                          placeholder="Enter product description"></textarea>
+                                <span class="text-xs text-red-500" asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-2 h-px flex-1 border-b border-border"></div>
+
+                    <h2 class="font-semibold">Category</h2>
+                    <div class="flex flex-col gap-2">
+                        <select asp-for="CategoryId"
+                                asp-items="@(new SelectList(Model.Categories, nameof(Vex_E_commerce.Models.Category.Id), nameof(Vex_E_commerce.Models.Category.Title), Model.CategoryId))"
+                                class="rounded-sm border border-border bg-white px-4 py-2.5 text-sm">
+                            <option value="">-- Select Category --</option>
+                        </select>
+
+                    </div>
+
+                    <div class="my-2 h-px flex-1 border-b border-border"></div>
+
+                    <div class="mb-10">
+                        <h2 class="mb-3 font-medium">Pricing</h2>
+                        <div class="flex flex-col gap-2">
+                            <label class="font-mono text-sm" asp-for="BasePrice">
+                                Base Price
+                            </label>
+                            <input asp-for="BasePrice" type="number" step="0.01"
+                                   placeholder="0.00"
+                                   class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                            <span class="text-xs text-red-500" asp-validation-for="BasePrice"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-2 mt-3 pl-5">
+                <div asp-validation-summary="All" class="mb-3 text-sm text-red-500"></div>
+                <h3 class="my-3 font-semibold">Product Variant</h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-muted-foreground bg-[#f4f4f5] font-medium">
+                            <tr>
+                                <th class="rounded-sm px-6 py-3 font-medium">Product Name</th>
+                                <th class="px-6 py-3 font-medium">Price</th>
+                                <th class="px-6 py-3 font-medium">Color</th>
+                                <th class="px-6 py-3 font-medium">Size</th>
+                                <th class="px-6 py-3 font-medium">Stock</th>   <!-- เพิ่ม -->
+                            </tr>
+                        </thead>
+                        <tbody id="variant-body" class="font-medium">
+                            @{
+                                var hasRows = Model?.Variants != null && Model.Variants.Count > 0;
+                            }
+                            @if (!hasRows)
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-muted-foreground px-6 py-6 text-center">
+                                        ไม่มี Variant สำหรับสินค้านี้
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                for (int i = 0; i < Model.Variants.Count; i++)
+                                {
+                                    <tr>
+                                        <!-- ชื่อคอลัมน์ใน header ของคุณมีซ้ำ "Price" สองช่อง
+                                             ด้านล่างผมใช้คอลัมน์: SKU | Price | Color | Size | Stock | Action -->
+
+                                        <td class="px-3 py-2">
+                                            <input asp-for="Variants[i].Sku"
+                                                   class="w-44 rounded-sm border border-border px-2 py-1" />
+                                        </td>
+
+                                        <td class="px-3 py-2">
+                                            <input asp-for="Variants[i].Price" type="number" step="0.01"
+                                                   class="w-24 rounded-sm border border-border px-2 py-1" />
+                                        </td>
+
+                                        <td class="px-3 py-2">
+                                            <select asp-for="Variants[i].Color"
+                                                    class="rounded-sm border border-border px-2 py-1">
+                                                @foreach (var c in Enum.GetNames(typeof(Vex_E_commerce.Models.ProductColor)))
+                                                {
+                                                    <option value="@c" selected="@(Model.Variants[i].Color == c)">
+                                                        @c
+                                                    </option>
+                                                }
+                                            </select>
+                                        </td>
+
+                                        <td class="px-3 py-2">
+                                            <select asp-for="Variants[i].Size"
+                                                    class="rounded-sm border border-border px-2 py-1">
+                                                @foreach (var s in Enum.GetNames(typeof(Vex_E_commerce.Models.ProductSize)))
+                                                {
+                                                    <option value="@s" selected="@(Model.Variants[i].Size == s)">
+                                                        @s
+                                                    </option>
+                                                }
+                                            </select>
+                                        </td>
+
+                                        <td class="px-3 py-2">
+                                            <input asp-for="Variants[i].Stock" type="number"
+                                                   class="w-20 rounded-sm border border-border px-2 py-1" />
+                                        </td>
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
