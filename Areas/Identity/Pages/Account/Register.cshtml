@@ -21,6 +21,12 @@
                                class="h-9 w-full rounded-xs border-[#D9D9D9] border-[0.5px] pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" placeholder="you@example.com" />
                         <span asp-validation-for="Input.Email"></span>
                     </div>
+                    <div  class="flex flex-col gap-2">
+                        <label asp-for="Input.Name" class="form-label">Name</label>
+                        <input asp-for="Input.Name" autocomplete="username" aria-required="true"
+                               class="h-9 w-full rounded-xs border-[#D9D9D9] border-[0.5px] pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" placeholder="you@example.com" />
+                        <span asp-validation-for="Input.Name"></span>
+                    </div>
                     <div class="flex flex-col gap-2">
                         <label asp-for="Input.Password" class="form-label">Password</label>
                         <input asp-for="Input.Password" autocomplete="current-password" aria-required="true" placeholder="At least 8 characters  A-z , 0-9 , symbol"

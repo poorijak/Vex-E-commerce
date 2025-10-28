@@ -80,6 +80,11 @@ namespace Vex_E_commerce.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+
+            [Required]
+            [MinLength(3, ErrorMessage = "MinLength 3 Char")]
+            public string Name { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -119,6 +124,8 @@ namespace Vex_E_commerce.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+
+                user.Name = Input.Name;
                 user.Status = UserStatus.Active;
                 user.Role = UserRole.Customer;
 

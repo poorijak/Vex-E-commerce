@@ -8,7 +8,7 @@
 }
 
 
-<div class="w-full">
+<div class="w-full p-5 md:p-0">
     <form asp-action="EditProduct" asp-controller="AdminProduct" method="post">
         @Html.AntiForgeryToken()
          <input type="hidden" asp-for="Id" />
@@ -26,9 +26,9 @@
         <div class="mt-5 h-px border-b border-border"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-3">
-            <div class="col-span-1 mt-3 border-r border-border pr-5">
+            <div class="col-span-1 mt-3 border-none border-border pr-0 md:border-r md:pr-5">
                 <div class="flex flex-col gap-3">
-                    <div>
+                    <div class="z-0">
                         @* ส่ง model เข้า partial เพื่อใช้ asp-for ใน partial ได้ *@
                          <partial name="AdminPartial/_ProductImage" model="Model" /> 
 
@@ -89,7 +89,7 @@
                 </div>
             </div>
 
-            <div class="col-span-2 mt-3 pl-5">
+            <div class="col-span-2 mt-1 pl-0 md:mt-3 md:pl-5">
                 <div asp-validation-summary="All" class="mb-3 text-sm text-red-500"></div>
                 <h3 class="my-3 font-semibold">Product Variant</h3>
                 <div class="relative overflow-x-auto">

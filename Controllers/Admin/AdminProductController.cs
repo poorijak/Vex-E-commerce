@@ -19,7 +19,6 @@ namespace Vex_E_commerce.Controllers.Admin
             _db = db;
         }
 
-        // ========== CREATE ==========
         [HttpGet]
         public async Task<IActionResult> CreateProduct()
         {
@@ -146,7 +145,6 @@ namespace Vex_E_commerce.Controllers.Admin
         {
             if (!ModelState.IsValid)
             {
-                // สำคัญ: ใส่ Categories กลับให้ dropdown
                 vm.Categories = await _db.Categories
                     .OrderBy(c => c.Title)
                     .ToListAsync();
@@ -159,7 +157,6 @@ namespace Vex_E_commerce.Controllers.Admin
                 .FirstOrDefaultAsync(x => x.Id == vm.Id);
             if (p == null) return NotFound();
 
-            // อัปเดต product
             p.Title = vm.Title;
             p.Description = vm.Description;
             p.BasePrice = vm.BasePrice ?? 0;

@@ -125,7 +125,6 @@ namespace Vex_E_commerce.Models
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }
   
-    // เพิ่มคลาสนี้ใน Vex_E_commerce.Models namespace
     public class TemporaryVariantData
     {
         public string Size { get; set; } = string.Empty;

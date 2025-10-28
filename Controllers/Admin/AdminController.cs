@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Microsoft.VisualBasic;
 using System.CodeDom;
+using System.Drawing.Printing;
 using Vex_E_commerce.Data;
 using Vex_E_commerce.Models;
 
@@ -68,10 +71,138 @@ namespace Vex_E_commerce.Controllers.Admin
             return View();
         }
 
-        public async Task<IActionResult> Customer()
+        public async Task<IActionResult> Customer(int page = 1 , int pageSize = 5)
         {
-            return View();
+
+
+            var Customers = await _userManager.Users
+            .OrderBy(c => c.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+
+            var total = await _userManager.Users.CountAsync();
+            var totalPages = (int)Math.Ceiling(total / (double)pageSize);
+
+            ViewBag.Page = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(Customers);
         }
+
+        public async Task<IActionResult> CustomerDetail(string id)
+        {
+
+            if (string.IsNullOrWhiteSpace(id)) return BadRequest();
+
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null) return NotFound();
+
+
+            var vm = new CustomerVm
+            {
+                User = user,
+                Form = new CustomerFormDto
+                {
+                    Role = user.Role,
+                    Status = user.Status,
+                    Id = user.Id
+                }
+
+            };
+
+            ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
+                .Cast<UserRole>()
+                .Select(r => new SelectListItem
+                {
+                    Text = r.ToString(),
+                    Value = r.ToString(),
+                    Selected = (r == user.Role)
+                }).ToList();
+
+            ViewBag.StatusList = Enum.GetValues(typeof(UserStatus))
+                .Cast<UserStatus>()
+                .Select(s => new SelectListItem
+                {
+                    Text = s.ToString(),
+                    Value = s.ToString(),
+                    Selected = (s == user.Status)
+                }).ToList();
+
+
+            if (vm.User is null)
+            {
+                return NotFound();
+            }
+
+            return View(vm);
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CustomerDetail(CustomerVm vm)
+        {
+             var user = await _userManager.FindByIdAsync(vm.Form.Id);
+            if (user == null) return NotFound();
+
+            if (vm.Form.Status == user.Status)
+                ModelState.AddModelError("Form.Status", "Existing Status");
+
+            if (vm.Form.Role == user.Role)
+                ModelState.AddModelError("Form.Role", "Existing Role");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
+                    .Cast<UserRole>()
+                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
+                    .ToList();
+
+                ViewBag.StatusList = Enum.GetValues(typeof(UserStatus))
+                    .Cast<UserStatus>()
+                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
+                    .ToList();
+
+                vm.User ??= user;
+
+                return View(vm); 
+            }
+
+            // 3) อัปเดตจริง
+            user.Role = vm.Form.Role;
+            user.Status = vm.Form.Status;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+                ModelState.AddModelError("", errors);
+
+                // เติม dropdown กลับก่อน return
+                ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
+                    .Cast<UserRole>()
+                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
+                    .ToList();
+
+                ViewBag.StatusList = Enum.GetValues(typeof(UserStatus))
+                    .Cast<UserStatus>()
+                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
+                    .ToList();
+
+                vm.User ??= user;
+                return View(vm);
+            }
+
+            return RedirectToAction("Customer" , "Admin");
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> Category()
         {
