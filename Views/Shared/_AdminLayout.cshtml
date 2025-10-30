@@ -1,4 +1,41 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Customer> SignInManager
+@inject UserManager<Customer> userManager
+
+
+@{
+    var user = await userManager.GetUserAsync(User);
+    var menuList = new[]
+    {
+        new {
+            Label = "Product",
+            Icon = "ph ph-shopping-cart",
+
+            Url = "/Admin"
+        },
+        new {
+            Label = "Orders",
+            Icon = "ph ph-clipboard-text",
+            Url = "/Admin/Orders"
+        },
+        new {
+            Label = "Customer",
+            Icon = "ph ph-users-three",
+            Url = "/Admin/Customer"
+        },
+        new {
+            Label = "Categroy",
+            Icon = "ph ph-folder",
+            Url = "/Admin/Category"
+        }
+    };
+
+    var pathname = Context.Request.Path;
+
+
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,24 +55,72 @@ https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css
 <body>
    <div class="min-h-svh">
        @* header *@
-        <div class="fixed h-[76px] w-full border-b border-border bg-white">
-           <div class="flex items-center justify-end p-4">
+        <div class="fixed h-16 w-full border-border bg-white md:h-[76px] md:border-b">
+           <div class="flex items-center justify-center p-0 md:justify-end md:p-4">
                 <partial name="AdminPartial/_AdminProfilePartial" />
             </div>
         </div>
-            
-
-
         <div class="flex">
             @* Side *@
             <partial name="AdminPartial/_SideAdminPartial" />
 
             @* content *@
-            <div class="mt-24 mr-0 ml-0 flex-1 bg-[#FAFAFA] md:mt-24 md:mr-20 md:ml-80">
+            <div class="z-10 mt-24 mr-0 ml-0 flex-1 bg-[#FAFAFA] md:mt-24 md:mr-20 md:ml-80">
                 @RenderBody()
             </div>
         </div>
    </div>
+
+
+    <!-- drawer component -->
+    <div id="drawer-navigation" class="fixed top-0 left-0 z-[999999] flex h-screen w-64 -translate-x-full flex-col justify-between overflow-y-auto border-r border-border bg-white p-4 transition-transform dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+        <div>
+            <h5 id="drawer-navigation-label" class="text-xl font-bold text-gray-500 uppercase dark:text-gray-400">Vex</h5>
+            <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="absolute end-2.5 top-2.5 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
+                <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+                <span class="sr-only">Close menu</span>
+            </button>
+            <div class="my-3 h-px flex-1 border-b border-border"></div>
+            <div class="overflow-y-auto py-4">
+                <ul class="space-y-5 font-medium">
+                    @foreach (var item in menuList)
+                    {
+                        var isActive = pathname == item.Url;
+
+                        <li>
+                            <a href="@item.Url" class="font flex items-center gap-5 text-center text-lg font-semibold @(isActive ? "text-primary" : "text-gray-500 hover:text-gray-900")"><i class='@item.Icon text-xl'></i> <span>@item.Label</span></a>
+
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+
+      
+        <div class="flex flex-col gap-3 p-1 font-medium" role="none">
+            <div>
+                <a asp-controller="Home" asp-action="Index" class="flex items-center gap-2 rounded-sm py-2 text-base hover:bg-gray-100" role="menuitem" tabindex="-1">
+                    <i class="ph ph-house"></i>
+                    Home
+                </a>
+                <div class="my-1 h-px flex-1 bg-border"></div>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="block w-full">
+                    <button type="submit" class="flex w-full items-center gap-2 rounded-sm py-2 text-left text-base text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1">
+                        <i class="ph ph-sign-out"></i>
+                        Sign out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
