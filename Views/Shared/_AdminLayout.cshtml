@@ -55,7 +55,7 @@ https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css
 <body>
    <div class="min-h-svh">
        @* header *@
-        <div class="fixed h-16 w-full border-border bg-white md:h-[76px] md:border-b">
+        <div class="fixed h-16 w-full bg-white md:h-[76px]">
            <div class="flex items-center justify-center p-0 md:justify-end md:p-4">
                 <partial name="AdminPartial/_AdminProfilePartial" />
             </div>
@@ -65,7 +65,7 @@ https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css
             <partial name="AdminPartial/_SideAdminPartial" />
 
             @* content *@
-            <div class="z-10 mt-24 mr-0 ml-0 flex-1 bg-[#FAFAFA] md:mt-24 md:mr-20 md:ml-80">
+            <div class="mt-24 mr-0 ml-0 flex-1 bg-[#FAFAFA] md:mt-24 md:mr-20 md:ml-80">
                 @RenderBody()
             </div>
         </div>

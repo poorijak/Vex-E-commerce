@@ -5,9 +5,39 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var profilePicture = Model.User?.ProfilePictureUrl ?? "https://avatars.githubusercontent.com/u/124599?v=4";
 
+    var CustomerDetialList = new[]
+   {
+        new {
+            Label = "Total Order",
+            Value = "2300",
+            Description = "New cost last 365 days",
+            dotClassName = ""
+        },
+        new {
+            Label = "Total spendding",
+            Value = "123",
+            Description = "Total order last 365 days",
+            dotClassName = "size-4 rounded-full bg-[#FFA232]"
+
+        },
+        new {
+            Label = "Completed",
+            Value = "100",
+            Description = "Completed order last 365 days",
+            dotClassName = "size-4 rounded-full bg-green-500"
+
+        },
+        new {
+            Label = "Cancled",
+            Value = "2300",
+            Description = "New cost last 365 days",
+            dotClassName = "size-4 rounded-full bg-destructive"
+        },
+    };
+
 }
 
-<div>
+<div class="p-5">
    <div class="flex gap-3">
         <a asp-action="Customer" asp-controller="Admin" class="flex size-11 items-center justify-center rounded-sm border border-border bg-transparent hover:bg-muted-foreground/10 hover:cursor-pointer">
             <i class="ph ph-arrow-left text-muted-foreground"></i>
@@ -18,48 +48,21 @@
         </div>
    </div>
     
-   <div class="mt-10 grid grid-cols-2 md:grid-cols-4">
-       <div class="flex justify-between">
-            <div class="flex flex-col gap-3">
-                <h3 class="font-medium">Total Order</h3>
-                <p class="text-3xl font-bold text-primary">20300฿</p>
-                <p class="text-muted-foreground text-sm font-medium">New cost last 365 days</p>
-            </div>
-            <div class="mx-10 h-full border-l border-border"></div>
-       </div>
-       <div class="flex justify-between">
-            <div class="flex flex-col gap-3">
-                <h3 class="font-medium">Total spendding</h3>
-                <div class="flex items-center gap-6">
-                    <p class="text-3xl font-bold text-primary">123</p>
-                    <div class="size-4 rounded-full bg-[#FFA232]"></div>
+   <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+        @foreach (var item in CustomerDetialList)
+        {
+            <div class="flex justify-between rounded-sm border border-border bg-white p-3">
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-sm font-medium">@item.Label</h3>
+                   <div class="flex items-center gap-3">
+                        <p class="text-3xl font-bold text-primary">@item.Value</p>
+                        <div class="@item.dotClassName"></div>
+                   </div>
+                    <p class="text-muted-foreground text-sm font-medium">@item.Description</p>
                 </div>
-                <p class="text-muted-foreground text-sm font-medium">Total order last 365 days</p>
             </div>
-        <div class="mx-10 h-full border-l border-border"></div>
-       </div>
-       <div class="flex justify-between">
-            <div class="flex flex-col gap-3">
-                <h3 class="font-medium">Completed</h3>
-                <div class="flex items-center gap-6">
-                    <p class="text-3xl font-bold text-primary">100</p>
-                    <div class="size-4 rounded-full bg-green-500"></div>
-                </div>
-                <p class="text-muted-foreground text-sm font-medium">Completed order last 365 days</p>
-            </div>
-        <div class="mx-10 h-full border-l border-border"></div>
-       </div>
-       <div class="flex justify-between">
-            <div class="flex flex-col gap-3">
-                <h3 class="font-medium">Cancled</h3>
-                <div class="flex items-center gap-6">
-                    <p class="text-3xl font-bold text-primary">4</p>
-                    <div class="size-4 rounded-full bg-destructive"></div>
-                </div>
-                <p class="text-muted-foreground text-sm font-medium">New cost last 365 days</p>
-            </div>
-       </div>
 
+        }
 
    </div>
 
@@ -68,11 +71,11 @@
 
 
    <div class="mt-10">
-      <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
-            <div class="col-span-1 flex flex-col gap-3">
-                <h2 class="text-xl font-bold">Cusotmer Infomation</h2>
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+            <div class="col-span-1 flex w-full flex-col gap-3">
+                <h2 class="text-xl font-bold">Customer Infomation</h2>
 
-                <div class="w relative flex flex-col gap-3 rounded-md border border-border bg-white p-5">
+                <div class="relative flex flex-col gap-3 rounded-md border border-border bg-white p-5">
                     <div>
                         <label class="text-muted-foreground text-xs">Name</label>
                         <p class="text-sm font-medium text-primary">@(@Model?.User.Name ?? "Not Provide")</p>
@@ -117,7 +120,7 @@
                     <img class="absolute top-5 right-9 size-16 rounded-full" src="@profilePicture" />
                 </div>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 md:col-span-2">
                 <div>
                     <h2 class="text-xl font-bold">Orders</h2>
                 </div>

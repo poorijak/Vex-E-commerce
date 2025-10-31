@@ -8,7 +8,7 @@
 
 }
 
-<div class="relative hidden border-b border-border text-left transition-all duration-150 md:inline-block">
+<div class="relative z-40 hidden text-left transition-all duration-150 md:inline-block">
 
     <img id="admin-menu-button"
          class="size-9 cursor-pointer rounded-full"
@@ -18,7 +18,7 @@
          aria-haspopup="true" />
 
     <div id="admin-menu-items"
-         class="absolute right-0 z-10 mt-2 hidden w-56 origin-top-right bg-white shadow-md ring-1 ring-border focus:outline-none"
+         class="absolute right-0 mt-2 hidden w-56 origin-top-right bg-white shadow-md ring-1 ring-border focus:outline-none"
          role="menu"
          aria-orientation="vertical"
          aria-labelledby="admin-menu-button"
@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<div class="relative inline-flex h-full w-full bg-white md:hidden">
+<div class="relative inline-flex h-full w-full border-b border-border bg-white md:hidden">
     <div class="flex h-full w-full items-center justify-between p-5">
         <div>
             <a asp-action="Index" asp-controller="Home" class="text-2xl font-bold">Vex</a>
