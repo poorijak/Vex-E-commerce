@@ -177,8 +177,27 @@
     font-display: swap;
 }
 
-/* ใช้งานทั่วทั้งเว็บ */
 body {
     font-family: 'Geist Sans', sans-serif;
     background-color: #fafafa;
 }
+
+@keyframes marquee {
+    0%
+
+{
+    transform: translateX(-20%);
+}
+
+100% {
+    transform: translateX(0);
+}
+
+}
+
+.animate-marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 10s linear infinite;
+}
+
