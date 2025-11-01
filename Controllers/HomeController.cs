@@ -1,5 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using Vex_E_commerce.Data;
 using Vex_E_commerce.Models;
 
 namespace Vex_E_commerce.Controllers;
@@ -7,15 +9,28 @@ namespace Vex_E_commerce.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly ApplicationDbContext _db;
 
-    public HomeController(ILogger<HomeController> logger)
+
+    public HomeController(ILogger<HomeController> logger , ApplicationDbContext db)
     {
         _logger = logger;
+        _db = db;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+
+        var product = await _db.Products.Take(5).ToListAsync();
+
+        return View(product);
+    }
+    public async Task<IActionResult> ProductDetail()
+    {
+
+        var product = await _db.Products.Take(5).ToListAsync();
+
+        return View(product);
     }
 
     public IActionResult Privacy()
