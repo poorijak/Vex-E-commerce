@@ -59,6 +59,8 @@ namespace Vex_E_commerce.Models
         public ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public int TotalSold { get; set; } = 0;
     }
 
 
