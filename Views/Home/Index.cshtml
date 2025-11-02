@@ -11,6 +11,39 @@
         new { style = "bg-white border" },
     };
 
+    var categoryList = new[]
+    {
+        new
+        {
+            label = "T-Shirt",
+            imgHover = "https://cdn01.pinkoi.com/product/WyzEB7Dz/0/1/640x530.jpg",
+            path = "T-shirt",
+            img = "https://streetconnect-402.com/cdn/shop/files/stc-classic-tshirt-black-back.png?v=1747523129&width=770"
+
+        },
+        new
+        {
+            label = "Accessories",
+            imgHover = "https://www.hawaiisurf.com/cdn/shop/collections/accessoires-streetwear-897338.jpg?v=1708074134&width=1296",
+            path = "Accessories",
+            img = "https://images.nexusapp.co/assets/76/d9/ee/709814866.png"
+        },
+        new
+        {
+            label = "Sweater",
+            imgHover = "https://img4.dhresource.com/webp/m/0x0/f3/albu/jc/j/22/7ff8e5c6-deea-41e1-b400-84ab6e2fa897.jpg",
+            path = "Sweater",
+            img = "https://charlottefolk.co/cdn/shop/files/CF-HOLIDAY-SWEATER-BLACK-B.png?v=1703004194"
+        },
+        new
+        {
+            label = "Hoodie",
+            imgHover = "https://techwear.store/cdn/shop/products/japanese-streetwear-hoodie-815_1800x1800.jpg?v=1643365967",
+            path = "Hoodie",
+            img = "https://elevatestreetstyle.com/cdn/shop/files/Elevate-Hoodie-Black.png?v=1731769231"
+        },
+    };
+
 }
 
 
@@ -37,7 +70,7 @@
                 <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
                 @foreach(var i in Model)
                 {
-                    <a asp-route-id="@i.Id" asp-action="ProductDetail" asp-controller="Home" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4 transition-transform duration-200 hover:-translate-y-2 hover:cursor-pointer">
+                    <a asp-route-id="@i.Id" asp-action="ProductDetail" asp-controller="Home" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4">
                         <div class="flex justify-end">
                             <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
                         </div>    
@@ -48,7 +81,7 @@
 
                             <div class="flex flex-col gap-1">
                                 <label class="line-clamp-1 text-xs font-semibold">@i.Title</label>
-                                <div class="flex gap-1">
+                                <div class="mt-1 flex gap-1">
                                     @foreach (var c in colorList)
                                     {
                                         <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
@@ -74,6 +107,38 @@
 
     <section class="mt-20 md:mt-40">
         <partial name="HomePagePartial/Banner-clip-path" />
+    </section>
+
+
+    <section class="mx-5 mt-24 md:mx-32">
+        <div>
+            <h2 class="text-2xl font-bold">Category</h2>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-10 md:grid-cols-4">
+            @foreach(var i in categoryList)
+            {
+                <div class="group">
+                    <a class="hover:cursor-pointer" >
+                        <div class="overflow-hidden border border-border p-5">
+                            <div class="relative flex size-28 items-center justify-center md:size-52">
+                                <img src="@i.imgHover" class="absolute inset-0 z-10 h-full w-full object-cover opacity-0
+                            transition-opacity duration-300 ease-in-out
+                            group-hover:opacity-100" />
+                                <img src="@i.img" class="absolute inset-0 h-full w-full object-cover
+                            transition-opacity duration-300 ease-in-out
+                            group-hover:opacity-0" />
+                            </div>
+                        </div>
+                        <div class="mt-5 flex justify-between">
+                            <label class="items-baseline text-lg font-medium underline hover:cursor-pointer">
+                                @i.label
+                            </label>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="currentColor" d="M10.586 4H4V2h10v10h-2V5.414l-8.293 8.293l-1.414-1.414z" /></svg>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
     </section>
 
 </div>
