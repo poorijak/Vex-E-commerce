@@ -28,30 +28,30 @@
             </div>
     </section>
     <section class="mx-5 md:mx-32">
-        <section class="mt-10 h-[500px]">
+        <figure class="mt-10">
             <h2 class="flex items-center gap-2 text-3xl font-medium">
                 Biggest 
                 <span class="font-bold">Sales</span>
                 Ever
             </h2>
-                <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-5 md:gap-10">
+                <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
                 @foreach(var i in Model)
                 {
-                    <a asp-route-id="@i.Id" asp-action="ProductDetail" asp-controller="Home" class="font-geist rounded-md border border-border bg-white p-4 shadow-sm transition-transform duration-200 hover:-translate-y-2 hover:cursor-pointer">
+                    <a asp-route-id="@i.Id" asp-action="ProductDetail" asp-controller="Home" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4 transition-transform duration-200 hover:-translate-y-2 hover:cursor-pointer">
                         <div class="flex justify-end">
-                            <p class="text-muted-foreground text-xs font-medium">345 SOLD</p>
+                            <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
                         </div>    
                         
                         <div class="my-4 flex items-center justify-center overflow-hidden">
-                                <img src="@i.PictureUrl" class="size-32 object-cover md\:size-40" />
+                                <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
                             </div>
 
-                            <div class="flex flex-col gap-2">
-                                <label class="line-clamp-1 text-sm font-semibold">@i.Title</label>
+                            <div class="flex flex-col gap-1">
+                                <label class="line-clamp-1 text-xs font-semibold">@i.Title</label>
                                 <div class="flex gap-1">
                                     @foreach (var c in colorList)
                                     {
-                                        <div class="@c.style size-4 rounded-xs border border-border hover:cursor-pointer md:size-5">
+                                        <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
                                         </div>
                                     }
                                 </div>
@@ -66,7 +66,16 @@
                     </a>
                 }
             </div>
-        </section>
+        </figure>
+
+
+
     </section>
+
+    <section class="mt-20 md:mt-40">
+        <partial name="HomePagePartial/Banner-clip-path" />
+    </section>
+
 </div>
+
 

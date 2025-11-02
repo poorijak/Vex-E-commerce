@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<svg class="circle">
+    <defs>
+        <clipPath id="clip-circle" clipPathUnits="objectBoundingBox">
+           <path d="M0 0H0.756964C0.891189 0 1 0.116259 1 0.259673C1 0.403086 0.891189 0.519345 0.756964 0.519345H0V0Z" fill="#D9D9D9"/>
+            <path d="M0 0.519345H0.609331C0.733557 0.519345 0.834262 0.626943 0.834262 0.759673C0.834262 0.892402 0.733557 1 0.609331 1H0V0.519345Z" fill="#D9D9D9"/>
+        </clipPath>
+    </defs>
+</svg>
+
+<section class="grid grid-cols-2 gap-10">
+    <figure>
+        <img class="clip-img hidden aspect-square h-96 overflow-hidden object-cover md:block md:h-10/12" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=3705" />
+        <img class="block aspect-square overflow-hidden object-cover md:hidden md:h-10/12" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=3705" />
+    </figure>
+
+    <div class="items- flex flex-col gap-40">
+        <p class="hidden flex-wrap md:block md:text-5xl">
+            Not just apparel — a culture that inspires creativity, empowers individuality, and unites a new generation of creators.
+        </p>
+        <p class="mr-5 block flex-wrap text-xl md:hidden md:text-5xl">
+            Beyond trends — building a culture of self-expression.
+        </p>
+
+        <p class="text-xs">
+            We believe streetwear is more than what you wear — it’s how you express who you are.
+            Every piece we design connects culture, art, and identity into a movement that celebrates originality and redefines style for the next era
+        </p>
+    </div>
+</section>
+
+
+<style>
+    .clip-img {
+        clip-path: url(#clip-circle)
+    }
+    svg.circle {
+        position : absolute;
+        top : -999px;
+        left : -999px;
+        width : 0;
+        height : 0; 
+    }
+</style>
