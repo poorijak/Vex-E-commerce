@@ -1,0 +1,62 @@
+﻿@model List<Vex_E_commerce.Models.Product>
+
+@*
+*@
+@{
+
+    var colorList = new[]
+ {
+        new { style = "bg-red-600"      },
+        new { style = "bg-neutral-900"  },
+        new { style = "bg-white border" },
+    };
+
+}
+
+
+<div class="pt-16 md:pt-[76px]">
+    <img class="h-[200px] w-full object-cover object-[70%_25%]" src="https://images.unsplash.com/photo-1635650804483-2a77a8c9e728?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2340" />
+
+
+    <div class="mx-20 mt-10">
+        <h2 class="text-7xl font-semibold">@ViewBag.category</h2>
+
+
+        <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
+            @foreach (var i in Model)
+            {
+                <a asp-route-id="@i.Id" asp-action="ProductDetail" asp-controller="Home" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4">
+                    <div class="flex justify-end">
+                        <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
+                    </div>
+                    <div class="my-4 flex items-center justify-center overflow-hidden">
+                        <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="line-clamp-1 text-xs font-semibold">@i.Title</label>
+                        <div class="mt-1 flex gap-1">
+                            @foreach (var c in colorList)
+                            {
+                                <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
+                                </div>
+                            }
+                        </div>
+                        <div class="flex items-end justify-between">
+                            <div class="mt-3 flex flex-col gap-1">
+                                <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
+                                <p class="text-sm font-semibold">฿ @i.BasePrice</p>
+                            </div>
+                            <i class="ph ph-heart text-xl"></i>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+
+    </div>
+
+</div>
+
+
+

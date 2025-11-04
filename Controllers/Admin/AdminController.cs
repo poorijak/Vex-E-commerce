@@ -142,8 +142,6 @@ namespace Vex_E_commerce.Controllers.Admin
         }
 
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CustomerDetail(CustomerVm vm)
@@ -242,8 +240,6 @@ namespace Vex_E_commerce.Controllers.Admin
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Category));
         }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteCategory(Guid id)

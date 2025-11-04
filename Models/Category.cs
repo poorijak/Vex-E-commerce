@@ -18,8 +18,8 @@ namespace Vex_E_commerce.Models
 
     public class CategoryPageViewModel
     {
-        public Category Category { get; set; } = new Category();
+        public Category Category { get; set; } = new Category(); 
 
-        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>(); 
     }
 }
