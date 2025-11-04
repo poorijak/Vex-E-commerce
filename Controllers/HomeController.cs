@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using System.Diagnostics;
 using Vex_E_commerce.Data;
 using Vex_E_commerce.Models;
@@ -10,37 +12,101 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ApplicationDbContext _db;
+    private readonly UserManager<Customer> _userManager;
 
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+
+
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext db, UserManager<Customer> userManager)
     {
         _logger = logger;
         _db = db;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> Index()
     {
 
-        var product = await _db.Products.Take(5).ToListAsync();
+        var userId = _userManager.GetUserId(User);
 
-        return View(product);
-    }
-    public async Task<IActionResult> ProductList()
-    {
+        HashSet<Guid> wishedIds = new();
+        if (userId != null)
+        {
+            wishedIds = (await _db.ProductWishlists
+                .AsNoTracking()
+                .Where(w => w.UserId == userId)
+                .Select(w => w.ProductId)
+                .ToListAsync()).ToHashSet();
+        }
 
-        var product = await _db.Products.Take(5).ToListAsync();
+        var lists = await _db.Products.AsNoTracking().Select(p => new ProductCardVm
+        {
+            Id = p.Id,
+            Title = p.Title,
+            PictureUrl = p.PictureUrl,
+            TotalSold = p.TotalSold,
+            BasePrice = p.BasePrice,
+            IsWishlisted = wishedIds.Contains(p.Id),
 
-        return View(product);
+        }).Take(5).ToListAsync();
+
+
+        return View(lists);
     }
 
     public async Task<IActionResult> CategoryProduct(string category)
     {
 
-        var prodcutList = await _db.Products.Where(p => p.Category.Title == category).ToListAsync();
+        var userId = _userManager.GetUserId(User);
+
+        HashSet<Guid> wishedIds = new();
+        if (userId != null)
+        {
+            wishedIds = (await _db.ProductWishlists
+                .AsNoTracking()
+                .Where(w => w.UserId == userId)
+                .Select(w => w.ProductId)
+                .ToListAsync()).ToHashSet();
+        }
+
+        var lists = await _db.Products.AsNoTracking().Select(p => new ProductCardVm
+        {
+            Id = p.Id,
+            Title = p.Title,
+            PictureUrl = p.PictureUrl,
+            TotalSold = p.TotalSold,
+            BasePrice = p.BasePrice,
+            IsWishlisted = wishedIds.Contains(p.Id),
+
+        }).ToListAsync();
 
         ViewBag.Category = category;
 
-        return View(prodcutList);
+        return View(lists);
+    }
+
+    public async Task<IActionResult> ToggleWishList([FromForm] Guid productId)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        var exist = await _db.ProductWishlists.FirstOrDefaultAsync(w => w.UserId == user.Id && w.ProductId == productId);
+
+        if (exist == null)
+        {
+            await _db.ProductWishlists.AddAsync(new ProductWishlist { UserId = user.Id, ProductId = productId });
+            await _db.SaveChangesAsync();
+            return Json(new { ok = true, added = true });
+        }
+        else
+        {
+            _db.ProductWishlists.Remove(exist);
+            await _db.SaveChangesAsync();
+            return Json(new { ok = true, added = false });
+        }
     }
 
     public IActionResult Privacy()

@@ -58,6 +58,8 @@ namespace Vex_E_commerce.Models
         // 1 Product → Many Variants
         public ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 
+        public ICollection<ProductWishlist> WishlistsItems { get; set; } = new List<ProductWishlist>();
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public int TotalSold { get; set; } = 0;
@@ -96,6 +98,18 @@ namespace Vex_E_commerce.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
+    public class ProductWishlist
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        public string UserId { get; set; }
+        public Customer User { get; set; }
+
+        public Guid ProductId { get; set; }
+
+        public Product Product { get; set; }
+    }
+
     public class ProductFormVm
     {
         public Guid? Id { get; set; }
@@ -122,11 +136,11 @@ namespace Vex_E_commerce.Models
 
         public List<TemporaryVariantData> Variants { get; set; } = new();
 
-        
+
 
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }
-  
+
     public class TemporaryVariantData
     {
         public string Size { get; set; } = string.Empty;
@@ -135,5 +149,20 @@ namespace Vex_E_commerce.Models
         public int Stock { get; set; }
         public string Sku { get; set; } = string.Empty;
     }
+
+    public class ProductCardVm
+    {
+        public Guid Id { get; set; }
+
+        public string Title { get; set; }
+        public string PictureUrl { get; set; }
+
+        public int TotalSold { get; set; }
+
+        public decimal BasePrice { get; set; }
+        public bool IsWishlisted { get; set; }
+    }
+
+
 
 }
