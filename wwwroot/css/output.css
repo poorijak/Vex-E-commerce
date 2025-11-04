@@ -522,8 +522,20 @@
   .h-\[200px\] {
     height: 200px;
   }
+  .h-\[276\] {
+    height: 276;
+  }
   .h-\[276px\] {
     height: 276px;
+  }
+  .h-\[280px\] {
+    height: 280px;
+  }
+  .h-\[600px\] {
+    height: 600px;
+  }
+  .h-\[600pxx\] {
+    height: 600pxx;
   }
   .h-full {
     height: 100%;
