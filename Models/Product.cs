@@ -150,6 +150,19 @@ namespace Vex_E_commerce.Models
         public string Sku { get; set; } = string.Empty;
     }
 
+    public class ProductCardVm
+    {
+        public Guid Id { get; set; }
+
+        public string Title { get; set; }
+        public string PictureUrl { get; set; }
+
+        public int TotalSold { get; set; }
+
+        public decimal BasePrice { get; set; }
+        public bool IsWishlisted { get; set; }
+    }
+
 
 
 }

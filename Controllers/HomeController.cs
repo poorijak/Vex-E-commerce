@@ -16,6 +16,7 @@ public class HomeController : Controller
 
 
 
+
     public HomeController(ILogger<HomeController> logger, ApplicationDbContext db, UserManager<Customer> userManager)
     {
         _logger = logger;
@@ -26,26 +27,62 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
 
-        var product = await _db.Products.Take(5).ToListAsync();
+        var userId = _userManager.GetUserId(User);
 
-        return View(product);
-    }
-    public async Task<IActionResult> ProductList()
-    {
+        HashSet<Guid> wishedIds = new();
+        if (userId != null)
+        {
+            wishedIds = (await _db.ProductWishlists
+                .AsNoTracking()
+                .Where(w => w.UserId == userId)
+                .Select(w => w.ProductId)
+                .ToListAsync()).ToHashSet();
+        }
 
-        var product = await _db.Products.Take(5).ToListAsync();
+        var lists = await _db.Products.AsNoTracking().Select(p => new ProductCardVm
+        {
+            Id = p.Id,
+            Title = p.Title,
+            PictureUrl = p.PictureUrl,
+            TotalSold = p.TotalSold,
+            BasePrice = p.BasePrice,
+            IsWishlisted = wishedIds.Contains(p.Id),
 
-        return View(product);
+        }).Take(5).ToListAsync();
+
+
+        return View(lists);
     }
 
     public async Task<IActionResult> CategoryProduct(string category)
     {
 
-        var prodcutList = await _db.Products.Where(p => p.Category.Title == category).ToListAsync();
+        var userId = _userManager.GetUserId(User);
+
+        HashSet<Guid> wishedIds = new();
+        if (userId != null)
+        {
+            wishedIds = (await _db.ProductWishlists
+                .AsNoTracking()
+                .Where(w => w.UserId == userId)
+                .Select(w => w.ProductId)
+                .ToListAsync()).ToHashSet();
+        }
+
+        var lists = await _db.Products.AsNoTracking().Select(p => new ProductCardVm
+        {
+            Id = p.Id,
+            Title = p.Title,
+            PictureUrl = p.PictureUrl,
+            TotalSold = p.TotalSold,
+            BasePrice = p.BasePrice,
+            IsWishlisted = wishedIds.Contains(p.Id),
+
+        }).ToListAsync();
 
         ViewBag.Category = category;
 
-        return View(prodcutList);
+        return View(lists);
     }
 
     public async Task<IActionResult> ToggleWishList([FromForm] Guid productId)
@@ -68,7 +105,7 @@ public class HomeController : Controller
         {
             _db.ProductWishlists.Remove(exist);
             await _db.SaveChangesAsync();
-            return Json(new { ok = true, addred = false });
+            return Json(new { ok = true, added = false });
         }
     }
 

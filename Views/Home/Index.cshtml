@@ -1,4 +1,4 @@
-﻿@model List<Vex_E_commerce.Models.Product>
+﻿@model List<Vex_E_commerce.Models.ProductCardVm>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -95,11 +95,12 @@
                                 <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
                                 <p class="text-sm font-semibold">฿ @i.BasePrice</p>
                             </div>
-                            <form method="post" asp-action="ToggleWishList" asp-controller="Home" data-product-itemid="@i.Id">
+                            <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="Home" data-product-itemid="@i.Id">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="productId" value="@i.Id" />
-                                <button>
-                                    <i class="ph ph-heart text-xl"></i>
+                                <button type="submit" class="heart-btn" aria-label="Wishlist">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  class="heart-outline @(i.IsWishlisted ? "hidden" : "") size-6" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-fill size-6 fill-destructive @(i.IsWishlisted ? "" : "hidden")" viewBox="0 0 256 256"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path></svg>
                                 </button>
                             </form>
                         </div>
@@ -181,11 +182,12 @@
                                 <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
                                 <p class="text-sm font-semibold">฿ @i.BasePrice</p>
                             </div>
-                            <form method="post" asp-action="ToggleWishList" asp-controller="Home" data-product-itemid="@i.Id">
+                            <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="Home" data-product-itemid="@i.Id">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="productId" value="@i.Id" />
-                                <button>
-                                    <i class="ph ph-heart text-xl"></i>
+                                <button type="submit" class="heart-btn" aria-label="Wishlist">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-outline @(i.IsWishlisted ? "hidden" : "") size-6" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-fill size-6 fill-destructive @(i.IsWishlisted ? "" : "hidden")" viewBox="0 0 256 256"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path></svg>
                                 </button>
                             </form>
                         </div>
@@ -227,11 +229,12 @@
                                 <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
                                 <p class="text-sm font-semibold">฿ @i.BasePrice</p>
                             </div>
-                            <form method="post" asp-action="ToggleWishList" asp-controller="Home" data-product-itemid="@i.Id">
+                            <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="Home" data-product-itemid="@i.Id">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="productId" value="@i.Id" />
-                                <button>
-                                    <i class="ph ph-heart text-xl"></i>
+                                <button type="submit" class="heart-btn" aria-label="Wishlist">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-outline @(i.IsWishlisted ? "hidden" : "") size-6" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-fill size-6 fill-destructive @(i.IsWishlisted ? "" : "hidden")" viewBox="0 0 256 256"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path></svg>
                                 </button>
                             </form>
                         </div>
@@ -244,5 +247,29 @@
 
 
 <script>
+       document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".wishlist-form").forEach(form => {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const fill = form.querySelector(".heart-fill");
+          const outline = form.querySelector(".heart-outline");
+
+          const fd = new FormData(form);
+          const res = await fetch(form.action, {
+            method: "POST",
+            body: fd,
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          });
+
+          const data = await res.json();
+
+          if (data.ok) {
+            fill.classList.toggle("hidden");
+            outline.classList.toggle("hidden");
+          }
+        });
+      });
+    });
 
 </script>
