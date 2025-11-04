@@ -45,8 +45,6 @@
     };
 
 }
-
-
 <div class="bg-[#fafafa] pt-16 md:pt-[76px]">
     <section class="relative h-svh w-full">
         <img class="h-full w-full object-cover object-[50%_25%]" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=3705" />
@@ -60,17 +58,17 @@
               </div>
             </div>
     </section>
-    <section class="mx-5 md:mx-32">
+    <section class="mx-5 md:mx-10 lg:mx-32">
         <figure class="mt-10">
             <h2 class="flex items-center gap-2 text-3xl font-medium">
                 Biggest 
                 <span class="font-bold">Sales</span>
                 Ever
             </h2>
-                <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
+                <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-10 lg:grid-cols-5">
                 @foreach(var i in Model)
                 {
-                    <a asp-route-id="@i.Id" asp-action="ProductDetail" asp-controller="Home" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4">
+                    <a asp-route-id="@i.Id" asp-action="Index" asp-controller="ProductDetail" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4">
                         <div class="flex justify-end">
                             <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
                         </div>    
@@ -80,7 +78,7 @@
                             </div>
 
                             <div class="flex flex-col gap-1">
-                                <label class="line-clamp-1 text-xs font-semibold">@i.Title</label>
+                                <label class="line-clamp-1 text-base font-semibold">@i.Title</label>
                                 <div class="mt-1 flex gap-1">
                                     @foreach (var c in colorList)
                                     {
@@ -100,31 +98,25 @@
                 }
             </div>
         </figure>
-
-
-
     </section>
-
     <section class="mt-20 md:mt-40">
         <partial name="HomePagePartial/Banner-clip-path" />
     </section>
-
-
-    <section class="mx-5 mt-24 md:mx-32">
+    <section class="mx-5 mt-20 md:mx-10 lg:mx-32">
         <div>
             <h2 class="text-2xl font-bold">Category</h2>
         </div>
-        <div class="mt-5 grid grid-cols-2 gap-10 md:grid-cols-4">
+        <div class="mt-10 grid grid-cols-2 gap-4 md:gap-10 lg:grid-cols-4">
             @foreach(var i in categoryList)
             {
                 <div class="group">
-                    <a class="hover:cursor-pointer" >
-                        <div class="overflow-hidden border border-border p-5">
-                            <div class="relative flex size-28 items-center justify-center md:size-52">
+                    <a class="hover:cursor-pointer" asp-action="CategoryProduct" asp-controller="Home" asp-route-category="@i.path">
+                        <div class="flex items-center justify-center overflow-hidden border border-border p-5">
+                            <div class="relative size-28 md:size-52">
                                 <img src="@i.imgHover" class="absolute inset-0 z-10 h-full w-full object-cover opacity-0
                             transition-opacity duration-300 ease-in-out
                             group-hover:opacity-100" />
-                                <img src="@i.img" class="absolute inset-0 h-full w-full object-cover
+                                <img src="@i.img" class="absolute inset-0 h-full w-full object-contain
                             transition-opacity duration-300 ease-in-out
                             group-hover:opacity-0" />
                             </div>
@@ -141,6 +133,86 @@
         </div>
     </section>
 
+    
+    <div class="my-24 h-px flex-1 border-b border-border"></div>
+
+
+    <div class="mx-5 md:mx-10 lg:mx-32">
+        <figure class="mt-10">
+            <h2 class="flex items-center gap-2 text-3xl font-bold">
+               Today's Trends
+            </h2>
+            <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-10 lg:grid-cols-5">
+                @foreach (var i in Model)
+                {
+                    <a asp-route-id="@i.Id" asp-action="Index" asp-controller="ProductDetail" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4">
+                        <div class="flex justify-end">
+                            <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
+                        </div>
+
+                        <div class="my-4 flex items-center justify-center overflow-hidden">
+                            <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label class="line-clamp-1 text-base font-semibold">@i.Title</label>
+                            <div class="mt-1 flex gap-1">
+                                @foreach (var c in colorList)
+                                {
+                                    <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
+                                    </div>
+                                }
+                            </div>
+                            <div class="flex items-end justify-between">
+                                <div class="mt-3 flex flex-col gap-1">
+                                    <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
+                                    <p class="text-sm font-semibold">฿ @i.BasePrice</p>
+                                </div>
+                                <i class="ph ph-heart text-xl"></i>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </figure>
+        <figure class="mt-10">
+            <h2 class="flex items-center gap-2 text-3xl font-bold">
+               Recently Sold
+            </h2>
+            <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-10 lg:grid-cols-5">
+                @foreach (var i in Model)
+                {
+                    <a asp-route-id="@i.Id" asp-action="Index" asp-controller="ProductDetail" class="font-geist flex h-[276px] flex-col rounded-md border border-border bg-white p-4">
+                        <div class="flex justify-end">
+                            <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
+                        </div>
+
+                        <div class="my-4 flex items-center justify-center overflow-hidden">
+                            <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label class="line-clamp-1 text-base font-semibold">@i.Title</label>
+                            <div class="mt-1 flex gap-1">
+                                @foreach (var c in colorList)
+                                {
+                                    <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
+                                    </div>
+                                }
+                            </div>
+                            <div class="flex items-end justify-between">
+                                <div class="mt-3 flex flex-col gap-1">
+                                    <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
+                                    <p class="text-sm font-semibold">฿ @i.BasePrice</p>
+                                </div>
+                                <i class="ph ph-heart text-xl"></i>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </figure> 
+    </div>
 </div>
 
 

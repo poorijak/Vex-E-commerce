@@ -12,7 +12,7 @@ public class HomeController : Controller
     private readonly ApplicationDbContext _db;
 
 
-    public HomeController(ILogger<HomeController> logger , ApplicationDbContext db)
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
     {
         _logger = logger;
         _db = db;
@@ -25,12 +25,22 @@ public class HomeController : Controller
 
         return View(product);
     }
-    public async Task<IActionResult> ProductDetail()
+    public async Task<IActionResult> ProductList()
     {
 
         var product = await _db.Products.Take(5).ToListAsync();
 
         return View(product);
+    }
+
+    public async Task<IActionResult> CategoryProduct(string category)
+    {
+
+        var prodcutList = await _db.Products.Where(p => p.Category.Title == category).ToListAsync();
+
+        ViewBag.Category = category;
+
+        return View(prodcutList);
     }
 
     public IActionResult Privacy()
