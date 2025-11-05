@@ -5,12 +5,31 @@
 @{
 
     var colorList = new[]
- {
+         {
         new { style = "bg-red-600"      },
         new { style = "bg-neutral-900"  },
         new { style = "bg-white border" },
     };
 
+    var sortList = new[]
+    {
+        new
+        {
+           id = "LTH",
+           value = "priceAsc",
+           HTMLFor = "LTH",
+           label = "Low to high (price)",
+        },
+        new
+        {
+           id = "HTL",
+           value = "priceDsec",
+           HTMLFor = "HTL",
+           label = "High to low (price)",
+        },
+    };
+
+    string currentSort = (ViewBag.Sort as string) ?? ""; 
 }
 
 
@@ -19,8 +38,9 @@
 
 
     <div class="mx-5 mt-10 md:mx-10 lg:mx-32">
-        <div class="flex items-baseline justify-between">
+        <div class="flex items-center justify-between">
             <h2 class="text-7xl font-semibold">@ViewBag.category</h2>
+            <div class="mx-5 h-px flex-1 border-b border-border"></div>
             <button type="button" data-drawer-target="drawer-filter"
                     data-drawer-show="drawer-filter"
                     aria-controls="drawer-filter"
@@ -100,16 +120,18 @@
 
         <div class="mt-5 flex flex-col gap-2">
             <h2 class="text-muted-foreground text-sm md:text-base">Sort by</h2>
-            <form asp-action="">
+            <form asp-action="CategoryProduct" asp-controller="Home" method="get">
+                <input type="hidden" value="@ViewBag.Category" name="category"/>
                 <div>
-                    <div class="mb-4 flex items-center">
-                        <input id="HTL" type="radio" value="" name="default-radio" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary focus:ring-2 focus:ring-primary active:rounded-sm">
-                        <label for="HTL" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Low to high (Price)</label>
-                    </div>
-                    <div class="mb-4 flex items-center">
-                        <input id="LTH" type="radio" value="" name="default-radio" class="h-4 w-4 border-gray-300 bg-gray-100 text-primary focus:ring-2 focus:ring-primary active:rounded-sm">
-                        <label for="LTH" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">High to Low (Price)</label>
-                    </div>
+                    @foreach(var item in sortList)
+                    {
+                        var isChecked = string.Equals(currentSort, item.value, StringComparison.OrdinalIgnoreCase);
+                        <div class="mb-4 flex items-center">
+                            <input id="@item.id" type="radio" value="@item.value" name="sort" @(isChecked ? "checked" : "") class="h-4 w-4 border-gray-300 bg-gray-100 text-primary @(isChecked ? "focus:ring-2 focus:ring-primary" : "") active:rounded-sm">
+                            <label for="@item.HTMLFor" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">@item.label</label>
+                        </div>
+
+                    }
                 </div>
 
                 <div class="flex justify-end">
