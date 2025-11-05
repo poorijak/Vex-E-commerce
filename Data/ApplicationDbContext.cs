@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductVariant> ProductVariants { get; set; }
 
+    public DbSet<ProductWishlist> ProductWishlists { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -28,11 +30,14 @@ public class ApplicationDbContext : IdentityDbContext
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<ProductWishlist>()
+            .HasIndex(x => new { x.UserId, x.ProductId }).IsUnique();
+
         builder.Entity<ProductVariant>()
             .HasOne(v => v.Product)
             .WithMany(p => p.ProductVariants)
             .HasForeignKey(v => v.ProductId)
-            .OnDelete(DeleteBehavior.Cascade); // 👈 เปลี่ยนเป็น Cascade
+            .OnDelete(DeleteBehavior.Cascade); 
 
         builder.Entity<Product>().Property(p => p.Status).HasConversion<string>();
         builder.Entity<ProductVariant>().Property(v => v.Size).HasConversion<string>();
