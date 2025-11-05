@@ -5,12 +5,31 @@
 @{
 
     var colorList = new[]
- {
+         {
         new { style = "bg-red-600"      },
         new { style = "bg-neutral-900"  },
         new { style = "bg-white border" },
     };
 
+    var sortList = new[]
+    {
+        new
+        {
+           id = "LTH",
+           value = "priceAsc",
+           HTMLFor = "LTH",
+           label = "Low to high (price)",
+        },
+        new
+        {
+           id = "HTL",
+           value = "priceDsec",
+           HTMLFor = "HTL",
+           label = "High to low (price)",
+        },
+    };
+
+    string currentSort = (ViewBag.Sort as string) ?? ""; 
 }
 
 
@@ -19,8 +38,17 @@
 
 
     <div class="mx-5 mt-10 md:mx-10 lg:mx-32">
-        <h2 class="text-7xl font-semibold">@ViewBag.category</h2>
-
+        <div class="flex items-center justify-between">
+            <h2 class="text-7xl font-semibold">@ViewBag.category</h2>
+            <div class="mx-5 h-px flex-1 border-b border-border"></div>
+            <button type="button" data-drawer-target="drawer-filter"
+                    data-drawer-show="drawer-filter"
+                    aria-controls="drawer-filter"
+                    data-drawer-placement="right"
+                class="flex cursor-pointer items-baseline gap-3 rounded-sm px-3 py-1 text-base hover:border hover:border-border hover:bg-[#F1F1f1]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 256 256"><path d="M200,136a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H192A8,8,0,0,1,200,136Zm32-56H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-80,96H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Z"></path></svg>Filter
+            </button>
+        </div>
 
         <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
             @foreach (var i in Model)
@@ -69,5 +97,49 @@
 
 </div>
 
+<div id="drawer-filter"
+     class="fixed top-0 right-0 z-[999999] h-screen w-72 translate-x-full overflow-y-auto border-l border-border bg-white p-4 shadow-sm transition-transform md:w-96"
+     tabindex="-1"
+     aria-labelledby="drawer-filter-label">
+    <div >
+        <h5 id="drawer-filter-label" class="flex items-baseline gap-2 text-base font-medium text-primary md:text-lg">
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 256 256"><path d="M200,136a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H192A8,8,0,0,1,200,136Zm32-56H24a8,8,0,0,0,0,16H232a8,8,0,0,0,0-16Zm-80,96H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Z"></path></svg>
+            </span>
+            Filter</h5>
+        <button type="button"
+                data-drawer-hide="drawer-filter"
+                aria-controls="drawer-filter"
+                class="absolute top-2.5 right-2.5 inline-flex h-8 w-8 items-center justify-center rounded-sm bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
+            <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg>
+        </button>
+        <div class="my-3 h-px border-b border-border"></div>
 
+        <div class="mt-5 flex flex-col gap-2">
+            <h2 class="text-muted-foreground text-sm md:text-base">Sort by</h2>
+            <form asp-action="CategoryProduct" asp-controller="Home" method="get">
+                <input type="hidden" value="@ViewBag.Category" name="category"/>
+                <div>
+                    @foreach(var item in sortList)
+                    {
+                        var isChecked = string.Equals(currentSort, item.value, StringComparison.OrdinalIgnoreCase);
+                        <div class="mb-4 flex items-center">
+                            <input id="@item.id" type="radio" value="@item.value" name="sort" @(isChecked ? "checked" : "") class="h-4 w-4 border-gray-300 bg-gray-100 text-primary @(isChecked ? "focus:ring-2 focus:ring-primary" : "") active:rounded-sm">
+                            <label for="@item.HTMLFor" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">@item.label</label>
+                        </div>
 
+                    }
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="mt-3 border-[0.5px] bg-primary px-4 py-1 text-sm text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary">
+                        Apply
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -54,7 +54,7 @@ public class HomeController : Controller
         return View(lists);
     }
 
-    public async Task<IActionResult> CategoryProduct(string category)
+    public async Task<IActionResult> CategoryProduct(string category , string? sort)
     {
 
         var userId = _userManager.GetUserId(User);
@@ -69,20 +69,45 @@ public class HomeController : Controller
                 .ToListAsync()).ToHashSet();
         }
 
-        var lists = await _db.Products.AsNoTracking().Select(p => new ProductCardVm
+        IQueryable<ProductCardVm> q = _db.Products
+         .AsNoTracking()
+         .Where(p => p.Category.Title == category) 
+         .Select(p => new ProductCardVm
+         {
+             Id = p.Id,
+             Title = p.Title,
+             PictureUrl = p.PictureUrl,
+             TotalSold = p.TotalSold,
+             BasePrice = p.BasePrice,
+             IsWishlisted = wishedIds.Contains(p.Id),
+         });
+
+
+        if (!string.IsNullOrEmpty(sort))
         {
-            Id = p.Id,
-            Title = p.Title,
-            PictureUrl = p.PictureUrl,
-            TotalSold = p.TotalSold,
-            BasePrice = p.BasePrice,
-            IsWishlisted = wishedIds.Contains(p.Id),
+            switch (sort)
+            {
+                case "priceAsc":
+                    q = q.OrderBy(p => p.BasePrice);
+                    break;
+                case "priceDsec":
+                    q = q.OrderByDescending(p => p.BasePrice);
+                    break;
+                default:
+                    q = q.OrderBy(p => p.Title);
+                    break;
+            }
+        }
 
-        }).ToListAsync();
+        var model = await q.ToListAsync();
 
+
+
+
+        ViewBag.Sort = sort;
         ViewBag.Category = category;
 
-        return View(lists);
+        return View(model);
     }
 
     public async Task<IActionResult> ToggleWishList([FromForm] Guid productId)
