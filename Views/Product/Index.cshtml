@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<Vex_E_commerce.Models.Product>
+
+<h2>รายการสินค้า</h2>
+
+@foreach (var product in Model)
+{
+    <div class="mb-4 border p-3">
+        <h3>@product.Title</h3>
+        @* <p>หมวดหมู่: @product.Category.Name</p> *@
+        <p>ราคา: @product.BasePrice บาท</p>
+        <p>สต็อกทั้งหมด: @product.TotalStock</p>
+        <p>ขายไปแล้ว: @product.TotalSold</p>
+
+        <h5>ตัวเลือกสินค้า:</h5>
+        <ul>
+            @foreach (var variant in product.ProductVariants)
+            {
+                <li>
+                    @variant.Size - @variant.Color -
+                    ราคา: @variant.BasePrice บาท -
+                    สต็อก: @variant.Stock
+                </li>
+            }
+        </ul>
+    </div>
+}

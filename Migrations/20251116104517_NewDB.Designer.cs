@@ -9,11 +9,11 @@ using Vex_E_commerce.Data;
 
 #nullable disable
 
-namespace Vex_E_commerce.Data.Migrations
+namespace Vex_E_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251102065757_Add-total-sold")]
-    partial class Addtotalsold
+    [Migration("20251116104517_NewDB")]
+    partial class NewDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -236,6 +236,69 @@ namespace Vex_E_commerce.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Vex_E_commerce.Models.Cart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CartTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("Vex_E_commerce.Models.CartItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductVariantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("Vex_E_commerce.Models.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -344,6 +407,29 @@ namespace Vex_E_commerce.Data.Migrations
                     b.ToTable("ProductVariants");
                 });
 
+            modelBuilder.Entity("Vex_E_commerce.Models.ProductWishlist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId", "ProductId")
+                        .IsUnique();
+
+                    b.ToTable("ProductWishlists");
+                });
+
             modelBuilder.Entity("Vex_E_commerce.Models.Customer", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -421,6 +507,36 @@ namespace Vex_E_commerce.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Vex_E_commerce.Models.Cart", b =>
+                {
+                    b.HasOne("Vex_E_commerce.Models.Customer", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Vex_E_commerce.Models.CartItem", b =>
+                {
+                    b.HasOne("Vex_E_commerce.Models.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Vex_E_commerce.Models.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("ProductVariant");
+                });
+
             modelBuilder.Entity("Vex_E_commerce.Models.Product", b =>
                 {
                     b.HasOne("Vex_E_commerce.Models.Category", "Category")
@@ -443,6 +559,30 @@ namespace Vex_E_commerce.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Vex_E_commerce.Models.ProductWishlist", b =>
+                {
+                    b.HasOne("Vex_E_commerce.Models.Product", "Product")
+                        .WithMany("WishlistsItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Vex_E_commerce.Models.Customer", "User")
+                        .WithMany("WishlistsItems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Vex_E_commerce.Models.Cart", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("Vex_E_commerce.Models.Category", b =>
                 {
                     b.Navigation("products");
@@ -451,6 +591,13 @@ namespace Vex_E_commerce.Data.Migrations
             modelBuilder.Entity("Vex_E_commerce.Models.Product", b =>
                 {
                     b.Navigation("ProductVariants");
+
+                    b.Navigation("WishlistsItems");
+                });
+
+            modelBuilder.Entity("Vex_E_commerce.Models.Customer", b =>
+                {
+                    b.Navigation("WishlistsItems");
                 });
 #pragma warning restore 612, 618
         }

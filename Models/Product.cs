@@ -63,6 +63,7 @@ namespace Vex_E_commerce.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public int TotalSold { get; set; } = 0;
+        //public object Products { get; internal set; }
     }
 
 

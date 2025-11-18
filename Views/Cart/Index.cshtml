@@ -1,0 +1,47 @@
+﻿@model Vex_E_commerce.Models.Cart
+
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Items == null || !Model.Items.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <div class="mt-25 m-20 flex justify-between">
+        <div class="w-7/10">
+            <h1 class="pb-5 text-2xl font-semibold">Shopping Cart</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="class=" px-6 py-3">Product</th>
+                        <th class="class=" px-6 py-3">Variant</th>
+                        <th class="class=" px-6 py-3">Quantity</th>
+                        <th class="class=" px-6 py-3">Unit Price</th>
+                        <th class="class=" px-6 py-3">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="m-10"> 
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class="m-10">
+                            <td>@item.ProductVariant.Product.Title</td>
+                            <td>@item.ProductVariant.Color - @item.ProductVariant.Size</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.UnitPrice.ToString("C")</td>
+                            <td>@item.Price.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="w-3/10">
+            <h1 class="pb-5 text-2xl font-semibold">Cart Total</h1>
+            <h3>Total: @Model.Items.Sum(i => i.Price).ToString("C")</h3>
+        </div>
+    </div>
+}

@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Vex_E_commerce.Models.ProductVariant
+
+@if (Model != null)
+{
+    <p>Stock: @Model.Stock</p>
+}
+else
+{
+    <p>สินค้านี้หมด</p>
+}
+
