@@ -4,63 +4,56 @@
     ViewData["Title"] = "รายการสินค้า";
 }
 
-<h2>@ViewData["Title"]</h2>              
+@* เปลี่ยน mx-56 เป็น max-w-6xl และ mx-auto เพื่อให้ responsive 
+    เพิ่ม p-4 สำหรับ padding ในหน้าจอเล็ก 
+*@
+<div class="max-w-6xl mx-auto pt-20 px-4 sm:px-6 lg:px-10 p-15">
 
-<div class="mx-56 pt-20">
-
-    @* path แสดงผล  *@
-    <div class="flex pb-10">
-        <img src="~/Icon/Vector.svg"/>
-        <a asp-action="Index" asp-controller="Home" class="m-5">Home</a>
-        <img src="~/Icon/right_Icon.svg" class=""/>
-        <a asp-action="Index" asp-controller="ProductDetail" class="ml-2 text-gray-600 hover:text-gray-800 flex items-center">
-            @Model.Title
-        </a>
+    <div class="flex pb-6 items-center text-sm mt-5">
+        <img src="~/Icon/Vector.svg" class="w-4 h-4" />
+        <a asp-action="Index" asp-controller="Home" class="px-2 text-gray-600 hover:text-black">Home</a>
+        <img src="~/Icon/right_Icon.svg" class="w-3 h-3" />
+        <a asp-action="Index" asp-controller="ProductDetail" class="px-2 font-medium">@Model.Title</a>
     </div>
 
+    <div class="grid md:grid-cols-2 grid-cols-1 gap-8 md:gap-10">
 
-    <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
-    
-        @* Product detail *@
-        <img src="@Model.PictureUrl" class="object-cover" />
+        @* Product image: ให้ภาพแสดงเต็มพื้นที่ในมือถือ *@
+        <img src="@Model.PictureUrl" class="object-cover w-full h-auto" />
 
-        <div class="pl-20"> 
+        <div class="md:pl-10">
+            @* ลด padding บน desktop และใช้ได้ดีใน mobile *@
             <div>
-                <p class="pb-4 text-muted-foreground text-xs md:text-sm">@ViewBag.categoryTitle</p>
-                
-                <div class="flex justify-between">
-                    <h1 class="pb-5 text-2xl font-semibold">@Model.Title</h1>
+                <p class="pb-2 text-muted-foreground text-xs md:text-sm">@ViewBag.categoryTitle</p>
+
+                <div class="flex justify-between items-start">
+                    <h1 class="pb-3 text-3xl font-bold md:text-4xl">@Model.Title</h1>
                 </div>
 
                 <form method="post" asp-controller="Cart" asp-action="Add" id="addToCartForm">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="ProductId" value="@Model.Id" />
 
-                    <!-- สี -->
-
+                    <div class="font-semibold text-base mb-2 mt-4">Select color</div>
                     <div class="flex gap-2">
                         <label class="cursor-pointer">
                             <input type="radio" name="Color" value="Red" class="hidden peer" />
-                            <div class="w-8 h-8 rounded-md bg-red-600 border border-gray-300
-                    peer-checked:border-black transition-all duration-300"></div>
+                            <div class="w-8 h-8 rounded-md bg-red-600 border-2 border-gray-300 peer-checked:border-black transition-all duration-150"></div>
                         </label>
-
                         <label class="cursor-pointer">
                             <input type="radio" name="Color" value="Black" class="hidden peer" />
-                            <div class="w-8 h-8 rounded-md bg-black border border-gray-300 peer-checked:border-black"></div>
+                            <div class="w-8 h-8 rounded-md bg-black border-2 border-gray-300 peer-checked:border-black transition-all duration-150"></div>
                         </label>
-
                         <label class="cursor-pointer">
                             <input type="radio" name="Color" value="White" class="hidden peer" />
-                            <div class="w-8 h-8 rounded-md bg-white border border-gray-300 peer-checked:border-black"></div>
+                            <div class="w-8 h-8 rounded-md bg-white border-2 border-gray-300 peer-checked:border-black transition-all duration-150"></div>
                         </label>
                     </div>
 
+                    <div class="font-semibold text-base mb-3 mt-6">Select size</div>
 
-
-                    <div class="font-semibold text-xl mb-3 mt-3">Select size</div>
-
-                    <div class="mt-3 flex gap-4">
+                    <div class="mt-3 flex flex-wrap gap-2 sm:gap-4">
+                        @* ใช้ flex-wrap และลด gap บนมือถือ *@
                         @{
                             var sizes = new[] { "XS", "S", "M", "L", "XL", "XXL" };
                             var sizeStock = ViewBag.SizeStock as Dictionary<string, int>;
@@ -72,95 +65,155 @@
 
                             <input type="radio" id="size-@size.ToLower()" name="Size" value="@size" class="hidden peer" @(stock <= 0 ? "disabled" : "") />
                             <label for="size-@size.ToLower()" class="
-                cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                hover:border-black transition duration-150
-                peer-checked:bg-black peer-checked:text-white peer-checked:border-black
-                flex justify-center items-center
-                @disabled
-            ">
+                                    cursor-pointer w-16 sm:w-20 py-2 px-1 text-center border border-gray-300 rounded
+                                    hover:border-black transition duration-150
+                                    peer-checked:bg-black peer-checked:text-white peer-checked:border-black
+                                    flex justify-center items-center text-sm
+                                    @disabled
+                                ">
                                 <span class="size-text">@size</span>
                                 (<span class="size-stock">@stock</span>)
                             </label>
                         }
                     </div>
 
-
-                    <div class="pt-3">
-                        <h1>Description</h1>
-                        <p class="pt-3 text-xs text-muted-foreground">@Model.Description</p>
+                    <div class="pt-8">
+                        <h2 class="font-semibold text-lg">Description</h2>
+                        <p class="pt-3 text-sm text-gray-600">@Model.Description</p> @* ปรับขนาดตัวอักษรเป็น text-sm *@
                     </div>
 
                     <div class="pt-10">
-                        <button type="submit" class="px-6 w-full bg-primary text-white py-4">Add To Cart</button>
+                        <button type="submit" class="px-6 w-full bg-black text-white py-6 font-semibold text-lg hover:bg-gray-800 transition duration-150">Add To Cart</button>
                     </div>
-                </form>
-               
 
+                    
+                </form>
+
+                <div class="pt-10">
+                    <button type="submit" class="py-6 flex w-full items-center justify-center gap-4 border-[0.5px] border-primary transition-colors duration-200 hover:cursor-pointer hover:bg-primary hover:text-white font-bold">Buy now</button>
+                </div>
+                    @* <div class="pt-4 grid gap-4">
+                        <div class="pt-10 h-10 flex w-full items-center justify-center gap-4 border-[0.5px] border-primary transition-colors duration-200 hover:cursor-pointer hover:bg-primary hover:text-white">Buy Now</div>
+                    </div> *@
                 
 
-                <div class="pt-10 grid gap-4">
-               
-                    
-                    <div class="flex w-full items-center justify-center gap-4 border-[0.5px] border-primary px-6 py-4 transition-colors duration-200 hover:cursor-pointer hover:bg-primary hover:text-white">Buy Nowz</div>
-                </div>
+
+                @* <div class="pt-4 grid gap-4">
+                    <div class="flex w-full items-center justify-center gap-4 border-[1px] border-black text-black px-6 py-4 font-semibold transition-colors duration-200 hover:cursor-pointer hover:bg-black hover:text-white">Buy Now</div>
+                </div> *@
+
             </div>
         </div>
-
+    </div>
 </div>
-</div>
 
-@section Scripts {
+                        @section Scripts {
+
     <script>
+
         const variants = @Html.Raw(ViewBag.VariantsJson);
 
+
+
         // อัปเดต size stock ตามสีที่เลือก
+
                 document.querySelectorAll('input[name="Color"]').forEach(cb => {
+
             cb.addEventListener('change', function () {
+
                 const selectedColor = this.value;
+
                 const sizeInputs = document.querySelectorAll('input[name="Size"]');
 
+
+
                 sizeInputs.forEach(input => {
+
                     const size = input.value;
+
                     const variant = variants.find(v => v.color === selectedColor && v.size === size);
+
                     const stock = variant ? variant.stock : 0;
 
+
+
                     const label = document.querySelector(`label[for="size-${size.toLowerCase()}"]`);
+
                     const stockSpan = label.querySelector('.size-stock');
 
+
+
                     // อัปเดต stock เฉพาะ span
+
                     stockSpan.innerText = stock;
 
+
+
                     // ปิด/เปิดปุ่มตาม stock
+
                     if (stock <= 0) {
+
                         input.disabled = true;
+
                         label.classList.add("opacity-50", "cursor-not-allowed");
+
                     } else {
+
                         input.disabled = false;
+
                         label.classList.remove("opacity-50", "cursor-not-allowed");
+
                     }
+
                 });
+
             });
+
         });
+
+
+
 
 
         // Highlight size เมื่อเลือก (Tailwind peer-checked ใช้แล้ว)
 
+
+
         // Submit form เดิม
+
         document.getElementById("addToCartForm").addEventListener("submit", async function (e) {
+
             e.preventDefault();
+
+
 
             const formData = new FormData(this);
 
+
+
             const res = await fetch("/cart/add", {
+
                 method: "POST",
+
                 body: formData
+
             });
+
+
 
             const json = await res.json();
 
+
+
             if (json.ok) {
+
                 window.location.href = "/cart/view/" + json.cartId;
+
             }
+
         });
+
     </script>
+
 }
+
