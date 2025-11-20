@@ -95,11 +95,13 @@ else
                         <span>@ViewBag.TotalAmount ฿</span>
                     </div>
 
-                    <a asp-action="Checkout"
-                       asp-route-cartId="@Model.Id"
-                       class="block mt-5 bg-black text-white px-6 py-3 rounded text-center hover:opacity-90">
-                        Checkout
-                    </a>
+                <a asp-action="Index"
+                   asp-controller="ThankYou"
+                   asp-route-cartId="@Model.Id"
+                   class="block mt-5 bg-black text-white px-6 py-3 rounded text-center hover:opacity-90">
+                    Checkout
+                </a>
+
             </div>
         </div>
     </div>

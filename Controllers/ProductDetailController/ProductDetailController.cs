@@ -35,24 +35,36 @@ namespace Vex_E_commerce.Controllers
             ViewBag.SizeStock = sizeStock;
 
 
+            ViewBag.VariantsJson = System.Text.Json.JsonSerializer.Serialize(
+    product.ProductVariants.Select(v => new
+    {
+        color = v.Color.ToString(),
+        size = v.Size.ToString(),
+        stock = v.Stock
+    })
+);
+
+
 
             return View(product); 
         }
 
-        [HttpGet]
-        public IActionResult GetVariantsBySize(Guid productId, string color, string size)
-        {
-            ProductColor colorEnum = Enum.Parse<ProductColor>(color);
-            ProductSize sizeEnum = Enum.Parse<ProductSize>(size);
+        //[HttpGet]
+        //public IActionResult GetVariantsBySize(Guid productId, string color, string size)
+        //{
+        //    ProductColor colorEnum = Enum.Parse<ProductColor>(color);
+        //    ProductSize sizeEnum = Enum.Parse<ProductSize>(size);
 
-            var variant = _context.ProductVariants
-                .Where(v => v.ProductId == productId
-                            && v.Color == colorEnum
-                            && v.Size == sizeEnum)
-                .FirstOrDefault(); // ตัวเดียว
+        //    var variant = _context.ProductVariants
+        //        .Where(v => v.ProductId == productId
+        //                    && v.Color == colorEnum
+        //                    && v.Size == sizeEnum)
+        //        .FirstOrDefault(); // ตัวเดียว
 
-            return PartialView("_VariantListPartial", variant); // ส่งตัวเดียว
-        }
+        //    return PartialView("_VariantListPartial", variant); // ส่งตัวเดียว
+        //}
+
+
 
 
 

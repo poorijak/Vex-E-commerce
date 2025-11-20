@@ -1,0 +1,28 @@
+﻿@model Vex_E_commerce.Models.Cart
+
+@{
+    ViewData["Title"] = "Thank You";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="flex flex-col items-center gap-4 mt-20">
+    <img src="~/Icon/sucess.svg" />
+
+    <h1 class="md:text-5xl font-bold mt-10">Thanks for the order!</h1>
+
+    <div class="flex gap-2">
+        <span class="text-gray-500 font-semibold">YOUR ORDER NUMBER:</span>
+        <span class="font-medium">@Model.Id</span>
+    </div>
+
+    <p class="text-center max-w-xl mt-4">
+        Thank you for your order! 🎉 Your purchase has been successfully received.
+        We’ll notify you once your package is on its way.
+    </p>
+
+    <a asp-controller="Home" asp-action="Index"
+       class="text-blue-600 underline hover:text-blue-800 font-bold mt-6">
+        GO TO HOMEPAGE
+    </a>
+</div>

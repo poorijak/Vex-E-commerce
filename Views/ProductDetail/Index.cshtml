@@ -11,9 +11,11 @@
     @* path แสดงผล  *@
     <div class="flex pb-10">
         <img src="~/Icon/Vector.svg"/>
-        <a asp-action="Index" asp-controller="Home" class="p-5">Home</a>
+        <a asp-action="Index" asp-controller="Home" class="m-5">Home</a>
         <img src="~/Icon/right_Icon.svg" class=""/>
-        <a asp-action="Index" asp-controller="ProductDetail" class="p-5">Productdetail</a>
+        <a asp-action="Index" asp-controller="ProductDetail" class="ml-2 text-gray-600 hover:text-gray-800 flex items-center">
+            @Model.Title
+        </a>
     </div>
 
 
@@ -35,94 +37,53 @@
                     <input type="hidden" name="ProductId" value="@Model.Id" />
 
                     <!-- สี -->
+
                     <div class="flex gap-2">
-                        @* <input type="radio" id="color-red" name="Color" value="Red" required />
-                        <label for="color-red" class="color-dot bg-red-600"></label>
-
-                        <input type="radio" id="color-black" name="Color" value="Black" />
-                        <label for="color-black" class="color-dot bg-black"></label>
-
-                        <input type="radio" id="color-White" name="Color" value="White" class="p-8 bg-black"/> *@
-
                         <label class="cursor-pointer">
-                            <input type="checkbox" name="Color" value="Red" class="color-box hidden peer" />
-                            <div class="w-8 h-8 rounded-md bg-red-600 border border-gray-300 peer-checked:border-black"></div>
+                            <input type="radio" name="Color" value="Red" class="hidden peer" />
+                            <div class="w-8 h-8 rounded-md bg-red-600 border border-gray-300
+                    peer-checked:border-black transition-all duration-300"></div>
                         </label>
 
-
                         <label class="cursor-pointer">
-                            <input type="checkbox" id="color-red" name="Color" value="Red" class="color-box hidden peer" />
+                            <input type="radio" name="Color" value="Black" class="hidden peer" />
                             <div class="w-8 h-8 rounded-md bg-black border border-gray-300 peer-checked:border-black"></div>
                         </label>
-                       
+
                         <label class="cursor-pointer">
-                            <input type="checkbox" name="Color" value="White" class="color-box hidden peer"/>
-                            <div class="w-8 h-8 rounded-md bg-white border border-gray-300 transition group-hover:border-gray-800 peer-checked:border-black"></div>
+                            <input type="radio" name="Color" value="White" class="hidden peer" />
+                            <div class="w-8 h-8 rounded-md bg-white border border-gray-300 peer-checked:border-black"></div>
                         </label>
-                      @*   <input type="radio" id="color-white" name="Color" value="White" />
-                        <label for="color-white" class="color-dot bg-white border"></label> *@
                     </div>
 
-                    <!-- ไซซ์ -->
-                    <div class="font-semibold text-xl mb-3">Select size</div>
+
+
+                    <div class="font-semibold text-xl mb-3 mt-3">Select size</div>
 
                     <div class="mt-3 flex gap-4">
+                        @{
+                            var sizes = new[] { "XS", "S", "M", "L", "XL", "XXL" };
+                            var sizeStock = ViewBag.SizeStock as Dictionary<string, int>;
+                        }
+                        @foreach (var size in sizes)
+                        {
+                            var stock = sizeStock != null && sizeStock.ContainsKey(size) ? sizeStock[size] : 0;
+                            var disabled = stock <= 0 ? "disabled opacity-50 cursor-not-allowed" : "";
 
-                        <input type="radio" id="size-s" name="Size" value="S" class="hidden" />
-                        <label for="size-s" class="
-                            cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                            hover:border-black transition duration-150
-                            checked:bg-black checked:text-white checked:border-black
-                            ">
-                            xs (4)
-                        </label>
-
-                        <input type="radio" id="size-s" name="Size" value="S" class="hidden" />
-                        <label for="size-s" class="
-                            cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                            hover:border-black transition duration-150
-                            checked:bg-black checked:text-white checked:border-black
-                            ">
-                            S
-                        </label>
-
-                        <input type="radio" id="size-m" name="Size" value="M" class="hidden" />
-                        <label for="size-m" class="
-                            cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                            hover:border-black transition duration-150
-                            checked:bg-black checked:text-white checked:border-black
-                            ">
-                            M
-                        </label>
-
-                        <input type="radio" id="size-l" name="Size" value="L" class="hidden" />
-                        <label for="size-l" class="
-                        cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                        hover:border-black transition duration-150
-                        checked:bg-black checked:text-white checked:border-black
-                        ">
-                            L
-                        </label>
-
-                        <input type="radio" id="size-xl" name="Size" value="L" class="hidden" />
-                        <label for="size-l" class="
-                        cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                        hover:border-black transition duration-150
-                        checked:bg-black checked:text-white checked:border-black
-                        ">
-                            XL
-                        </label>
-
-                        <input type="radio" id="size-xxl" name="Size" value="L" class="hidden" />
-                        <label for="size-l" class="
-                        cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
-                        hover:border-black transition duration-150
-                        checked:bg-black checked:text-white checked:border-black
-                        ">
-                            XXL
-                        </label>
-
+                            <input type="radio" id="size-@size.ToLower()" name="Size" value="@size" class="hidden peer" @(stock <= 0 ? "disabled" : "") />
+                            <label for="size-@size.ToLower()" class="
+                cursor-pointer w-20 py-2 px-1 text-center border border-gray-300 rounded
+                hover:border-black transition duration-150
+                peer-checked:bg-black peer-checked:text-white peer-checked:border-black
+                flex justify-center items-center
+                @disabled
+            ">
+                                <span class="size-text">@size</span>
+                                (<span class="size-stock">@stock</span>)
+                            </label>
+                        }
                     </div>
+
 
                     <div class="pt-3">
                         <h1>Description</h1>
@@ -150,6 +111,41 @@
 
 @section Scripts {
     <script>
+        const variants = @Html.Raw(ViewBag.VariantsJson);
+
+        // อัปเดต size stock ตามสีที่เลือก
+                document.querySelectorAll('input[name="Color"]').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const selectedColor = this.value;
+                const sizeInputs = document.querySelectorAll('input[name="Size"]');
+
+                sizeInputs.forEach(input => {
+                    const size = input.value;
+                    const variant = variants.find(v => v.color === selectedColor && v.size === size);
+                    const stock = variant ? variant.stock : 0;
+
+                    const label = document.querySelector(`label[for="size-${size.toLowerCase()}"]`);
+                    const stockSpan = label.querySelector('.size-stock');
+
+                    // อัปเดต stock เฉพาะ span
+                    stockSpan.innerText = stock;
+
+                    // ปิด/เปิดปุ่มตาม stock
+                    if (stock <= 0) {
+                        input.disabled = true;
+                        label.classList.add("opacity-50", "cursor-not-allowed");
+                    } else {
+                        input.disabled = false;
+                        label.classList.remove("opacity-50", "cursor-not-allowed");
+                    }
+                });
+            });
+        });
+
+
+        // Highlight size เมื่อเลือก (Tailwind peer-checked ใช้แล้ว)
+
+        // Submit form เดิม
         document.getElementById("addToCartForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
@@ -168,21 +164,3 @@
         });
     </script>
 }
-
-@* @section Scripts {
-    <script>
-        function loadVariants(size ,color) {
-            const productId = '@Model.Id';
-            fetch(`/ProductDetail/GetVariantsBySize?productId=${productId}&color=${color}&size=${size}`)
-                .then(response => {
-                    if (!response.ok) throw new E01rror('Network error');
-                    return response.text();
-                })
-                .then(html => {
-                    document.getElementById('variantContainer').innerHTML = html;
-                })
-                .catch(err => console.error("Error loading variants:", err));
-        }
-    </script>
-} *@
-   
