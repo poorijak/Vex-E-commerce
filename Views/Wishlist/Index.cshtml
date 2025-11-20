@@ -12,9 +12,12 @@
     };
 }
 
-<div class="max-w-[1400px] mx-auto px-4 pt-30 pb-10">
+<!-- spacer ดันเนื้อหาลงมาอยู่ใต้ navbar -->
+<div class="h-32 sm:h-36 md:h-40"></div>
 
-    <div class="flex items-center gap-2 text-sm font-medium mb-4">
+<div class="max-w-[1400px] mx-auto px-4 pb-10 min-h-screen">
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 text-sm font-medium mb-4 pt-4">
         <a asp-controller="Home" asp-action="Index" class="text-gray-700 hover:text-black">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -29,19 +32,19 @@
         <span class="text-black font-bold">My Profile</span>
     </div>
 
-    <div class="flex flex-col md:flex-row mt-12">
-
-        <aside class="md:w-60 md:pr-10 md:border-r md:border-gray-200 mb-8 md:mb-0">
-
+    <div class="flex flex-col md:flex-row mt-8 md:mt-12 gap-8 md:gap-0">
+        <!-- Sidebar -->
+        <aside class="md:w-60 md:pr-10 md:border-r md:border-gray-200 mb-4 md:mb-0">
             <div class="mb-4">
                 <p class="text-sm text-gray-500">Welcome back,</p>
-                <p class="text-2xl font-medium text-black truncate">@User.Identity?.Name</p>
+                <p class="text-base font-medium text-black truncate">@User.Identity?.Name</p>
+
             </div>
 
             <hr class="my-4 border-gray-200" />
 
-            <nav class="flex flex-col gap-4 text-base pt-4">
-
+            <!-- เมนู: mobile = แถว, desktop = คอลัมน์ -->
+            <nav class="flex flex-row flex-wrap items-center gap-4 pt-4 text-base md:flex-col md:items-start">
                 <a href="/Orders" class="flex items-center gap-3 text-gray-500 hover:text-black">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -55,10 +58,10 @@
                     </svg>
                     <span class="font-medium">Wishlist</span>
                 </a>
-
             </nav>
         </aside>
 
+        <!-- Main content -->
         <main class="flex-1 md:pl-16">
             <h1 class="text-xl font-bold mb-5">Wishlist</h1>
 
@@ -70,12 +73,14 @@
             }
             else
             {
-                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach (var i in Model)
                     {
                         <div class="font-geist flex flex-col rounded-md border border-border bg-white p-4">
-                            <a asp-route-id="@i.Id" asp-action="Index" asp-controller="ProductDetail" class="block">
+                            <a asp-route-id="@i.Id"
+                               asp-action="Index"
+                               asp-controller="ProductDetail"
+                               class="block">
                                 <div class="flex justify-end">
                                     <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
                                 </div>
@@ -101,9 +106,7 @@
                             <div class="mt-3 flex items-end justify-between">
                                 <div class="flex flex-col gap-1">
                                     <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
-                                    <p class="text-sm font-semibold">
-                                        ฿ @i.BasePrice.ToString("N0")
-                                    </p>
+                                    <p class="text-sm font-semibold">฿ @i.BasePrice.ToString("N0")</p>
                                 </div>
 
                                 <form method="post"
@@ -114,9 +117,7 @@
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="productId" value="@i.Id" />
 
-                                    <button type="submit"
-                                            class="heart-btn"
-                                            aria-label="Toggle wishlist">
+                                    <button type="submit" class="heart-btn" aria-label="Toggle wishlist">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              class="heart-outline @(i.IsWishlisted ? "hidden" : "") size-6"
                                              viewBox="0 0 256 256">
@@ -132,7 +133,6 @@
                                 </form>
                             </div>
                         </div>
-
                     }
                 </div>
             }
