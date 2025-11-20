@@ -96,8 +96,43 @@ namespace Vex_E_commerce.Controllers.Cartpage
             if (cart == null)
                 return NotFound("Cart not found");
 
+            // --- คำนวณราคารวม ---
+            decimal itemsTotal = cart.Items.Sum(i => i.Price * i.Quantity); // รวมราคาสินค้า
+            decimal shippingFee = 40m; // ค่าจัดส่ง
+            decimal tax = 2m; // ภาษี
+
+            decimal totalAmount = itemsTotal + shippingFee + tax;
+
+            // ส่งข้อมูลไป View
+            ViewBag.ItemsTotal = itemsTotal;
+            ViewBag.ShippingFee = shippingFee;
+            ViewBag.Tax = tax;
+            ViewBag.TotalAmount = totalAmount;
+
             return View("Index",cart); // ส่ง cart ไปหน้า View
         }
+
+        // POST /cart/delete
+        [HttpPost("delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid itemId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var cartItem = await _db.CartItems
+                .Include(i => i.Cart)
+                .FirstOrDefaultAsync(i => i.Id == itemId && i.Cart.UserId == user.Id);
+
+            if (cartItem == null) return NotFound();
+
+            _db.CartItems.Remove(cartItem);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("ViewCart", new { id = cartItem.CartId });
+        }
+
+
     }
 
     public class AddToCartDto
