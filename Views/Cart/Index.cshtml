@@ -12,27 +12,27 @@
 }
 else
 {
-    <div class="mt-25 mx-10 md:mx-20 grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="mx-10 mt-25 grid grid-cols-1 gap-4 md:mx-20 md:grid-cols-5">
 
 
 
-        <div class="relative overflow-x-auto col-span-3">
-            <table class="w-full text-sm text-left rtl:text-right text-body">
-                <thead class="text-sm text-body bg-neutral-secondary-medium">
+        <div class="relative col-span-3 overflow-x-auto">
+            <table class="text-body w-full text-left text-sm rtl:text-right">
+                <thead class="text-body bg-neutral-secondary-medium text-sm">
                     <tr>
-                        <th scope="col" class="px-6 py-3 rounded-s-base font-medium">
+                        <th scope="col" class="rounded-s-base px-6 py-3 font-medium">
                             Product
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium">
                             Variant
                         </th>
-                        <th scope="col" class="px-6 py-3 rounded-e-base font-medium">
+                        <th scope="col" class="rounded-e-base px-6 py-3 font-medium">
                             Quantity
                         </th>
-                        <th scope="col" class="px-6 py-3 rounded-e-base font-medium">
+                        <th scope="col" class="rounded-e-base px-6 py-3 font-medium">
                             Unit Price
                         </th>
-                        <th scope="col" class="px-6 py-3 rounded-e-base font-medium">
+                        <th scope="col" class="rounded-e-base px-6 py-3 font-medium">
                             Total
                         </th>
                     </tr>
@@ -41,34 +41,34 @@ else
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-left">
-                                <div class="flex gap-4">
-                                    <img class="size-10 object-cover md:size-20"
+                            <td class="px-2 py-3 text-left md:px-6 md:py-4">
+                                <div class="flex items-center gap-4">
+                                    <img class="size-10 rounded-md object-cover md:size-18"
                                          src="@item.ProductVariant.Product.PictureUrl" />
                                     <p class="text-base">@item.ProductVariant.Product.Title</p>
                                 </div>
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.ProductVariant.Color - @item.ProductVariant.Size
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.Quantity
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.UnitPrice.ToString("C")
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.Price.ToString("C")
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 <form asp-action="Delete" asp-controller="Cart" method="post">
                                     <input type="hidden" name="itemId" value="@item.Id" />
-                                    <button type="submit" class="text-gray-500 hover:text-black text-xl">
+                                    <button type="submit" class="text-xl text-gray-500 hover:text-black">
                                         ×
                                     </button>
                                 </form>
@@ -105,30 +105,30 @@ else
                                      src="@item.ProductVariant.Product.PictureUrl" />
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.ProductVariant.Product.Title
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.ProductVariant.Color - @item.ProductVariant.Size
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.Quantity
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.UnitPrice.ToString("C")
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 @item.Price.ToString("C")
                             </td>
 
-                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                            <td class="px-2 py-3 text-center md:px-6 md:py-4">
                                 <form asp-action="Delete" asp-controller="Cart" method="post">
                                     <input type="hidden" name="itemId" value="@item.Id" />
-                                    <button type="submit" class="text-gray-500 hover:text-black text-xl">
+                                    <button type="submit" class="text-xl text-gray-500 hover:text-black">
                                         ×
                                     </button>
                                 </form>
@@ -140,26 +140,26 @@ else
 
         @* </div> *@
 
-        <div class="col-span-2 border-l-0 md:border-l border-gray-200">
+        <div class="col-span-2 border-l-0 border-gray-200 md:border-l">
             <div class="md:pl-5">
                 <h1 class="pb-10 text-2xl font-semibold">Cart Total</h1>
 
-                <div class="py-4 flex justify-between border-b border-gray-200">
+                <div class="flex justify-between border-b border-gray-200 py-4">
                     <span>Subtotal</span>
                     <span>@ViewBag.ItemsTotal ฿</span>
                 </div>
 
-                <div class="py-4 flex justify-between">
+                <div class="flex justify-between py-4">
                     <span>Shipping Fee</span>
                     <span>@ViewBag.ShippingFee ฿</span>
                 </div>
 
-                <div class=" flex justify-between border-b border-gray-200 pb-4">
+                <div class="flex justify-between border-b border-gray-200 pb-4">
                     <span>Tax</span>
                     <span>@ViewBag.Tax ฿</span>
                 </div>
 
-                <div class="py-4 flex justify-between font-semibold pt-3">
+                <div class="flex justify-between py-4 pt-3 font-semibold">
                     <span>Total</span>
                     <span>@ViewBag.TotalAmount ฿</span>
                 </div>
@@ -167,7 +167,7 @@ else
                 <a asp-action="Index"
                    asp-controller="ThankYou"
                    asp-route-cartId="@Model.Id"
-                   class="block mt-5 bg-black text-white px-6 py-3 rounded text-center hover:opacity-90">
+                   class="mt-5 block rounded bg-black px-6 py-3 text-center text-white hover:opacity-90">
                     Checkout
                 </a>
 
