@@ -2,10 +2,11 @@
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var Keyword = ViewBag.keyword;
 }
 
-<div class="w-full flex-col">
-    <div class="mx-5 mb-3 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
+<div class="w-full flex-col px-5">
+    <div class="mb-3 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
         <div>
             <h1 class="text-xl font-bold md:text-2xl">Product Manager</h1>
             <p class="text-muted-foreground text-xs md:text-sm">Manage your product inventory and details</p>
@@ -14,13 +15,24 @@
                    class="w-full border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto md:text-base">
             Add Product
         </a>
+      
     </div>
+
+  
 
     <div class="grid grid-cols-1">
 
 
-        <div class="mx-5 my-4 h-px flex-1 border-b border-border"></div>
-            <div class="relative overflow-x-auto p-5">
+        <div class="my-4 h-px flex-1 border-b border-border"></div>
+        <div class="flex justify-end">
+            <form asp-controller="Admin" asp-action="Index" class="relative w-full md:w-64">
+                <input placeholder="Search Product Title" name="keyword" value="@Keyword" class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <i class="ph ph-magnifying-glass absolute top-2 left-2.5"></i>
+                <a asp-action="Index" asp-controller="Admin" class="absolute top-2 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+            </form>
+            
+        </div>
+            <div class="relative overflow-x-auto pt-3">
                 <table class="w-full text-left text-sm whitespace-nowrap text-gray-500 rtl:text-right dark:text-gray-400">
                 <thead class="text-muted-foreground rounded-sm bg-[#F4F4F5] text-xs uppercase dark:text-gray-400">
                         <tr>
@@ -46,6 +58,15 @@
                         </tr>
                     </thead>
                     <tbody>
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="px-2 py-8 text-center text-sm text-gray-400">
+                                ไม่พบสินค้า
+                            </td>
+                        </tr>
+                    } else
+                    {
                         @foreach (var item in Model)
                         {
                             <tr class="border-b border-gray-200 text-center text-primary md:text-left">
@@ -108,23 +129,24 @@
                             </tr>
                         }
 
-                    </tbody>
+                    }
+                </tbody>
                 </table>
             </div>
 
         </div>
     </div>
-<div class="flex items-center justify-center gap-5">
+<div class="mt-4 flex items-center justify-center gap-5">
     @if (ViewBag.Page > 1)
     {
-        <a asp-action="Index" class="w-full border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto" asp-route-page="@(ViewBag.Page - 1)">Prev</a>
+        <a asp-action="Index" class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto" asp-route-page="@(ViewBag.Page - 1)">Prev</a>
     }
 
     <span>@ViewBag.Page / @ViewBag.TotalPages</span>
 
     @if (ViewBag.Page < ViewBag.TotalPages)
     {
-        <a asp-action="Index" class="w-full border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto" asp-route-page="@(ViewBag.Page + 1)">Next</a>
+        <a asp-action="Index" class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto" asp-route-page="@(ViewBag.Page + 1)">Next</a>
     }
 </div>
 
