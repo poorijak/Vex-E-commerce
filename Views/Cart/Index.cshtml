@@ -12,9 +12,9 @@
 }
 else
 {
-    <div class="mt-25 m-20 **flex flex-col md:flex-row** gap-4">
+    <div class="mt-25 mx-10 md:mx-20 grid grid-cols-1 md:grid-cols-5 gap-4">
 
-        <div class="**w-full md:w-1/2 lg:w-7/10**">
+        <div class="col-span-3">
             <h1 class="pb-5 text-2xl font-semibold">Shopping Cart</h1>
             <table class="w-full border-t border-gray-300">
                 <thead>
@@ -34,7 +34,7 @@ else
                     {
                         <tr>
                             <td class="">
-                                <img class="block mx-auto w-[10px] h-auto"
+                                <img class="size-24 object-cover md:size-20"
                                      src="@item.ProductVariant.Product.PictureUrl" />
                             </td>
 
@@ -73,8 +73,8 @@ else
 
         </div>
 
-        <div class="**w-full md:w-1/2 lg:w-3/10** **md:pl-10 lg:border-l lg:border-gray-300**">
-            <div class="**md:pl-5**">
+        <div class="border-l lg:border-gray-300 col-span-2">
+            <div class="md:pl-5">
                 <h1 class="pb-10 text-2xl font-semibold">Cart Total</h1>
 
                 <div class="py-4 flex justify-between border-b border-gray-200">

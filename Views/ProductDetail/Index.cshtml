@@ -63,17 +63,22 @@
                             var stock = sizeStock != null && sizeStock.ContainsKey(size) ? sizeStock[size] : 0;
                             var disabled = stock <= 0 ? "disabled opacity-50 cursor-not-allowed" : "";
 
-                            <input type="radio" id="size-@size.ToLower()" name="Size" value="@size" class="hidden peer" @(stock <= 0 ? "disabled" : "") />
-                            <label for="size-@size.ToLower()" class="
-                                    cursor-pointer w-16 sm:w-20 py-2 px-1 text-center border border-gray-300 rounded
-                                    hover:border-black transition duration-150
-                                    peer-checked:bg-black peer-checked:text-white peer-checked:border-black
-                                    flex justify-center items-center text-sm
-                                    @disabled
-                                ">
-                                <span class="size-text">@size</span>
-                                (<span class="size-stock">@stock</span>)
-                            </label>
+                           <div>
+                                <input type="radio" id="size-@size.ToLower()" name="Size" value="@size" class="hidden peer" @(stock <= 0 ? "disabled" : "") />
+                                <label for="size-@size.ToLower()" class="
+                                            cursor-pointer w-16 sm:w-20 py-2 px-1 text-center border border-gray-300 rounded
+                                            hover:border-black transition duration- 50
+                                            bg-white text-black border-black
+                                            flex justify-center items-center text-sm
+                                                peer-checked:bg-black
+                    peer-checked:text-white
+                    peer-checked:border-black
+                                            @disabled
+                                        ">
+                                    <span class="size-text">@size</span>
+                                    (<span class="size-stock">@stock</span>)
+                                </label>
+                           </div>
                         }
                     </div>
 
@@ -83,19 +88,19 @@
                     </div>
 
                     <div class="pt-10">
-                        <button type="submit" class="px-6 w-full bg-black text-white py-6 font-semibold text-lg hover:bg-gray-800 transition duration-150">Add To Cart</button>
+                        <button type="submit" class="w-full py-3 px-2 bg-black text-white font-semibold text-lg hover:bg-gray-800 transition duration-150">Add To Cart</button>
                     </div>
 
-                    
+
                 </form>
 
                 <div class="pt-10">
-                    <button type="submit" class="py-6 flex w-full items-center justify-center gap-4 border-[0.5px] border-primary transition-colors duration-200 hover:cursor-pointer hover:bg-primary hover:text-white font-bold">Buy now</button>
+                    <button type="submit" class="py-3 flex px-2 w-full items-center justify-center gap-4 border-[0.5px] border-primary transition-colors duration-200 hover:cursor-pointer hover:bg-primary hover:text-white font-bold">Buy now</button>
                 </div>
-                    @* <div class="pt-4 grid gap-4">
+                @* <div class="pt-4 grid gap-4">
                         <div class="pt-10 h-10 flex w-full items-center justify-center gap-4 border-[0.5px] border-primary transition-colors duration-200 hover:cursor-pointer hover:bg-primary hover:text-white">Buy Now</div>
                     </div> *@
-                
+
 
 
                 @* <div class="pt-4 grid gap-4">
@@ -107,7 +112,7 @@
     </div>
 </div>
 
-                        @section Scripts {
+@section Scripts {
 
     <script>
 
@@ -216,4 +221,3 @@
     </script>
 
 }
-
