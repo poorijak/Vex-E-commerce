@@ -46,5 +46,29 @@ namespace Vex_E_commerce.Controllers
 
             return View(model); // <-- List<ProductCardVm>
         }
+
+        public async Task<IActionResult> ToggleWishList([FromForm] Guid productId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var exist = await _db.ProductWishlists.FirstOrDefaultAsync(w => w.UserId == user.Id && w.ProductId == productId);
+
+            if (exist == null)
+            {
+                await _db.ProductWishlists.AddAsync(new ProductWishlist { UserId = user.Id, ProductId = productId });
+                await _db.SaveChangesAsync();
+            }
+            else
+            {
+                _db.ProductWishlists.Remove(exist);
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction("index", "Wishlist");
+        }
     }
 }
