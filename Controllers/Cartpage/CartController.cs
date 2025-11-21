@@ -19,6 +19,7 @@ namespace Vex_E_commerce.Controllers.Cartpage
                                                                                                                                             
         // POST /cart/add
         [HttpPost("add")]
+        
         [ValidateAntiForgeryToken]                       
         public async Task<IActionResult> Add(AddToCartDto dto)
         {
@@ -109,7 +110,7 @@ namespace Vex_E_commerce.Controllers.Cartpage
             ViewBag.Tax = tax;
             ViewBag.TotalAmount = totalAmount;
 
-            return View("Index",cart); // ส่ง cart ไปหน้า View
+            return View("Index", cart); // ส่ง cart ไปหน้า View
         }
 
         // POST /cart/delete
@@ -131,6 +132,40 @@ namespace Vex_E_commerce.Controllers.Cartpage
 
             return RedirectToAction("ViewCart", new { id = cartItem.CartId });
         }
+
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var cart = await _db.Carts
+                .Include(c => c.Items)
+                .ThenInclude(i => i.ProductVariant)
+                .ThenInclude(v => v.Product)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+            if (cart == null)
+            {
+                cart = new Cart { UserId = user.Id };
+                _db.Carts.Add(cart);
+                await _db.SaveChangesAsync();
+            }
+
+            decimal itemsTotal = cart.Items.Sum(i => i.Price * i.Quantity);
+            decimal shippingFee = 40m;
+            decimal tax = 2m;
+
+            ViewBag.ItemsTotal = itemsTotal;
+            ViewBag.ShippingFee = shippingFee;
+            ViewBag.Tax = tax;
+            ViewBag.TotalAmount = itemsTotal + shippingFee + tax;
+
+            return View("Index", cart);
+        }
+
+
+
 
 
     }

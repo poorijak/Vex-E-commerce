@@ -14,7 +14,74 @@ else
 {
     <div class="mt-25 mx-10 md:mx-20 grid grid-cols-1 md:grid-cols-5 gap-4">
 
-        <div class="col-span-3">
+
+
+        <div class="relative overflow-x-auto col-span-3">
+            <table class="w-full text-sm text-left rtl:text-right text-body">
+                <thead class="text-sm text-body bg-neutral-secondary-medium">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 rounded-s-base font-medium">
+                            Product
+                        </th>
+                        <th scope="col" class="px-6 py-3 font-medium">
+                            Variant
+                        </th>
+                        <th scope="col" class="px-6 py-3 rounded-e-base font-medium">
+                            Quantity
+                        </th>
+                        <th scope="col" class="px-6 py-3 rounded-e-base font-medium">
+                            Unit Price
+                        </th>
+                        <th scope="col" class="px-6 py-3 rounded-e-base font-medium">
+                            Total
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td class="px-2 py-3 md:px-6 md:py-4 text-left">
+                                <div class="flex gap-4">
+                                    <img class="size-10 object-cover md:size-20"
+                                         src="@item.ProductVariant.Product.PictureUrl" />
+                                    <p class="text-base">@item.ProductVariant.Product.Title</p>
+                                </div>
+                            </td>
+
+                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                                @item.ProductVariant.Color - @item.ProductVariant.Size
+                            </td>
+
+                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                                @item.Quantity
+                            </td>
+
+                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                                @item.UnitPrice.ToString("C")
+                            </td>
+
+                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                                @item.Price.ToString("C")
+                            </td>
+
+                            <td class="px-2 py-3 md:px-6 md:py-4 text-center">
+                                <form asp-action="Delete" asp-controller="Cart" method="post">
+                                    <input type="hidden" name="itemId" value="@item.Id" />
+                                    <button type="submit" class="text-gray-500 hover:text-black text-xl">
+                                        ×
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+
+        @* <div class="col-span-3">
             <h1 class="pb-5 text-2xl font-semibold">Shopping Cart</h1>
             <table class="w-full border-t border-gray-300">
                 <thead>
@@ -69,11 +136,11 @@ else
                         </tr>
                     }
                 </tbody>
-            </table>
+            </table> *@
 
-        </div>
+        @* </div> *@
 
-        <div class="border-l lg:border-gray-300 col-span-2">
+        <div class="col-span-2 border-l-0 md:border-l border-gray-200">
             <div class="md:pl-5">
                 <h1 class="pb-10 text-2xl font-semibold">Cart Total</h1>
 
