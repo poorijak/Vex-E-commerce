@@ -12,8 +12,9 @@
 }
 else
 {
-    <div class="mt-25 m-20 flex gap-4">
-        <div class="w-7/10">
+    <div class="mt-25 m-20 **flex flex-col md:flex-row** gap-4">
+
+        <div class="**w-full md:w-1/2 lg:w-7/10**">
             <h1 class="pb-5 text-2xl font-semibold">Shopping Cart</h1>
             <table class="w-full border-t border-gray-300">
                 <thead>
@@ -32,8 +33,8 @@ else
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td class="px-2 py-3 md:px-6 md:py-4">
-                                <img class="size-6 rounded-sm object-cover md:size-8"
+                            <td class="">
+                                <img class="block mx-auto w-[10px] h-auto"
                                      src="@item.ProductVariant.Product.PictureUrl" />
                             </td>
 
@@ -71,29 +72,30 @@ else
             </table>
 
         </div>
-        <div class="w-3/10 pl-10 border-l border-gray-300">
-            <div class="pl-5">
+
+        <div class="**w-full md:w-1/2 lg:w-3/10** **md:pl-10 lg:border-l lg:border-gray-300**">
+            <div class="**md:pl-5**">
                 <h1 class="pb-10 text-2xl font-semibold">Cart Total</h1>
 
                 <div class="py-4 flex justify-between border-b border-gray-200">
-                        <span>Subtotal</span>
-                        <span>@ViewBag.ItemsTotal ฿</span>
-                    </div>
+                    <span>Subtotal</span>
+                    <span>@ViewBag.ItemsTotal ฿</span>
+                </div>
 
                 <div class="py-4 flex justify-between">
-                        <span>Shipping Fee</span>
-                        <span>@ViewBag.ShippingFee ฿</span>
-                    </div>
+                    <span>Shipping Fee</span>
+                    <span>@ViewBag.ShippingFee ฿</span>
+                </div>
 
                 <div class=" flex justify-between border-b border-gray-200 pb-4">
-                        <span>Tax</span>
-                        <span>@ViewBag.Tax ฿</span>
-                    </div>
+                    <span>Tax</span>
+                    <span>@ViewBag.Tax ฿</span>
+                </div>
 
                 <div class="py-4 flex justify-between font-semibold pt-3">
-                        <span>Total</span>
-                        <span>@ViewBag.TotalAmount ฿</span>
-                    </div>
+                    <span>Total</span>
+                    <span>@ViewBag.TotalAmount ฿</span>
+                </div>
 
                 <a asp-action="Index"
                    asp-controller="ThankYou"
