@@ -22,23 +22,25 @@
                 <a href="/">Vex</a>
             </div>
 
-            <div class="hidden flex-col items-center justify-center gap-5 md:flex">
-                <div class="flex items-center justify-center gap-10">
-                    <a class="font-semibold hover:underline" href="/category">Category</a>
-                    <a class="font-semibold hover:underline" href="/Shop">Shop</a>
-                    <a class="font-semibold hover:underline" href="/About-us">About</a>
-                    <a class="font-semibold hover:underline" href="/Contact">Contact</a>
-                </div>
+            <div class="relative hidden w-80 flex-col items-center justify-center gap-5 md:flex">
+                    <form class="w-full" asp-action="Index" asp-controller="Discover">
+                    <input placeholder="Search Product Title" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                        <i class="ph ph-magnifying-glass text-muted-foreground absolute top-2.5 left-2.5"></i>
+                        <a asp-action="Index" asp-controller="Discover" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+                    </form>
+
             </div>
             <partial name="_LoginPartial" />
         </div>
 
-        <div class="flex flex-col items-center justify-center gap-5 py-3 text-sm md:hidden">
-            <div class="flex items-center justify-center gap-10">
-                <a class="font-semibold hover:underline" href="/category">Category</a>
-                <a class="font-semibold hover:underline" href="/Shop">Shop</a>
-                <a class="font-semibold hover:underline" href="/About-us">About</a>
-                <a class="font-semibold hover:underline" href="/Contact">Contact</a>
+        <div class="flex items-center justify-center">
+            <div class="relative my-4 flex w-80 flex-col items-center justify-center gap-5 md:hidden">
+                <form class="w-full" asp-action="Index" asp-controller="Discover">
+                    <input placeholder="Search Product Title" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <i class="ph ph-magnifying-glass text-muted-foreground absolute top-2.5 left-2.5"></i>
+                    <a asp-action="Index" asp-controller="Discover" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+                </form>
+
             </div>
         </div>
 

@@ -28,22 +28,36 @@ namespace Vex_E_commerce.Controllers.Admin
             _db = db;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string? keyword, int page = 1, int pageSize = 5)
         {
+
             var user = await _userManager.GetUserAsync(User);
 
             if (user != null && user.Role.ToString() == "Admin")
             {
 
-                var products = await _db.Products
+                IQueryable<Product> q = _db.Products.AsNoTracking().Where(p => p.Status == ProductStatus.Active);
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    var keywordTrim = keyword.Trim();
+
+                    q = q.Where(p => p.Title.Contains(keywordTrim));
+                }
+
+
+
+
+                var total = await q.CountAsync();
+                var totalPages = (int)Math.Ceiling(total / (double)pageSize);
+
+                var products = await q
                     .OrderBy(p => p.Id)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
 
-                var total = await _db.Products.CountAsync();
-                var totalPages = (int)Math.Ceiling(total / (double)pageSize);
-
+                ViewBag.keyword = keyword;
                 ViewBag.Page = page;
                 ViewBag.TotalPages = totalPages;
 
@@ -70,8 +84,12 @@ namespace Vex_E_commerce.Controllers.Admin
         {
             return View();
         }
+        public async Task<IActionResult> OrderDetail()
+        {
+            return View();
+        }
 
-        public async Task<IActionResult> Customer(int page = 1 , int pageSize = 5)
+        public async Task<IActionResult> Customer(int page = 1, int pageSize = 5)
         {
 
 
@@ -146,7 +164,7 @@ namespace Vex_E_commerce.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CustomerDetail(CustomerVm vm)
         {
-             var user = await _userManager.FindByIdAsync(vm.Form.Id);
+            var user = await _userManager.FindByIdAsync(vm.Form.Id);
             if (user == null) return NotFound();
 
             if (vm.Form.Status == user.Status)
@@ -169,7 +187,7 @@ namespace Vex_E_commerce.Controllers.Admin
 
                 vm.User ??= user;
 
-                return View(vm); 
+                return View(vm);
             }
 
             // 3) อัปเดตจริง
@@ -197,7 +215,7 @@ namespace Vex_E_commerce.Controllers.Admin
                 return View(vm);
             }
 
-            return RedirectToAction("Customer" , "Admin");
+            return RedirectToAction("Customer", "Admin");
         }
 
 
@@ -257,6 +275,7 @@ namespace Vex_E_commerce.Controllers.Admin
             return RedirectToAction(nameof(Category));
 
         }
+
     }
 
 

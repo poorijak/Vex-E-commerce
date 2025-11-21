@@ -1,0 +1,245 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var colorList = new[]
+ {
+        new { color = "Red",  style = "bg-red-600"      },
+        new { color = "Black",  style = "bg-neutral-900"  },
+        new { color = "White" ,  style = "bg-white border" },
+    };
+
+
+    var orderId = "#ORD7176220874";
+    var createdAt = "2024-05-31 03:24";
+    var status = "Shipping";
+
+    var items = new[]
+    {
+        new {
+            Title = "MEN’s Shirt Backpink in your area",
+            Size = "L",
+            Color = "White",
+            Quantity = 3,
+            Price = 1399,
+            Total = 195,
+            Picture = "https://img.lazcdn.com/g/p/53fa921ef83a0742fa78461353c131b2.jpg_720x720q80.jpg"
+        },
+        new {
+            Title = "MEN’s Shirt Backpink in your area",
+            Size = "L",
+            Color = "Red",
+            Quantity = 3,
+            Price = 1399,
+            Total = 195,
+            Picture = "https://img.lazcdn.com/g/p/53fa921ef83a0742fa78461353c131b2.jpg_720x720q80.jpg"
+
+        },
+        new {
+            Title = "MEN’s Shirt Backpink in your area",
+            Size = "L",
+            Color = "Black",
+            Quantity = 3,
+            Price = 1399,
+            Total = 195,
+            Picture = "https://img.lazcdn.com/g/p/53fa921ef83a0742fa78461353c131b2.jpg_720x720q80.jpg"
+        }
+    };
+
+    var customer = new {
+        Name = "Freddie Mercury",
+        TotalOrder = 1
+    };
+
+    var contact = new {
+        Email = "Freddie91@queen.god"
+    };
+
+      var shippingInfo = new {
+        Name = "Freddie Mercury",
+        Phone = "089-123-4567",
+        AddressDetails = "128/45 อาคารบ้านสุขใจ อพาร์ตเมนต์ ชั้น 3 ห้อง 305, ซอยสุขุมวิท 71",
+        ProvinceDistrict = "กรุงเทพมหานคร, เขตวัฒนา, พระโขนงเหนือ",
+        PostalCode = "10110",
+        Note = "ฝากพนักงานส่งไวๆ หน่อยครับ"
+    };
+    
+    var subtotal = 2421;
+    var discount = -213;
+    var shippingFee = 43;
+    var total = 43.00m;
+
+
+    var statusList = new[] { "Pending", "Paid", "Shipping", "Completed", "Cancelled" };
+}
+
+
+<div class="mx-3">
+   <div class="flex items-center justify-between">
+        <div class="flex gap-3">
+            <a asp-action="Customer" asp-controller="Admin" class="flex size-11 items-center justify-center rounded-sm border border-border bg-transparent hover:bg-muted-foreground/10 hover:cursor-pointer">
+                <i class="ph ph-arrow-left text-muted-foreground"></i>
+            </a>
+            <div>
+                <p class="text-muted-foreground text-sm font-semibold">Back to customer</p>
+                <h1 class="text-lg font-bold">@orderId</h1>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <div class="rounded-sm bg-[#DCFAE9] px-2 py-1">
+                <p class="text-center font-medium text-[#209A4A]">@status</p>
+            </div>
+            <p>@createdAt</p>
+        </div>
+   </div>
+
+    <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-5">
+        <div class="col-span-3">
+            <div class="rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Order Item</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+              <div class="my-4 flex flex-col gap-3">
+                    @foreach (var i in items)
+                    {
+                        <section class="my-2 flex w-full items-center gap-3">
+                            <img src="@i.Picture" class="size-13 object-cover" />
+                            <div class="flex w-full flex-col gap-2">
+                                <p class="text-muted-foreground">shirt</p>
+                                <div class="flex w-full items-center justify-between">
+                                    <p>@i.Title</p>
+                                    <div class="flex gap-3">
+                                        <p>@i.Quantity x @i.Price</p>
+                                        <p>@i.Price</p> 
+                                        <form>
+                                            <button class="cursor-pointer">
+                                                <i class="ph ph-trash text-lg text-destructive"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <p>@i.Size</p>
+                                    <div class="w-px border-l border-border"></div>
+                                    <div class="flex gap-2">
+                                        <p>@i.Color</p>
+                                        
+                                        @{
+                                            var colorMatch = colorList.FirstOrDefault(c => c.color == i.Color);
+                                        }
+                                        <div class="mt-1 flex gap-1">
+                                                <div class="@colorMatch.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    }
+              </div>
+            </div>
+
+            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Order Summary <span class="rounded-md bg-[#DCFAE9] px-3 py-1 text-sm font-thin text-[#209A4A]">@status</span></h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                    <div class="text-muted-foreground flex justify-between gap-2">
+                        <p >Subtotal</p>
+                        <p>@subtotal ฿</p>
+                    </div>
+                    <div class="text-muted-foreground flex justify-between gap-2">
+                        <p >Discount</p>
+                        <p>@discount ฿</p>
+                    </div>
+                    <div class="text-muted-foreground flex justify-between gap-2">
+                        <p >Shipping Fee</p>
+                        <p>@shippingFee ฿</p>
+                    </div>
+                    <div class="flex justify-between gap-2 font-medium text-black">
+                        <p >Total</p>
+                        <p>@total ฿</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-span-2 gap-3">
+            <div class="rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Customer</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                   <div class="flex items-center gap-2">
+                        <i class="ph ph-user"></i>
+                        <p>@customer.Name</p>
+                   </div>
+                   <div class="flex items-center gap-2">
+                        <i class="ph ph-bag"></i>
+                        <p>@customer.TotalOrder</p>
+                   </div>
+                </div>
+            </div>
+            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Contact Information</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                   <div class="flex items-center gap-2">
+                        <i class="ph ph-envelope-simple"></i>
+                        <p>@customer.Name</p>
+                   </div>
+                   <div class="flex items-center gap-2">
+                        <i class="ph ph-phone"></i>
+                        <p>@shippingInfo.Phone</p>
+                   </div>
+                </div>
+            </div>
+            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Shipping Address</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                   <div class="flex flex-col gap-2">
+                        <div>
+                            <label class="text-muted-foreground text-xs">Name</label>
+                            <p class="text-sm font-medium text-primary">@shippingInfo.Name</p>
+                        </div>
+                        <div>
+                            <label class="text-muted-foreground text-xs">Phone</label>
+                            <p class="text-sm font-medium text-primary">@shippingInfo.Phone</p>
+                        </div>
+                        <div>
+                            <label class="text-muted-foreground text-xs">Address Details</label>
+                            <p class="text-sm font-medium text-primary">@shippingInfo.AddressDetails</p>
+                        </div>
+                        <div>
+                            <label class="text-muted-foreground text-xs">Province, District, Sub-district</label>
+                            <p class="text-sm font-medium text-primary">@shippingInfo.ProvinceDistrict</p>
+                        </div>
+                        <div>
+                            <label class="text-muted-foreground text-xs">Postal Code</label>
+                            <p class="text-sm font-medium text-primary">@shippingInfo.PostalCode</p>
+                        </div>
+                        <div>
+                            <label class="text-muted-foreground text-xs">Note</label>
+                            <p class="text-sm font-medium text-primary">@shippingInfo.Note</p>
+                        </div>
+                   </div>
+                </div>
+            </div>
+            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Update order status</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                   <div class="flex items-center gap-2">
+                        <i class="ph ph-envelope-simple"></i>
+
+                        <p>@customer.Name</p>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
