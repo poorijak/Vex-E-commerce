@@ -175,19 +175,7 @@ namespace Vex_E_commerce.Controllers.Admin
 
             if (!ModelState.IsValid)
             {
-                ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
-                    .Cast<UserRole>()
-                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
-                    .ToList();
-
-                ViewBag.StatusList = Enum.GetValues(typeof(UserStatus))
-                    .Cast<UserStatus>()
-                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
-                    .ToList();
-
-                vm.User ??= user;
-
-                return View(vm);
+                return NotFound();
             }
 
             // 3) อัปเดตจริง

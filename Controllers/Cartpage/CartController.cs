@@ -104,12 +104,17 @@ namespace Vex_E_commerce.Controllers.Cartpage
 
             decimal totalAmount = itemsTotal + shippingFee + tax;
 
+            cart.CartTotal = totalAmount;
+
+
+
             // ส่งข้อมูลไป View
             ViewBag.ItemsTotal = itemsTotal;
             ViewBag.ShippingFee = shippingFee;
             ViewBag.Tax = tax;
             ViewBag.TotalAmount = totalAmount;
 
+            await _db.SaveChangesAsync();
             return View("Index", cart); // ส่ง cart ไปหน้า View
         }
 

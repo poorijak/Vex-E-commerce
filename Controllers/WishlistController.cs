@@ -29,7 +29,6 @@ namespace Vex_E_commerce.Controllers
                 return Challenge(); // เด้งไปหน้า login
             }
 
-            // ดึง product ทั้งหมดที่ user คนนี้กด wishlist
             List<ProductCardVm> model = await _db.ProductWishlists
                 .Where(w => w.UserId == userId)
                 .Include(w => w.Product)

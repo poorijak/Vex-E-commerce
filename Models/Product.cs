@@ -164,6 +164,12 @@ namespace Vex_E_commerce.Models
         public bool IsWishlisted { get; set; }
     }
 
+    public class ProductDetailDTO
+    {
+        public Product Product { get; set; } = null;
+        public List<ProductCardVm> RelateProducts { get; set; } = new();
+    }
+
 
 
 }
