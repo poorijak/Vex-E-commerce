@@ -137,7 +137,7 @@
                             <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
                             <p class="text-sm font-semibold">฿ @i.BasePrice</p>
                         </div>
-                        <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="Home" data-product-itemid="@i.Id">
+                        <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="ProductDetail" data-product-itemid="@i.Id">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="productId" value="@i.Id" />
                             <button type="submit" class="heart-btn" aria-label="Wishlist">
@@ -162,7 +162,7 @@
 
         // อัปเดต size stock ตามสีที่เลือก
 
-                document.querySelectorAll('input[name="Color"]').forEach(cb => {
+            document.querySelectorAll('input[name="Color"]').forEach(cb => {
 
             cb.addEventListener('change', function () {
 
