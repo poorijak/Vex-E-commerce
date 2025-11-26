@@ -97,6 +97,8 @@ namespace Vex_E_commerce.Models
         public ProductSize Size { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<OrderItem> Items { get; set; }
     }
 
     public class ProductWishlist

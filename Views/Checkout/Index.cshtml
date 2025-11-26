@@ -1,0 +1,168 @@
+﻿@model Vex_E_commerce.Models.CheckoutVm
+
+<form asp-action="Index" asp-controller="Checkout" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mx-32 pt-30">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-5">
+
+            <!-- Left: Shipping Form -->
+            <div class="col-span-3 flex w-full flex-col gap-4 border-r border-border pr-10">
+
+                <h1 class="text-3xl font-bold">
+                    Checkout
+                </h1>
+
+                <input type="hidden" asp-for="CartId" />
+
+                <label class="text-md font-medium">
+                    Shipping Information
+                </label>
+
+                <div asp-validation-summary="ModelOnly"
+                     class="mb-3 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                </div>
+
+                <!-- Name & Phone -->
+                <div class="flex w-full gap-3">
+                    <div class="flex w-full flex-col gap-2">
+                        <label class="font-mono text-sm">
+                            Name <span class="text-red-500">*</span>
+                        </label>
+                        <input asp-for="Address.Name"
+                               placeholder="Enter your name..."
+                               class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                        <span asp-validation-for="Address.Name" class="text-xs text-red-500"></span>
+                    </div>
+
+                    <div class="flex w-full flex-col gap-2">
+                        <label class="font-mono text-sm">
+                            Phone <span class="text-red-500">*</span>
+                        </label>
+                        <input asp-for="Address.Phone"
+                               placeholder="Enter your phone number..."
+                               class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                        <span asp-validation-for="Address.Phone" class="text-xs text-red-500"></span>
+                    </div>
+                </div>
+
+                <div class="my-4 h-px w-full border-b border-border"></div>
+
+                <!-- Address Detail -->
+                <div class="flex w-full flex-col gap-2">
+                    <label class="font-mono text-sm">
+                        Address details <span class="text-red-500">*</span>
+                    </label>
+                    <input asp-for="Address.AddressDetail"
+                           placeholder="Enter your address..."
+                           class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <span asp-validation-for="Address.AddressDetail" class="text-xs text-red-500"></span>
+                </div>
+
+                <!-- Province -->
+                <div class="flex w-full flex-col gap-2">
+                    <label class="font-mono text-sm">
+                        Province, District, Sub-district <span class="text-red-500">*</span>
+                    </label>
+                    <input asp-for="Address.Province"
+                           placeholder="Enter province, district..."
+                           class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <span asp-validation-for="Address.Province" class="text-xs text-red-500"></span>
+                </div>
+
+                <!-- Postal Code -->
+                <div class="flex w-full flex-col gap-2">
+                    <label class="font-mono text-sm">
+                        Postal Code <span class="text-red-500">*</span>
+                    </label>
+                    <input asp-for="Address.PostalCode"
+                           placeholder="Enter your postal code..."
+                           class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <span asp-validation-for="Address.PostalCode" class="text-xs text-red-500"></span>
+                </div>
+
+                <!-- Note -->
+                <div class="flex w-full flex-col gap-2">
+                    <label class="font-mono text-sm">
+                        Note
+                    </label>
+                    <input asp-for="Address.Note"
+                           placeholder="Enter note..."
+                           class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <span asp-validation-for="Address.Note" class="text-xs text-red-500"></span>
+                </div>
+
+            </div>
+
+            <!-- Right: Order Detail -->
+            <div class="col-span-2 flex flex-col gap-4">
+                <!-- Order Detail -->
+                <div class="rounded-md border border-border bg-white p-4">
+                    <label class="text-md mb-3 block font-medium">
+                        Order Detail
+                    </label>
+
+                    @if (Model.Items == null || !Model.Items.Any())
+                    {
+                        <p class="text-sm text-gray-500">Your cart is empty.</p>
+                    }
+                    else
+                    {
+                        <div class="flex flex-col gap-3">
+                            @foreach (var item in Model.Items)
+                            {
+                                <div class="flex items-start justify-between border-b border-border pb-3 last:border-0 last:pb-0">
+                                    <div>
+                                        <p class="text-sm font-medium">@item.ProductTitle</p>
+                                        <p class="text-xs text-gray-500">@item.VariantText</p>
+                                        <p class="mt-1 text-xs text-gray-500">Qty: @item.Quantity</p>
+                                    </div>
+
+                                    <div class="text-right text-sm">
+                                        <p>@item.UnitPrice.ToString("N2") ฿</p>
+                                        <p class="text-xs text-gray-500">Total: @item.LineTotal.ToString("N2") ฿</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Order Summary -->
+                <div class="rounded-md border border-border bg-white p-4">
+                    <label class="text-md mb-3 block font-medium">
+                        Order Summary
+                    </label>
+
+                    <div class="flex justify-between text-sm">
+                        <span>Items total</span>
+                        <span>@Model.ItemsTotal.ToString("N2") ฿</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Shipping</span>
+                        <span>@Model.ShippingFee.ToString("N2") ฿</span>
+                    </div>
+
+                    <div class="my-3 h-px w-full border-b border-border"></div>
+
+                    <div class="flex justify-between text-base font-semibold">
+                        <span>Total</span>
+                        <span>@Model.GrandTotal.ToString("N2") ฿</span>
+                    </div>
+
+                    <button type="submit"
+                            class="mt-4 w-full rounded-sm bg-black py-2 text-sm font-semibold text-white hover:bg-gray-900">
+                        Place Order
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

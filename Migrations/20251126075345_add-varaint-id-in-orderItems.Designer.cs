@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vex_E_commerce.Data;
 
@@ -11,9 +12,11 @@ using Vex_E_commerce.Data;
 namespace Vex_E_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251126075345_add-varaint-id-in-orderItems")]
+    partial class addvaraintidinorderItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -369,16 +372,15 @@ namespace Vex_E_commerce.Migrations
                     b.Property<Guid>("AddressId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("OrderNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("customerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("paymentAt")
                         .HasColumnType("datetime2");
@@ -403,7 +405,7 @@ namespace Vex_E_commerce.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.HasIndex("customerId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("orders");
                 });
@@ -680,15 +682,11 @@ namespace Vex_E_commerce.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vex_E_commerce.Models.Customer", "customer")
+                    b.HasOne("Vex_E_commerce.Models.Customer", null)
                         .WithMany("Orders")
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("address");
-
-                    b.Navigation("customer");
                 });
 
             modelBuilder.Entity("Vex_E_commerce.Models.OrderItem", b =>

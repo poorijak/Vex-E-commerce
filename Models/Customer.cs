@@ -27,6 +27,8 @@ namespace Vex_E_commerce.Models
         [MinLength(3, ErrorMessage = ("MinLength 3 char"))]
         public string Name { get; set; }
 
+        public ICollection<Address> addresses { get; set; }
+        public ICollection<Order> Orders { get; set; }
         public ICollection<ProductWishlist> WishlistsItems { get; set; } = new List<ProductWishlist>();
     }
 
