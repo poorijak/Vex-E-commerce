@@ -14,12 +14,14 @@ namespace Vex_E_commerce.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<Customer> _userManager;
         private readonly ILogger<CheckoutController> _logger;
+        private readonly IConfiguration _config;
 
-        public myOrderController(ApplicationDbContext db, UserManager<Customer> userManager, ILogger<CheckoutController> logger)
+        public myOrderController(ApplicationDbContext db, UserManager<Customer> userManager, ILogger<CheckoutController> logger  , IConfiguration config)
         {
             _db = db;
             _userManager = userManager;
             _logger = logger;
+            _config = config;
         }
 
         public async Task<IActionResult> Index(Guid id)
@@ -40,11 +42,12 @@ namespace Vex_E_commerce.Controllers
                 OrderId = order.Id,
                 OrderNumber = order.OrderNumber,
                 Status = order.status,
-                TotalAmount = order.totalAmount,
+                TotalAmount = order.totalAmount + 2,
                 ShippingFee = order.shippingFee,
                 CreatedAt = order.createdAt,
                 PaymentAt = order.paymentAt,
                 TrackingNumber = order.trackingNumver,
+                Tax = 2,
 
                 CustomerId = order.customerId,
                 CustomerName = order.customer.Name,
@@ -62,6 +65,7 @@ namespace Vex_E_commerce.Controllers
 
                 Items = order.Items.Select(oi => new OrderItemVm
                 {
+                    PictureUrl = oi.variant.Product.PictureUrl,
                     OrderItemId = oi.Id,
                     ProductTitle = oi.variant.ProductTitle,
                     VariantText = $"{oi.variant.Color} / {oi.variant.Size}",
@@ -78,8 +82,11 @@ namespace Vex_E_commerce.Controllers
                 vm.PaymentImageBase64 = $"data:image/png;base64,{Convert.ToBase64String(order.paymentImage)}";
             }
 
+            var promptPayPhone = _config["PromptPay:PhoneNumber"];
 
-            return View();
+            ViewBag.Phone = promptPayPhone;
+
+            return View(vm);
         }
     }
 }

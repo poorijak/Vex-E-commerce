@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Vex_E_commerce.Models
 {
@@ -74,6 +75,8 @@ namespace Vex_E_commerce.Models
     {
         public Guid OrderItemId { get; set; }
 
+        public string PictureUrl { get; set; }
+
         public string ProductTitle { get; set; } = string.Empty;
 
         // เช่น "Red / L"
@@ -109,6 +112,8 @@ namespace Vex_E_commerce.Models
         public DateTime CreatedAt { get; set; }
         public DateTime? PaymentAt { get; set; }
         public string? TrackingNumber { get; set; }
+
+        public int Tax { get; set; }
 
         // ----- ข้อมูลลูกค้า -----
         public string CustomerId { get; set; } = string.Empty;

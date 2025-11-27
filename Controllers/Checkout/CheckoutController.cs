@@ -217,7 +217,7 @@ namespace Vex_E_commerce.Controllers.Checkout
                 );
 
                 TempData["OrderSuccess"] = "สั่งซื้อสำเร็จแล้ว ขอบคุณที่อุดหนุนครับ 🖤";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "myOrder", new { id = order.Id });
             }
             catch (Exception ex)
             {
