@@ -77,7 +77,7 @@ namespace Vex_E_commerce.Controllers.Cartpage
             }
 
             await _db.SaveChangesAsync();
-            return Json(new { ok = true, cartId = cart.Id, itemId = item.Id });
+            return RedirectToAction("index" , "ProductDetail" , new { id = dto.ProductId});
         }
         [HttpGet("view/{id}")]
         public async Task<IActionResult> ViewCart(Guid id)

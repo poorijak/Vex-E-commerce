@@ -1,13 +1,18 @@
 ﻿@model Vex_E_commerce.Models.CheckoutVm
 
+@{
+    Layout = "~/Views/Shared/_ProtectLayout.cshtml";
+
+}
+
 <form asp-action="Index" asp-controller="Checkout" method="post">
     @Html.AntiForgeryToken()
 
-    <div class="mx-32 pt-30">
+    <div class="mx-5 pt-44 md:mx-30 md:pt-30">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-5">
 
             <!-- Left: Shipping Form -->
-            <div class="col-span-3 flex w-full flex-col gap-4 border-r border-border pr-10">
+            <div class="col-span-3 flex w-full flex-col gap-4 border-border pr-0 md:border-t-0 md:border-r md:pr-10">
 
                 <h1 class="text-3xl font-bold">
                     Checkout
@@ -31,7 +36,7 @@
                         </label>
                         <input asp-for="Address.Name"
                                placeholder="Enter your name..."
-                               class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                               class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9] md:placeholder:text-sm" />
                         <span asp-validation-for="Address.Name" class="text-xs text-red-500"></span>
                     </div>
 
@@ -41,12 +46,12 @@
                         </label>
                         <input asp-for="Address.Phone"
                                placeholder="Enter your phone number..."
-                               class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                               class="h-9 w-full rounded-sm border border-[#D9D9D9] bg-white pl-4 placeholder:text-sm placeholder:text-[#D9D9D9] md:placeholder:text-sm" />
                         <span asp-validation-for="Address.Phone" class="text-xs text-red-500"></span>
                     </div>
                 </div>
 
-                <div class="my-4 h-px w-full border-b border-border"></div>
+                <div class="my-1 h-px w-full border-b border-border md:my-4"></div>
 
                 <!-- Address Detail -->
                 <div class="flex w-full flex-col gap-2">
@@ -97,7 +102,7 @@
             <!-- Right: Order Detail -->
             <div class="col-span-2 flex flex-col gap-4">
                 <!-- Order Detail -->
-                <div class="rounded-md border border-border bg-white p-4">
+                <div class="w-full rounded-md border border-border bg-white p-4">
                     <label class="text-md mb-3 block font-medium">
                         Order Detail
                     </label>

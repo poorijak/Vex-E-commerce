@@ -73,6 +73,8 @@ public class ApplicationDbContext : IdentityDbContext
             .HasForeignKey(oi => oi.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<Order>().Property(o => o.status).HasConversion<string>();
+
     }
 
 

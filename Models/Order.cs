@@ -22,7 +22,7 @@ namespace Vex_E_commerce.Models
 
         public OrderStatus status { get; set; } = OrderStatus.pending;
 
-        public byte[]? paymentImage { get; set; }
+        public string? paymentImage { get; set; }
 
         public DateTime? paymentAt { get; set; }
 
@@ -132,8 +132,13 @@ namespace Vex_E_commerce.Models
         // ใช้ไว้รับไฟล์จากฟอร์ม
         public IFormFile? PaymentFile { get; set; }
 
-        // ใช้ไว้โชว์รูป (base64 data url)
-        public string? PaymentImageBase64 { get; set; }
+        public string? PaymentImageUrl { get; set; }
+    }
+
+    public class ThankyouPageVm
+    {
+        public List<ProductCardVm> RelateProduct { get; set; } = new List<ProductCardVm>();
+        public string OrderId { get; set; } = string.Empty;
     }
 
 }
