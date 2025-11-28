@@ -12,8 +12,8 @@ using Vex_E_commerce.Data;
 namespace Vex_E_commerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251127185025_RestoreCustomerIdInOrder")]
-    partial class RestoreCustomerIdInOrder
+    [Migration("20251128150734_RemoveCustomerID")]
+    partial class RemoveCustomerID
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -386,14 +386,15 @@ namespace Vex_E_commerce.Migrations
                     b.Property<DateTime?>("paymentAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("paymentImage")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("paymentImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("shippingFee")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("status")
-                        .HasColumnType("int");
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("totalAmount")
                         .HasColumnType("decimal(18,2)");

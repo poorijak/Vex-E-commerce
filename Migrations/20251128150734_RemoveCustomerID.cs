@@ -5,11 +5,19 @@
 namespace Vex_E_commerce.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeURLToString : Migration
+    public partial class RemoveCustomerID : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<string>(
+                name: "status",
+                table: "orders",
+                type: "nvarchar(max)",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "int");
+
             migrationBuilder.AlterColumn<string>(
                 name: "paymentImage",
                 table: "orders",
@@ -23,6 +31,14 @@ namespace Vex_E_commerce.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<int>(
+                name: "status",
+                table: "orders",
+                type: "int",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
+
             migrationBuilder.AlterColumn<byte[]>(
                 name: "paymentImage",
                 table: "orders",
