@@ -26,7 +26,6 @@ namespace Vex_E_commerce.Controllers.Cartpage
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Unauthorized();
 
-            // 1) หา variant จากสิ่งที่ user เลือก
             var variant = await _db.ProductVariants
                 .Include(v => v.Product)
                 .FirstOrDefaultAsync(v =>
@@ -40,7 +39,6 @@ namespace Vex_E_commerce.Controllers.Cartpage
             if (variant.Stock <= 0 || variant.Stock < dto.Qty)
                 return BadRequest("Out of stock");
 
-            // 2) หา/สร้าง Cart ของ user
             var cart = await _db.Carts
                 .Include(c => c.Items)
                 .FirstOrDefaultAsync(c => c.UserId == user.Id);
@@ -52,7 +50,6 @@ namespace Vex_E_commerce.Controllers.Cartpage
                 await _db.SaveChangesAsync();
             }
 
-            // 3) ถ้ามี CartItem ของ variant เดิมอยู่แล้ว → บวกจำนวน
             var item = cart.Items.FirstOrDefault(i => i.ProductVariantId == variant.Id);
 
             if (item == null)
@@ -80,7 +77,7 @@ namespace Vex_E_commerce.Controllers.Cartpage
             }
 
             await _db.SaveChangesAsync();
-            return Json(new { ok = true, cartId = cart.Id, itemId = item.Id });
+            return RedirectToAction("index" , "ProductDetail" , new { id = dto.ProductId});
         }
         [HttpGet("view/{id}")]
         public async Task<IActionResult> ViewCart(Guid id)
@@ -128,15 +125,36 @@ namespace Vex_E_commerce.Controllers.Cartpage
 
             var cartItem = await _db.CartItems
                 .Include(i => i.Cart)
+                .ThenInclude(c => c.Items)
                 .FirstOrDefaultAsync(i => i.Id == itemId && i.Cart.UserId == user.Id);
 
             if (cartItem == null) return NotFound();
 
+            var cart = cartItem.Cart;
+
+            // ลบ item ก่อน
             _db.CartItems.Remove(cartItem);
+
+            // ถ้าใน cart มี item แค่ 1 ชิ้น แปลว่าพอลบเสร็จจะเหลือ 0 → ลบ cart ทิ้ง
+            var cartWillBeEmpty = cart.Items.Count == 1;
+
+            if (cartWillBeEmpty)
+            {
+                _db.Carts.Remove(cart);
+            }
+
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("ViewCart", new { id = cartItem.CartId });
+            if (cartWillBeEmpty)
+            {
+                // ตะกร้าถูกลบแล้ว → กลับหน้า Home
+                return RedirectToAction("Index", "Home");
+            }
+
+            // ยังมีของในตะกร้า → อยู่หน้า ViewCart ต่อ
+            return RedirectToAction("ViewCart", new { id = cart.Id });
         }
+
 
         [HttpGet("")]
         public async Task<IActionResult> Index()

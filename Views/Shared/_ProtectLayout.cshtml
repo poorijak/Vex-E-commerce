@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vex_E_commerce</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Vex_E_commerce.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/site/nohemi.css" asp-append-version="true" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+</head>
+<body>
+    <header class="fixed z-40 min-w-svw border-b border-border bg-[#fafafa] shadow-sm">
+        <div class="flex h-[76px] items-center justify-between p-5">
+            <div class="text-3xl font-bold">
+                <a href="/">Vex</a>
+            </div>
+
+            <div class="relative hidden w-80 flex-col items-center justify-center gap-5 md:flex">
+                <form class="w-full" asp-action="Index" asp-controller="Discover">
+                    <input placeholder="Search Product Title" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <i class="ph ph-magnifying-glass text-muted-foreground absolute top-2.5 left-2.5"></i>
+                    <a asp-action="Index" asp-controller="Discover" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+                </form>
+
+            </div>
+            <partial name="_LoginPartial" />
+        </div>
+
+        <div class="flex items-center justify-center">
+            <div class="relative my-4 flex w-80 flex-col items-center justify-center gap-5 md:hidden">
+                <form class="w-full" asp-action="Index" asp-controller="Discover">
+                    <input placeholder="Search Product Title" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                    <i class="ph ph-magnifying-glass text-muted-foreground absolute top-2.5 left-2.5"></i>
+                    <a asp-action="Index" asp-controller="Discover" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+                </form>
+
+            </div>
+        </div>
+
+
+
+    </header>
+
+    @RenderBody()
+
+
+
+
+    <script src="_framework/blazor.server.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

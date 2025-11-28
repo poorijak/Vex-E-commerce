@@ -7,6 +7,7 @@ using Newtonsoft.Json.Serialization;
 using System.Net.WebSockets;
 using Vex_E_commerce.Data;
 using Vex_E_commerce.Models;
+using Vex_E_commerce.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,16 @@ builder.Services.AddAuthentication().AddGoogle(googleOption =>
 
     googleOption.ClaimActions.MapJsonKey("picture", "picture", "url");
 
+});
+
+// หาบรรทัดนี้ใน Program.cs
+builder.Services.AddHttpClient<CatboxServices>(client =>
+{
+    // เพิ่มบรรทัดนี้: ปลอมตัวเป็น Chrome
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+
+    // (Optional) เพิ่ม Timeout เผื่อไฟล์ใหญ่ (เช่น 2 นาที)
+    client.Timeout = TimeSpan.FromMinutes(2);
 });
 
 var app = builder.Build();
