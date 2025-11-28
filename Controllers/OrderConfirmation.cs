@@ -10,16 +10,16 @@ using Vex_E_commerce.Services;
 
 namespace Vex_E_commerce.Controllers
 {
-    public class myOrderController : Controller
+    public class OrderConfirmationController : Controller
     {
 
         private readonly ApplicationDbContext _db;
         private readonly UserManager<Customer> _userManager;
-        private readonly ILogger<myOrderController> _logger;
+        private readonly ILogger<OrderConfirmationController> _logger;
         private readonly IConfiguration _config;
         private readonly CatboxServices _catboxServices;
 
-        public myOrderController(ApplicationDbContext db, UserManager<Customer> userManager, ILogger<myOrderController> logger, IConfiguration config, CatboxServices catebox)
+        public OrderConfirmationController(ApplicationDbContext db, UserManager<Customer> userManager, ILogger<OrderConfirmationController> logger, IConfiguration config, CatboxServices catebox)
         {
             _db = db;
             _userManager = userManager;

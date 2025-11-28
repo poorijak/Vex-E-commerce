@@ -42,11 +42,11 @@
     }
 
 }
-    
+
 
 <div class="font-geist mx-5 pt-44 md:mx-30 md:pt-30">
     <div>
-       <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2">
             <h1 class="text-xl font-bold md:text-2xl">OrderId - #@Model.OrderNumber</h1>
             <div class="flex items-center gap-3">
                 <p class="text-muted-foreground">Order date <span class="font-medium text-primary">@Model.CreatedAt</span></p>
@@ -56,7 +56,7 @@
                     </span>
                 </div>
             </div>
-       </div>
+        </div>
         <p></p>
     </div>
     <div class="mt-10 grid grid-cols-1 gap-3 md:grid-cols-5">
@@ -117,7 +117,7 @@
                         <label class="text-muted-foreground text-xs">Postal Code : </label>
                         <p class="text-base font-semibold">@Model.Address.PostalCode</p>
                     </div>
-                    
+
                 </div>
 
                 <div>
@@ -152,9 +152,9 @@
                         </div>
                     </div>
 
-                  
 
-                    @if(string.IsNullOrEmpty(Model.PaymentImageUrl))
+
+                    @if (string.IsNullOrEmpty(Model.PaymentImageUrl))
                     {
 
                         <div>
@@ -198,7 +198,8 @@
                             </div>
 
                         </div>
-                    } else
+                    }
+                    else
                     {
 
                         <div class="font-geist">
@@ -211,25 +212,25 @@
 
                         </div>
 
-                        
+
                     }
                 </div>
             </section>
-       </div>
+        </div>
 
-        
-        
+
+
     </div>
 </div>
 
 <script>
-   const  promptpay_button = document.querySelector(".btn-qr")
-   const  payment_Section = document.querySelector(".payment-section")
+    const  promptpay_button = document.querySelector(".btn-qr")
+    const  payment_Section = document.querySelector(".payment-section")
 
 
-   promptpay_button.addEventListener("click" , () => {
-       payment_Section.classList.toggle("hidden")
-   })
+    promptpay_button.addEventListener("click" , () => {
+        payment_Section.classList.toggle("hidden")
+    })
 
 
 
