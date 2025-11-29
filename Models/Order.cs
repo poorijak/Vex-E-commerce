@@ -138,7 +138,7 @@ namespace Vex_E_commerce.Models
     public class ThankyouPageVm
     {
         public List<ProductCardVm> RelateProduct { get; set; } = new List<ProductCardVm>();
-        public string OrderId { get; set; } = string.Empty;
+        public string OrderNumber { get; set; } = string.Empty;
     }
 
 }

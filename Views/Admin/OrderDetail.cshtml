@@ -115,13 +115,13 @@
 
 
 <div class="mx-3">
-   <div class="flex items-center justify-between">
+   <div class="flex flex-col items-start justify-start gap-3 md:flex-row md:items-center md:justify-between">
         <div class="flex gap-3">
-            <a asp-action="Customer" asp-controller="Admin" class="flex size-11 items-center justify-center rounded-sm border border-border bg-transparent hover:bg-muted-foreground/10 hover:cursor-pointer">
+            <a asp-action="Orders" asp-controller="Admin" class="hidden size-11 items-center justify-center rounded-sm border border-border bg-transparent hover:bg-muted-foreground/10 hover:cursor-pointer md:flex">
                 <i class="ph ph-arrow-left text-muted-foreground"></i>
             </a>
             <div>
-                <p class="text-muted-foreground text-sm font-semibold">Back to customer</p>
+                <p class="text-muted-foreground hidden text-sm font-semibold md:flex">Back to Order Management</p>
                 <h1 class="text-lg font-bold">@Model.OrderNumber</h1>
             </div>
         </div>
@@ -137,8 +137,8 @@
         </div>
    </div>
 
-    <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-5">
-        <div class="col-span-3">
+    <div class="mt-4 grid gap-3 md:grid-cols-1 lg:grid-cols-5">
+        <div class="col-span-1 lg:col-span-3">
             <div class="rounded-md border border-border bg-white px-5 py-5">
                 <h1 class="text-lg font-bold">Order Item</h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
@@ -172,7 +172,7 @@
             </div>
 
             <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
-             <h1 class="text-lg font-bold">
+             <h1 class="flex gap-3 text-lg font-bold">
                     Order Summary
                     <span class="rounded-full border px-3 py-1 text-xs font-semibold @statusBadgeClass">
                         @statusLabel
@@ -197,18 +197,18 @@
 
         </div>
 
-        <div class="col-span-2 gap-3">
+        <div class="col-span-1 gap-3 lg:col-span-2">
             <div class="rounded-md border border-border bg-white px-5 py-5">
                 <h1 class="text-lg font-bold">Customer</h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
                 <div class="flex flex-col gap-3">
                    <div class="flex items-center gap-2">
-                        <i class="ph ph-user"></i>
-                        <p>@Model.CustomerName</p>
+                        <i class="ph text-muted-foreground ph-user"></i>
+                        <p class="font-medium text-primary">@Model.CustomerEmail</p>
                    </div>
                    <div class="flex items-center gap-2">
-                        <i class="ph ph-bag"></i>
-                        <p>@customer.TotalOrder</p>
+                        <i class="ph text-muted-foreground ph-bag"></i>
+                        <p class="font-medium text-primary">@customer.TotalOrder</p>
                    </div>
                 </div>
             </div>
@@ -217,12 +217,12 @@
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
                 <div class="flex flex-col gap-3">
                    <div class="flex items-center gap-2">
-                        <i class="ph ph-envelope-simple"></i>
-                        <p>@Model.CustomerEmail</p>
+                        <i class="ph text-muted-foreground ph-envelope-simple"></i>
+                        <p class="font-medium text-primary">@Model.CustomerEmail</p>
                    </div>
-                   <div class="flex items-center gap-2">
-                        <i class="ph ph-phone"></i>
-                        <p>@Model.Address.Phone</p>
+                    <div class="text-muted-foreground flex items-center gap-2">
+                        <i class="ph text-muted-foreground ph-phone"></i>
+                        <p class="font-medium text-primary">@Model.Address.Phone</p>
                    </div>
                 </div>
             </div>

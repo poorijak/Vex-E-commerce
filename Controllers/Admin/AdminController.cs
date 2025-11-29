@@ -93,6 +93,8 @@ namespace Vex_E_commerce.Controllers.Admin
             var totalPages = (int)Math.Ceiling(total / (double)pageSize);
 
             var orders = await ordersQuery
+                .Include(o => o.customer)
+                .AsNoTracking()
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -155,7 +157,7 @@ namespace Vex_E_commerce.Controllers.Admin
             };
 
             vm.ItemsTotal = vm.Items.Sum(i => i.LineTotal);
-            ViewBag.SubTotal = order.totalAmount ;
+            ViewBag.SubTotal = order.totalAmount;
             ViewBag.Total = order.totalAmount + vm.ShippingFee;
             return View(vm);
         }
