@@ -1,8 +1,10 @@
-﻿@model List<Vex_E_commerce.Models.ProductCardVm>
+﻿@model List<Vex_E_commerce.Models.Order>
 
 @{
     ViewData["Title"] = "My Orders";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string current = (ViewBag.Status ?? "pending").ToLower();
 }
 
 <div class="mx-auto min-h-screen max-w-[1400px] px-4 pt-44 pb-10 md:pt-10">
@@ -27,7 +29,7 @@
                   d="M9 5l7 7-7 7" />
         </svg>
 
-        <span class="font-bold text-black">My Profile</span>
+        <span class="font-bold text-black">My Orders</span>
     </div>
 
     <div class="mt-8 flex flex-col gap-8 md:mt-12 md:flex-row md:gap-0">
@@ -42,7 +44,7 @@
             <hr class="my-4 border-gray-200" />
 
             <nav class="flex flex-row flex-wrap items-center gap-4 pt-4 text-base md:flex-col md:items-start">
-                <a href="/Orders" class="flex items-center gap-3 text-black">
+                <a href="/MyOrder" class="flex items-center gap-3 text-black">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                          viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -67,133 +69,103 @@
 
             <!-- Title + Tabs -->
             <div class="mb-5 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-
                 <h1 class="text-xl font-bold">My Orders</h1>
 
-                @{
-                    string current = (ViewBag.Status ?? "pending").ToLower();
-                }
-
-                <!-- Status Tabs: slide bar บนจอเล็ก -->
+                <!-- Status Tabs -->
                 <div class="w-full md:w-auto">
-                    <div class="-mx-4 md:mx-0">
-                        <div class="overflow-x-auto md:overflow-visible px-4 md:px-0">
-                            <div class="flex gap-1 rounded-xl bg-gray-100 p-1 text-xs sm:text-sm font-medium whitespace-nowrap md:whitespace-normal min-w-max md:min-w-0">
+                    <div class="overflow-x-auto px-4 md:px-0">
+                        <div class="flex gap-1 rounded-xl bg-gray-100 p-1 text-xs sm:text-sm font-medium whitespace-nowrap">
 
-                                <a href="/Orders?status=pending"
-                                   class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "pending"
-                                                                                                                 ? "bg-white text-black shadow-sm"
-                                                                                                                 : "text-gray-500 hover:text-black")">
-                                    Pending
-                                </a>
+                            <a href="/MyOrder?status=pending"
+                               class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "pending" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black")">
+                                Pending
+                            </a>
 
-                                <a href="/Orders?status=paid"
-                                   class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "paid"
-                                                                                                                 ? "bg-white text-black shadow-sm"
-                                                                                                                 : "text-gray-500 hover:text-black")">
-                                    Paid
-                                </a>
+                            <a href="/MyOrder?status=paid"
+                               class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "paid" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black")">
+                                Paid
+                            </a>
 
-                                <a href="/Orders?status=shipping"
-                                   class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "shipping"
-                                                                                                                 ? "bg-white text-black shadow-sm"
-                                                                                                                 : "text-gray-500 hover:text-black")">
-                                    Shipping
-                                </a>
+                            <a href="/MyOrder?status=shipped"
+                               class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "shipped" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black")">
+                                Shipping
+                            </a>
 
-                                <a href="/Orders?status=delivered"
-                                   class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "delivered"
-                                                                                                                 ? "bg-white text-black shadow-sm"
-                                                                                                                 : "text-gray-500 hover:text-black")">
-                                    Delivered
-                                </a>
+                            <a href="/MyOrder?status=delivered"
+                               class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "delivered" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black")">
+                                Delivered
+                            </a>
 
-                                <a href="/Orders?status=cancelled"
-                                   class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "cancelled"
-                                                                                                                 ? "bg-white text-black shadow-sm"
-                                                                                                                 : "text-gray-500 hover:text-black")">
-                                    Cancelled
-                                </a>
+                            <a href="/MyOrder?status=cancelled"
+                               class="inline-flex items-center justify-center rounded-lg px-4 py-2 @(current == "cancelled" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black")">
+                                Cancelled
+                            </a>
 
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ORDER CARD MOCKUP -->
-            <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-6">
+            <!-- Loop Orders -->
+            <div class="space-y-6">
 
-                <!-- Header -->
-                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm font-medium">
-                    <div class="flex items-center gap-2 min-w-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M3 7h18M3 7l1.664 9.977A2 2 0 006.652 19h10.696a2 2 0 001.988-2.023L21 7M3 7h18" />
-                        </svg>
+                @if (!Model.Any())
+                {
+                    <div class="text-center py-10 text-gray-500 text-sm">
+                        No orders found for this status.
+                    </div>
+                }
 
-                        <span class="text-gray-700 truncate">
-                            Orders # 0941a17a-0c4c-48ff-8d61-7f5b725dbd86
+                @foreach (var o in Model)
+                {
+                    <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-6">
+
+                        <!-- Header -->
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm font-medium">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="text-gray-700 truncate">Order # @o.OrderNumber</span>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <span class="inline-flex items-center justify-center rounded-full px-3 py-1 text-[11px] sm:text-xs font-semibold border
+                                    @(o.status == OrderStatus.pending ? "bg-yellow-200/40 text-yellow-700 border-yellow-300" :
+                                                                    o.status == OrderStatus.paid ? "bg-blue-200/40 text-blue-700 border-blue-300" :
+                                                                    o.status == OrderStatus.shipped ? "bg-indigo-200/40 text-indigo-700 border-indigo-300" :
+                                                                    o.status == OrderStatus.delivered ? "bg-green-200/40 text-green-700 border-green-300" :
+                                                                                                        "bg-red-200/40 text-red-700 border-red-300")">
+                            ● @o.status
                         </span>
                     </div>
 
-                    <!-- Status -->
-                    <span class="inline-flex items-center justify-center rounded-full bg-yellow-300/30 px-3 py-1 text-[11px] sm:text-xs font-semibold text-yellow-700 border border-yellow-300 w-fit">
-                        ● On Deliver
-                    </span>
-                </div>
+                        <hr class="my-4" />
 
-                <hr class="my-4" />
+                        <!-- ITEMS -->
+                    @foreach (var item in o.Items)
+                        {
+                            <div class="flex flex-row gap-4 py-4 border-b">
+                                <div class="shrink-0">
+                                    <img src="@item.variant.Product.PictureUrl"
+                                         class="h-20 w-20 rounded-md object-cover" />
+                                </div>
 
-                <!-- Item 1 -->
-                <div class="flex flex-row gap-4 py-4 border-b">
-                    <div class="shrink-0">
-                        <img src="/mnt/data/12d43e57-5dbf-458d-adea-192a23cca44c.png"
-                             class="h-20 w-20 rounded-md object-cover" />
+                                <div class="flex flex-1 flex-col min-w-0">
+                                    <p class="text-sm font-medium truncate">@item.variant.Product.Title</p>
+                                    <p class="text-xs text-gray-500">x @item.quantity</p>
+                                    <p class="mt-1 text-sm font-semibold">@item.price ฿</p>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- TOTAL -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 pt-4">
+                            <span class="text-gray-500 font-medium">Total :</span>
+                            <span class="font-bold text-gray-800">@o.totalAmount ฿</span>
+                        </div>
+
                     </div>
-
-                    <div class="flex flex-1 flex-col justify-center min-w-0">
-                        <p class="text-sm font-medium truncate">Men’s Shirt white</p>
-                        <p class="text-xs text-gray-500">x1</p>
-                        <p class="mt-1 text-sm font-semibold">$34</p>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="flex flex-row gap-4 py-4 border-b">
-                    <div class="shrink-0">
-                        <img src="/mnt/data/12d43e57-5dbf-458d-adea-192a23cca44c.png"
-                             class="h-20 w-20 rounded-md object-cover" />
-                    </div>
-
-                    <div class="flex flex-1 flex-col justify-center min-w-0">
-                        <p class="text-sm font-medium truncate">Men’s Shirt white</p>
-                        <p class="text-xs text-gray-500">x1</p>
-                        <p class="mt-1 text-sm font-semibold">$34</p>
-                    </div>
-                </div>
-
-                <!-- Total -->
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-4">
-                    <span class="text-gray-500 font-medium">Total :</span>
-                    <span class="font-bold text-gray-800">$68.00</span>
-                </div>
-
-            </div>
-
-            <!-- Order Cards (เพิ่ม loop จริงได้ตรงนี้) -->
-            <div class="mt-6">
-                <!-- ตัวอย่างตำแหน่งไว้ใส่ foreach แสดง order จาก Model -->
-                @* 
-                @foreach (var item in Model)
-                {
-                    // render การ์ด order จริง
                 }
-                *@
             </div>
 
         </main>
-
     </div>
 </div>

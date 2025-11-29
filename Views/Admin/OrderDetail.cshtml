@@ -1,4 +1,6 @@
-﻿@*
+﻿@model Vex_E_commerce.Models.OrderDetailVm
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -73,6 +75,42 @@
 
 
     var statusList = new[] { "Pending", "Paid", "Shipping", "Completed", "Cancelled" };
+
+    string statusBadgeClass = "";
+    string statusLabel = Model.Status.ToString().ToUpper(); // แปลงเป็นตัวพิมพ์ใหญ่
+
+    switch (Model.Status)
+    {
+        case Vex_E_commerce.Models.OrderStatus.pending:
+            // สีเหลือง: รอตรวจสอบ
+            statusBadgeClass = "bg-yellow-100 text-yellow-700 border-yellow-200";
+            break;
+
+        case Vex_E_commerce.Models.OrderStatus.paid:
+            // สีฟ้า: จ่ายแล้ว/รอส่ง
+            statusBadgeClass = "bg-blue-100 text-blue-700 border-blue-200";
+            break;
+
+        case Vex_E_commerce.Models.OrderStatus.shipped:
+            // สีม่วง/คราม: อยู่ระหว่างขนส่ง
+            statusBadgeClass = "bg-indigo-100 text-indigo-700 border-indigo-200";
+            break;
+
+        case Vex_E_commerce.Models.OrderStatus.delivered:
+            // สีเขียว: สำเร็จ
+            statusBadgeClass = "bg-green-100 text-green-700 border-green-200";
+            break;
+
+        case Vex_E_commerce.Models.OrderStatus.cancelled:
+            // สีแดง: ยกเลิก
+            statusBadgeClass = "bg-red-100 text-red-700 border-red-200";
+            break;
+
+        default:
+            statusBadgeClass = "bg-gray-100 text-gray-700 border-gray-200";
+            break;
+    }
+
 }
 
 
@@ -84,15 +122,18 @@
             </a>
             <div>
                 <p class="text-muted-foreground text-sm font-semibold">Back to customer</p>
-                <h1 class="text-lg font-bold">@orderId</h1>
+                <h1 class="text-lg font-bold">@Model.OrderNumber</h1>
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <div class="rounded-sm bg-[#DCFAE9] px-2 py-1">
-                <p class="text-center font-medium text-[#209A4A]">@status</p>
+            <div>
+                <span class="rounded-full border px-3 py-1 text-xs font-semibold @statusBadgeClass">
+                    @statusLabel
+                </span>
             </div>
-            <p>@createdAt</p>
+            
+            <p>@Model.CreatedAt</p>
         </div>
    </div>
 
@@ -102,17 +143,17 @@
                 <h1 class="text-lg font-bold">Order Item</h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
               <div class="my-4 flex flex-col gap-3">
-                    @foreach (var i in items)
+                    @foreach (var i in Model.Items)
                     {
                         <section class="my-2 flex w-full items-center gap-3">
-                            <img src="@i.Picture" class="size-13 object-cover" />
+                            <img src="@i.PictureUrl" class="size-13 object-cover" />
                             <div class="flex w-full flex-col gap-2">
                                 <p class="text-muted-foreground">shirt</p>
                                 <div class="flex w-full items-center justify-between">
-                                    <p>@i.Title</p>
+                                    <p>@i.ProductTitle</p>
                                     <div class="flex gap-3">
-                                        <p>@i.Quantity x @i.Price</p>
-                                        <p>@i.Price</p> 
+                                        <p>x @i.Quantity</p>
+                                        <p>@i.UnitPrice</p> 
                                         <form>
                                             <button class="cursor-pointer">
                                                 <i class="ph ph-trash text-lg text-destructive"></i>
@@ -121,19 +162,8 @@
                                     </div>
                                 </div>
                                 <div class="flex gap-3">
-                                    <p>@i.Size</p>
-                                    <div class="w-px border-l border-border"></div>
-                                    <div class="flex gap-2">
-                                        <p>@i.Color</p>
-                                        
-                                        @{
-                                            var colorMatch = colorList.FirstOrDefault(c => c.color == i.Color);
-                                        }
-                                        <div class="mt-1 flex gap-1">
-                                                <div class="@colorMatch.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
-                                                </div>
-                                        </div>
-                                    </div>
+                                    <p>@i.VariantText</p>
+    
                                 </div>
                             </div>
                         </section>
@@ -142,24 +172,25 @@
             </div>
 
             <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
-                <h1 class="text-lg font-bold">Order Summary <span class="rounded-md bg-[#DCFAE9] px-3 py-1 text-sm font-thin text-[#209A4A]">@status</span></h1>
+             <h1 class="text-lg font-bold">
+                    Order Summary
+                    <span class="rounded-full border px-3 py-1 text-xs font-semibold @statusBadgeClass">
+                        @statusLabel
+                    </span>
+            </h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
                 <div class="flex flex-col gap-3">
                     <div class="text-muted-foreground flex justify-between gap-2">
                         <p >Subtotal</p>
-                        <p>@subtotal ฿</p>
-                    </div>
-                    <div class="text-muted-foreground flex justify-between gap-2">
-                        <p >Discount</p>
-                        <p>@discount ฿</p>
+                        <p>@ViewBag.SubTotal ฿</p>
                     </div>
                     <div class="text-muted-foreground flex justify-between gap-2">
                         <p >Shipping Fee</p>
-                        <p>@shippingFee ฿</p>
+                        <p>@Model.ShippingFee ฿</p>
                     </div>
                     <div class="flex justify-between gap-2 font-medium text-black">
                         <p >Total</p>
-                        <p>@total ฿</p>
+                        <p>@ViewBag.Total ฿</p>
                     </div>
                 </div>
             </div>
@@ -173,7 +204,7 @@
                 <div class="flex flex-col gap-3">
                    <div class="flex items-center gap-2">
                         <i class="ph ph-user"></i>
-                        <p>@customer.Name</p>
+                        <p>@Model.CustomerName</p>
                    </div>
                    <div class="flex items-center gap-2">
                         <i class="ph ph-bag"></i>
@@ -187,11 +218,11 @@
                 <div class="flex flex-col gap-3">
                    <div class="flex items-center gap-2">
                         <i class="ph ph-envelope-simple"></i>
-                        <p>@customer.Name</p>
+                        <p>@Model.CustomerEmail</p>
                    </div>
                    <div class="flex items-center gap-2">
                         <i class="ph ph-phone"></i>
-                        <p>@shippingInfo.Phone</p>
+                        <p>@Model.Address.Phone</p>
                    </div>
                 </div>
             </div>
@@ -202,27 +233,27 @@
                    <div class="flex flex-col gap-2">
                         <div>
                             <label class="text-muted-foreground text-xs">Name</label>
-                            <p class="text-sm font-medium text-primary">@shippingInfo.Name</p>
+                            <p class="text-sm font-medium text-primary">@Model.Address.Name</p>
                         </div>
                         <div>
                             <label class="text-muted-foreground text-xs">Phone</label>
-                            <p class="text-sm font-medium text-primary">@shippingInfo.Phone</p>
+                            <p class="text-sm font-medium text-primary">@Model.Address.Phone</p>
                         </div>
                         <div>
                             <label class="text-muted-foreground text-xs">Address Details</label>
-                            <p class="text-sm font-medium text-primary">@shippingInfo.AddressDetails</p>
+                            <p class="text-sm font-medium text-primary">@Model.Address.AddressDetail</p>
                         </div>
                         <div>
                             <label class="text-muted-foreground text-xs">Province, District, Sub-district</label>
-                            <p class="text-sm font-medium text-primary">@shippingInfo.ProvinceDistrict</p>
+                            <p class="text-sm font-medium text-primary">@Model.Address.Province</p>
                         </div>
                         <div>
                             <label class="text-muted-foreground text-xs">Postal Code</label>
-                            <p class="text-sm font-medium text-primary">@shippingInfo.PostalCode</p>
+                            <p class="text-sm font-medium text-primary">@Model.Address.PostalCode</p>
                         </div>
                         <div>
                             <label class="text-muted-foreground text-xs">Note</label>
-                            <p class="text-sm font-medium text-primary">@shippingInfo.Note</p>
+                            <p class="text-sm font-medium text-primary">@Model.Address.Note</p>
                         </div>
                    </div>
                 </div>
