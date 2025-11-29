@@ -80,14 +80,86 @@ namespace Vex_E_commerce.Controllers.Admin
             return RedirectToAction("Index", "Admin");
         }
 
-        public async Task<IActionResult> Orders()
+        public async Task<IActionResult> Orders(int page = 1, int pageSize = 5)
         {
-            return View();
+            var ordersQuery = _db.orders
+                .Include(o => o.customer)
+                .Include(o => o.Items)
+                .AsNoTracking()
+                .OrderByDescending(o => o.createdAt);
+
+            // Pagination
+            var total = await ordersQuery.CountAsync();
+            var totalPages = (int)Math.Ceiling(total / (double)pageSize);
+
+            var orders = await ordersQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.Page = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(orders);
         }
-        public async Task<IActionResult> OrderDetail()
+
+        public async Task<IActionResult> OrderDetail(Guid id)
         {
-            return View();
+
+            var order = await _db.orders
+                .Include(o => o.customer)
+                .Include(o => o.address)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.variant)
+                        .ThenInclude(v => v.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+                return NotFound();
+
+            var vm = new OrderDetailVm
+            {
+                OrderId = order.Id,
+                OrderNumber = order.OrderNumber,
+                Status = order.status,
+                TotalAmount = order.totalAmount,
+                ShippingFee = order.shippingFee,
+                CreatedAt = order.createdAt,
+                PaymentAt = order.paymentAt,
+                TrackingNumber = order.trackingNumver,
+                PaymentImageUrl = order.paymentImage,
+
+                CustomerId = order.customer.Id,
+                CustomerName = order.customer.Name,
+                CustomerEmail = order.customer.Email,
+
+                Address = new OrderAddressVm
+                {
+                    Name = order.address.Name,
+                    Phone = order.address.Phone,
+                    AddressDetail = order.address.AddressDetail,
+                    Province = order.address.Province,
+                    PostalCode = order.address.PostalCode,
+                    Note = order.address.Note
+                },
+
+                Items = order.Items.Select(i => new OrderItemVm
+                {
+                    OrderItemId = i.Id,
+                    PictureUrl = i.variant.Product.PictureUrl,
+                    ProductTitle = i.variant.Product.Title,
+                    VariantText = $"{i.variant.Color} / {i.variant.Size}",
+                    Quantity = i.quantity,
+                    UnitPrice = i.price
+                }).ToList()
+            };
+
+            vm.ItemsTotal = vm.Items.Sum(i => i.LineTotal);
+            ViewBag.SubTotal = order.totalAmount ;
+            ViewBag.Total = order.totalAmount + vm.ShippingFee;
+            return View(vm);
         }
+
 
         public async Task<IActionResult> Customer(int page = 1, int pageSize = 5)
         {

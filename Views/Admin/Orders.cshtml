@@ -1,15 +1,7 @@
-﻿@* @model List<Vex_E_commerce.Models.Order> *@
+﻿@model List<Vex_E_commerce.Models.Order>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-
-    var orders = new[]
-   {
-        new { OrderId = "#ORD-001", Customer = "John", Date = "2025-02-01", Item = 3, Amount = 1500, Status = "Completed" },
-        new { OrderId = "#ORD-002", Customer = "Alice", Date = "2025-02-03", Item = 1, Amount = 450, Status = "Pending" },
-        new { OrderId = "#ORD-003", Customer = "Mark", Date = "2025-02-05", Item = 2, Amount = 900, Status = "Cancelled" }
-    };
 }
-
 
 <div>
     <div class="mx-5 mb-3 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
@@ -27,88 +19,90 @@
         <div class="grid grid-cols-1 p-5 md:p-0">
             <div class="relative overflow-x-auto">
                 <table class="w-full text-left text-sm rtl:text-right">
-                    <thead class="text-muted-foreground bg-[#F4F4F5] text-xs uppercase dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="text-muted-foreground bg-[#F4F4F5] text-xs uppercase">
                         <tr>
-
-                            <th scope="col" class="px-6 py-3">
-                                Order ID
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Customer
-                            </th>
-                            <th scope="col" class="px-6 py-3 whitespace-nowrap">
-                                Date
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Item
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Amount
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Status
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Action
-                            </th>
+                            <th class="px-6 py-3">Order ID</th>
+                            <th class="px-6 py-3">Customer</th>
+                            <th class="px-6 py-3">Date</th>
+                            <th class="px-6 py-3">Item</th>
+                            <th class="px-6 py-3">Amount</th>
+                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var i in orders)
+                        @foreach (var i in Model)
                         {
-
-                            var profilePicture =  "https://avatars.githubusercontent.com/u/124599?v=4";
                             <tr class="border-b border-gray-200 text-primary">
-                                <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                    @i.OrderId
-                                </th>
+
+                                <!-- 1) Order ID -->
+                                <td class="px-6 py-4">@i.OrderNumber</td>
+
+                                <!-- 2) Customer -->
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2 font-medium">
-                                        <div>
-                                            <img src="@profilePicture" class="size-6 rounded-full" />
-                                        </div>
-                                        @i.Customer
+                                        @if (!string.IsNullOrEmpty(i.customer?.ProfilePictureUrl))
+                                        {
+                                            <img src="@i.customer.ProfilePictureUrl" class="size-6 rounded-full" />
+                                        }
+                                        <span>@i.customer?.Name</span>
                                     </div>
                                 </td>
+
+                                <!-- 3) Date -->
+                                <td class="px-6 py-4">@i.createdAt</td>
+
+                                <!-- 4) Item Count -->
+                                <td class="px-6 py-4">@i.Items?.Count</td>
+
+                                <!-- 5) Amount -->
+                                <td class="px-6 py-4">@i.totalAmount</td>
+
+                                <!-- 6) Status -->
+                                <td class="px-6 py-4">@i.status</td>
+
+                                <!-- 7) Action -->
                                 <td class="px-6 py-4">
-                                    @i.Date
+                                    <a asp-controller="Admin"
+                                       asp-action="OrderDetail"
+                                       asp-route-id="@i.Id"
+                                       class="underline">
+                                        View
+                                    </a>
                                 </td>
-                                <td class="px-6 py-4">
-                                    @i.Item
-                                </td>
-                                <td class="px-6 py-4">
-                                    @i.Amount
-                                </td>
-                                <td class="px-6 py-4">
-                                    @i.Status
-                                </td>
-                                <td class="px-6 py-4">
-                                    <a asp-controller="Admin" asp-action="CustomerDetail" class="underline" asp-route-id="@i.OrderId">View</a>
-                                </td>
+
                             </tr>
                         }
-
                     </tbody>
+
                 </table>
             </div>
-
         </div>
+    </div>
 
+    <!-- Pagination -->
+    <div class="mt-5 flex items-center justify-center gap-5 p-5 md:p-0">
+
+        @if (ViewBag.Page > 1)
+        {
+            <a asp-action="Orders"
+               asp-route-page="@(ViewBag.Page - 1)"
+               class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white hover:bg-transparent hover:text-primary">
+                Prev
+            </a>
+        }
+
+        <span>@ViewBag.Page / @ViewBag.TotalPages</span>
+
+        @if (ViewBag.Page < ViewBag.TotalPages)
+        {
+            <a asp-action="Orders"
+               asp-route-page="@(ViewBag.Page + 1)"
+               class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white hover:bg-transparent hover:text-primary">
+                Next
+            </a>
+        }
 
     </div>
 
-
-</div>
-<div class="mt-5 flex items-center justify-center gap-5 p-5 md:p-0">
-    @if (ViewBag.Page > 1)
-    {
-        <a asp-action="Customer" class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto" asp-route-page="@(ViewBag.Page - 1)">Prev</a>
-    }
-
-    <span>@ViewBag.Page / @ViewBag.TotalPages</span>
-
-    @if (ViewBag.Page < ViewBag.TotalPages)
-    {
-        <a asp-action="Customer" class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto" asp-route-page="@(ViewBag.Page + 1)">Next</a>
-    }
 </div>
