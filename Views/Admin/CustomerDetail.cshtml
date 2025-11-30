@@ -95,10 +95,15 @@
 
                             <div class="flex items-center gap-5">
                                 <div class="flex flex-col gap-3">
-                                    <label class="text-muted-foreground text-xs">Role</label>
-                                    <select asp-for="Form.Role"
-                                            asp-items="ViewBag.RoleList"
-                                            class="min-w-[120px] rounded-sm border border-border bg-white px-3 py-2 text-sm">
+                            <form asp-action="UpdateOrderStatus" asp-controller="Admin" method="post" class="flex items-end gap-4">
+                                <input type="hidden" name="orderId" value="" />
+
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-muted-foreground text-xs">Order Status</label>
+
+                                    <select name="newStatus"
+                                            asp-items="ViewBag.OrderStatusList"
+                                            class="w-auto rounded-sm border border-border bg-white px-3 py-2 text-sm uppercase">
                                     </select>
                                     <span asp-validation-for="Form.Role" class="text-xs text-red-500"></span>
                                 </div>
