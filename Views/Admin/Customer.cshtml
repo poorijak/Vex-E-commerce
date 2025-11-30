@@ -1,7 +1,10 @@
 ﻿@model List<Vex_E_commerce.Models.Customer>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+
 }
+
 
 
 <div>
@@ -25,7 +28,7 @@
                         <tr>
 
                             <th scope="col" class="px-6 py-3">
-                                Name
+                                User Profile
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Email
@@ -53,9 +56,8 @@
                                 <th scope="row" class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2 font-medium">
                                         <div>
-                                            <img src="@profilePicture" class="size-6 rounded-full" />
+                                            <img src="~/Images/Avatar/Avatar.webp" class="size-6 rounded-full" />
                                         </div>
-                                        @user.Name
                                     </div>
                                 </th>
                                 <td class="px-6 py-4">

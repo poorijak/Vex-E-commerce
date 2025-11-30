@@ -50,19 +50,5 @@ namespace Vex_E_commerce.Controllers
 
         }
 
-
-        // แสดงสินค้าภายในหมวดหมู่ที่เลือก
-        //public IActionResult Detail(Guid id)
-        //{
-        //    var category = _context.Categories
-        //        .Include(c => c.products)
-        //        .FirstOrDefault(c => c.Id == id);
-
-        //    if (category == null)
-        //        return NotFound();
-                                          
-        //    return View(category);
-        //}
-       
     }
 }

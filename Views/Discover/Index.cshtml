@@ -35,7 +35,7 @@
 
 
 <div class="pt-16 md:pt-[76px]">
-    <img class="h-[200px] w-full object-cover object-[70%_25%]" src="https://images.unsplash.com/photo-1635650804483-2a77a8c9e728?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2340" />
+    <img class="h-[200px] w-full object-cover object-[70%_25%]" alt="banner-image" src="/Images//Discover/Bg-banner.webp" />
 
 
     <div class="mx-5 mt-10 md:mx-10 lg:mx-32">
@@ -51,47 +51,67 @@
             </button>
         </div>
 
-        <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
-            @foreach (var i in Model)
-            {
-                <div class="font-geist flex flex-col rounded-md border border-border bg-white p-4">
-                    <a asp-route-id="@i.Id" asp-action="Index" asp-controller="ProductDetail">
-                        <div class="flex justify-end">
-                            <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
-                        </div>
-
-                        <div class="my-4 flex items-center justify-center overflow-hidden">
-                            <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="line-clamp-1 text-base font-semibold">@i.Title</label>
-                            <div class="mt-1 flex gap-1">
-                                @foreach (var c in colorList)
-                                {
-                                    <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
-                                    </div>
-                                }
+         @if (Model != null && Model.Any())
+        {
+            <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-10">
+                @foreach (var i in Model)
+                {
+                    <div class="font-geist flex flex-col rounded-md border border-border bg-white p-4">
+                        <a asp-route-id="@i.Id" asp-action="Index" asp-controller="ProductDetail">
+                            <div class="flex justify-end">
+                                <p class="text-muted-foreground text-xs font-medium">@i.TotalSold SOLD</p>
                             </div>
 
+                            <div class="my-4 flex items-center justify-center overflow-hidden">
+                                <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <label class="line-clamp-1 text-base font-semibold">@i.Title</label>
+                                <div class="mt-1 flex gap-1">
+                                    @foreach (var c in colorList)
+                                    {
+                                        <div class="@c.style size-3 rounded-xs border border-border hover:cursor-pointer md:size-4">
+                                        </div>
+                                    }
+                                </div>
+
+                            </div>
+                        </a>
+                        <div class="flex items-end justify-between">
+                            <div class="mt-3 flex flex-col gap-1">
+                                <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
+                                <p class="text-sm font-semibold">฿ @i.BasePrice</p>
+                            </div>
+                            <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="Home" data-product-itemid="@i.Id">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productId" value="@i.Id" />
+                                <button type="submit" class="heart-btn" aria-label="Wishlist">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-outline @(i.IsWishlisted ? "hidden" : "") size-6" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="heart-fill size-6 fill-destructive @(i.IsWishlisted ? "" : "hidden")" viewBox="0 0 256 256"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path></svg>
+                                </button>
+                            </form>
                         </div>
-                    </a>
-                    <div class="flex items-end justify-between">
-                        <div class="mt-3 flex flex-col gap-1">
-                            <p class="text-muted-foreground text-xs font-medium md:text-xs">Start From</p>
-                            <p class="text-sm font-semibold">฿ @i.BasePrice</p>
-                        </div>
-                        <form method="post" asp-action="ToggleWishList" class="wishlist-form" asp-controller="Home" data-product-itemid="@i.Id">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="productId" value="@i.Id" />
-                            <button type="submit" class="heart-btn" aria-label="Wishlist">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="heart-outline @(i.IsWishlisted ? "hidden" : "") size-6" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="heart-fill size-6 fill-destructive @(i.IsWishlisted ? "" : "hidden")" viewBox="0 0 256 256"><path d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"></path></svg>
-                            </button>
-                        </form>
                     </div>
+                }
+            </div>
+        } else
+        {
+            <div class="mt-10 mb-40 flex w-full flex-col items-center justify-center gap-4 text-center">
+                <div class="flex size-16 items-center justify-center rounded-full bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                 </div>
-            }
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900">No products found</h3>
+                    <p class="mt-1 text-sm text-gray-500">We couldn't find any products in this " <span class="font-semibold text-primary">@keyword</span> "</p>
+                </div>
+                <a asp-action="Index" asp-controller="Home" class="mt-4 bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90">
+                    Back to Home
+                </a>
+            </div>
+        }
         </div>
 
     </div>

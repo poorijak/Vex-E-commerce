@@ -41,6 +41,9 @@ namespace Vex_E_commerce.Models
 
         public Customer? User { get; set; } = new Customer();
 
+
+        public List<Order> Orders { get; set; } = new();
+
     }
 
     public class CustomerFormDto

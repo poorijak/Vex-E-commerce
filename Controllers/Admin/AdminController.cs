@@ -222,16 +222,44 @@ namespace Vex_E_commerce.Controllers.Admin
             return View(Customers);
         }
 
-        public async Task<IActionResult> CustomerDetail(string id)
-        {
+        // ใน AdminController.cs
 
+        public async Task<IActionResult> CustomerDetail(string id, int page = 1, int pageSize = 5)
+        {
             if (string.IsNullOrWhiteSpace(id)) return BadRequest();
 
-
             var user = await _userManager.FindByIdAsync(id);
-
             if (user == null) return NotFound();
 
+            // 1. สร้าง Query หลัก
+            var ordersQuery = _db.orders.Where(o => o.customerId == id);
+
+            // ---------------------------------------------------------
+            // ส่วนที่เพิ่ม: การคำนวณสถิติ (Statistics)
+            // ---------------------------------------------------------
+
+            // 1. นับจำนวน Order ทั้งหมด
+            var totalOrders = await ordersQuery.CountAsync();
+
+            // 2. ยอดรวมการใช้จ่าย (ใส่ (decimal?) เพื่อป้องกัน error กรณีไม่มีข้อมูล)
+            var totalSpending = await ordersQuery.SumAsync(o => (decimal?)o.totalAmount) ?? 0;
+
+            // 3. แก้ไขตามสั่ง: นับสถานะ Delivered
+            var completedCount = await ordersQuery.CountAsync(o => o.status == OrderStatus.delivered);
+
+            // 4. แก้ไขตามสั่ง: นับสถานะ Canceled (L ตัวเดียว ตามคำสั่ง)
+            var cancelledCount = await ordersQuery.CountAsync(o => o.status == OrderStatus.cancelled);
+
+            // ---------------------------------------------------------
+
+            // Pagination
+            var totalPages = (int)Math.Ceiling(totalOrders / (double)pageSize);
+
+            var pagedOrders = await ordersQuery
+                .OrderByDescending(o => o.createdAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             var vm = new CustomerVm
             {
@@ -241,10 +269,11 @@ namespace Vex_E_commerce.Controllers.Admin
                     Role = user.Role,
                     Status = user.Status,
                     Id = user.Id
-                }
-
+                },
+                Orders = pagedOrders
             };
 
+            // Dropdowns
             ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
                 .Cast<UserRole>()
                 .Select(r => new SelectListItem
@@ -263,11 +292,16 @@ namespace Vex_E_commerce.Controllers.Admin
                     Selected = (s == user.Status)
                 }).ToList();
 
+            // ส่งค่า Pagination
+            ViewBag.Page = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CustomerId = id;
 
-            if (vm.User is null)
-            {
-                return NotFound();
-            }
+            // ส่งค่าสถิติ
+            ViewBag.TotalOrders = totalOrders;
+            ViewBag.TotalSpending = totalSpending;
+            ViewBag.CompletedOrders = completedCount;
+            ViewBag.CancelledOrders = cancelledCount;
 
             return View(vm);
         }

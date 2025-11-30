@@ -3,33 +3,37 @@
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    var profilePicture = Model.User?.ProfilePictureUrl ?? "https://avatars.githubusercontent.com/u/124599?v=4";
+
+    var TotalOrders = ViewBag.TotalOrders;
+    var TotalSpending = ViewBag.TotalSpending;
+    var CompletedOrders = ViewBag.CompletedOrders;
+    var CancelledOrders = ViewBag.CancelledOrders;
 
     var CustomerDetialList = new[]
    {
         new {
             Label = "Total Order",
-            Value = "2300",
+            Value = TotalOrders,
             Description = "New cost last 365 days",
             dotClassName = ""
         },
         new {
             Label = "Total spendding",
-            Value = "123",
+            Value = TotalSpending,
             Description = "Total order last 365 days",
             dotClassName = "size-4 rounded-full bg-[#FFA232]"
 
         },
         new {
             Label = "Completed",
-            Value = "100",
+            Value = CompletedOrders,
             Description = "Completed order last 365 days",
             dotClassName = "size-4 rounded-full bg-green-500"
 
         },
         new {
             Label = "Cancled",
-            Value = "2300",
+            Value = CancelledOrders,
             Description = "New cost last 365 days",
             dotClassName = "size-4 rounded-full bg-destructive"
         },
@@ -44,11 +48,11 @@
         </a>
         <div>
             <p class="text-muted-foreground text-sm font-semibold">Back to customer</p>
-            <h1 class="text-lg font-bold">@(@Model?.User.Name ?? "Not Provide")</h1>
+            <h1 class="text-lg font-bold">@(@Model?.User.Email ?? "Not Provide")</h1>
         </div>
    </div>
     
-   <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-col-4">
+   <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
         @foreach (var item in CustomerDetialList)
         {
             <div class="flex justify-between rounded-sm border border-border bg-white p-3">
@@ -71,7 +75,7 @@
 
 
    <div class="mt-10">
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+      <div class="grid grid-cols-1 gap-5 md:gap-6 lg:grid-cols-3">
             <div class="col-span-1 flex w-full flex-col gap-3">
                 <h2 class="text-xl font-bold">Customer Infomation</h2>
 
@@ -107,9 +111,7 @@
                                     <span asp-validation-for="Form.Status" class="text-xs text-red-500"></span>
                                 </div>
 
-                                <button type="submit" class="h-[38px] rounded-sm bg-black px-4 py-2 text-sm text-white transition hover:bg-gray-800">
-                                    Save
-                                </button>
+                              
                             </div>
                         </form>
                   </div>
@@ -117,7 +119,7 @@
                         <label class="text-muted-foreground text-xs">Shipping Address</label>
                         <p class="text-sm font-medium text-primary">Wait...</p>
                     </div>
-                    <img class="absolute top-5 right-9 size-16 rounded-full" src="@profilePicture" />
+                    <img class="absolute top-5 right-9 size-16 rounded-full" alt="Profile-image" src="/Images//Avatar/Avatar.webp" />
                 </div>
             </div>
             <div class="col-span-1 md:col-span-2">
@@ -139,9 +141,6 @@
                                             Date
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            Qty
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
                                             Price
                                         </th>
                                         <th scope="col" class="px-6 py-3">
@@ -153,110 +152,58 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    @foreach( var i in Model.Orders)
+                                    {
                                         <tr class="border-b border-gray-200 text-primary">
                                             <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                               #ORD394920420
-                                            </th>
+                                                @i.OrderNumber
+                                             </th>
                                             <td class="px-6 py-4">
-                                               2024-05-31
+                                                @i.createdAt
                                             </td>
                                             <td class="px-6 py-4">
-                                                2
+                                               @i.totalAmount
+                                            </td>
+                                            <td class="px-6 py-4 uppercase">
+                                                @i.status
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2341
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Shipping
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                View
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-200 text-primary">
-                                            <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                               #ORD394920420
-                                            </th>
-                                            <td class="px-6 py-4">
-                                               2024-05-31
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                2
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2341
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Shipping
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                View
+                                                <a asp-action="OrderDetail" asp-controller="admin" asp-route-id="@i.Id" class="underline">
+                                                    View
+                                                </a>
                                             </td>
                                         </tr>
-                                        <tr class="border-b border-gray-200 text-primary">
-                                            <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                               #ORD394920420
-                                            </th>
-                                            <td class="px-6 py-4">
-                                               2024-05-31
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                2
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2341
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Shipping
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                View
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-200 text-primary">
-                                            <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                               #ORD394920420
-                                            </th>
-                                            <td class="px-6 py-4">
-                                               2024-05-31
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                2
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2341
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Shipping
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                View
-                                            </td>
-                                        </tr>
-                                        <tr class="border-b border-gray-200 text-primary">
-                                            <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                               #ORD394920420
-                                            </th>
-                                            <td class="px-6 py-4">
-                                               2024-05-31
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                2
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2341
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Shipping
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                View
-                                            </td>
-                                        </tr>
-
+                                    }
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="mt-5 flex items-center justify-center gap-5 p-5 md:p-0">
+
+                            @if (ViewBag.Page > 1)
+                            {
+                                <a asp-action="CustomerDetail"
+                                   asp-controller="Admin"
+                                   asp-route-id="@ViewBag.CustomerId"
+                                   asp-route-page="@(ViewBag.Page - 1)"
+                                   class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto">
+                                    Prev
+                                </a>
+                            }
+
+                            <span>@ViewBag.Page / @ViewBag.TotalPages</span>
+
+                            @if (ViewBag.Page < ViewBag.TotalPages)
+                            {
+                                <a asp-action="CustomerDetail"
+                                   asp-controller="Admin"
+                                   asp-route-id="@ViewBag.CustomerId"
+                                   asp-route-page="@(ViewBag.Page + 1)"
+                                   class="w-auto border-[0.5px] bg-primary px-4 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:cursor-pointer hover:bg-transparent hover:text-primary md:w-auto">
+                                    Next
+                                </a>
+                            }
+
                         </div>
 
                     </div>
