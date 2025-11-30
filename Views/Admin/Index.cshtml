@@ -5,7 +5,7 @@
     var Keyword = ViewBag.keyword;
 }
 
-<div class="w-full flex-col px-5">
+<div class="w-full flex-col px-5 md:px-0">
     <div class="mb-3 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
         <div>
             <h1 class="text-xl font-bold md:text-2xl">Product Manager</h1>
@@ -17,21 +17,17 @@
         </a>
       
     </div>
-
-  
     <div class="grid grid-cols-1">
+        <div class="h-px flex-1 border-b border-border"></div>
 
-
-        <div class="my-4 h-px flex-1 border-b border-border"></div>
-        <div class="flex justify-start">
-            <form asp-controller="Admin" asp-action="Index" class="relative w-full md:w-64">
-                <input placeholder="Search Product Title" name="keyword" value="@Keyword" class="h-9 w-full rounded-sm border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
-                    <i class="ph ph-magnifying-glass absolute top-2.5 left-2.5"></i>
-                <a asp-action="Index" asp-controller="Admin" class="absolute top-2 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+        <div class="my-4 flex justify-start md:w-64">
+            <form asp-action="Index" class="relative w-full"  asp-controller="Admin">
+                <input placeholder="e.g. Oversized Black T-Shirt" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill fill-muted-foreground absolute top-2.5 left-2.5 size-4" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+                <a asp-action="Index" asp-controller="Admin" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
             </form>
-            
         </div>
-            <div class="relative overflow-x-auto pt-3">
+            <div class="relative overflow-x-auto pt-3 md:overflow-visible">
                 <table class="w-full text-left text-sm whitespace-nowrap text-gray-500 rtl:text-right dark:text-gray-400">
                 <thead class="text-muted-foreground rounded-sm bg-[#F4F4F5] text-xs uppercase dark:text-gray-400">
                         <tr>
@@ -44,6 +40,9 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Stock
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Category
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Created At
@@ -88,10 +87,15 @@
                                     @item.TotalStock
                                 </td>
 
+
+
+                                <td class="px-2 py-3 md:px-6 md:py-4">
+                                    @item.Category.Title
+                                </td>
                                 <td class="px-2 py-3 md:px-6 md:py-4">
                                     @item.CreatedAt
                                 </td>
-
+                              
                                 <td class="px-2 py-3 md:px-6 md:py-4">
                                     @item.Status
                                 </td>
@@ -105,11 +109,11 @@
                                     </button>
 
                                     <div id="menu-@item.Id"
-                                         class="absolute top-10 right-30 mt-2 hidden w-32 rounded-sm border border-border bg-white">
+                                         class="absolute top-10 right-16 mt-2 hidden w-32 rounded-sm border border-border bg-white md:top-10 md:right-30">
                                         <a asp-action="EditProduct"
                                            asp-controller="AdminProduct"
                                            asp-route-id="@item.Id"
-                                           class="block px-4 py-2 text-sm hover:bg-muted-foreground/10">
+                                           class="flex items-center justify-start px-4 py-2 text-sm hover:bg-muted-foreground/10">
                                             <i class="ph ph-pencil-simple mr-2"></i>
                                             Edit
                                         </a>

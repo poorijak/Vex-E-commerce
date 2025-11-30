@@ -14,7 +14,6 @@ using Vex_E_commerce.Models;
 namespace Vex_E_commerce.Controllers.Admin
 {
 
-    //[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
 
@@ -42,7 +41,7 @@ namespace Vex_E_commerce.Controllers.Admin
                 {
                     var keywordTrim = keyword.Trim();
 
-                    q = q.Where(p => p.Title.Contains(keywordTrim));
+                    q = q.Where(p => p.Title.Contains(keywordTrim) || p.Category.Title.Contains(keywordTrim));
                 }
 
 
@@ -53,6 +52,7 @@ namespace Vex_E_commerce.Controllers.Admin
 
                 var products = await q
                     .OrderBy(p => p.Id)
+                    .Include(p => p.Category)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
@@ -63,6 +63,8 @@ namespace Vex_E_commerce.Controllers.Admin
 
                 return View(products);
             }
+
+            ViewBag.keyword = keyword;
             return RedirectToAction("Index", "Home");
         }
 
@@ -80,13 +82,20 @@ namespace Vex_E_commerce.Controllers.Admin
             return RedirectToAction("Index", "Admin");
         }
 
-        public async Task<IActionResult> Orders(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Orders(string? keyword ,  int page = 1, int pageSize = 5)
         {
             var ordersQuery = _db.orders
                 .Include(o => o.customer)
                 .Include(o => o.Items)
-                .AsNoTracking()
-                .OrderByDescending(o => o.createdAt);
+                .AsNoTracking();
+
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var keywordTrim = keyword.Trim();
+
+                ordersQuery = ordersQuery.Where(o => o.OrderNumber.Contains(keywordTrim) || o.customer.Email.Contains(keywordTrim));
+            }
 
             // Pagination
             var total = await ordersQuery.CountAsync();
@@ -94,6 +103,7 @@ namespace Vex_E_commerce.Controllers.Admin
 
             var orders = await ordersQuery
                 .Include(o => o.customer)
+                .OrderByDescending(o => o.createdAt)
                 .AsNoTracking()
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -202,26 +212,38 @@ namespace Vex_E_commerce.Controllers.Admin
 
 
 
-        public async Task<IActionResult> Customer(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Customer(string? keyword, int page = 1, int pageSize = 5)
         {
+            var query = _userManager.Users.AsNoTracking();
+
+            var keywordTrim = keyword?.Trim();
 
 
-            var Customers = await _userManager.Users
-            .OrderBy(c => c.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var search = keyword.Trim();
+                query = query.Where(c => c.Email.Contains(keywordTrim)
+                                      || c.Name.Contains(keywordTrim)
+                                      || c.UserName.Contains(keywordTrim)
+                                      || c.Id.Contains(keywordTrim)
+                                      );
+            }
 
-
-            var total = await _userManager.Users.CountAsync();
+            var total = await query.CountAsync();
             var totalPages = (int)Math.Ceiling(total / (double)pageSize);
 
+            var customers = await query
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.keyword = keyword;
             ViewBag.Page = page;
             ViewBag.TotalPages = totalPages;
 
-            return View(Customers);
+            return View(customers);
         }
-
         // ใน AdminController.cs
 
         public async Task<IActionResult> CustomerDetail(string id, int page = 1, int pageSize = 5)
@@ -314,21 +336,6 @@ namespace Vex_E_commerce.Controllers.Admin
             var user = await _userManager.FindByIdAsync(vm.Form.Id);
             if (user == null) return NotFound();
 
-            if (!ModelState.IsValid)
-            {
-                ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
-                    .Cast<UserRole>()
-                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString(), Selected = x == user.Role })
-                    .ToList();
-
-                ViewBag.StatusList = Enum.GetValues(typeof(UserStatus))
-                    .Cast<UserStatus>()
-                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString(), Selected = x == user.Status })
-                    .ToList();
-
-                vm.User ??= user;
-                return View(vm);
-            }
 
             user.Role = vm.Form.Role;
             user.Status = vm.Form.Status;
@@ -354,7 +361,7 @@ namespace Vex_E_commerce.Controllers.Admin
             }
 
             // บันทึกสำเร็จ Redirect กลับมาหน้าเดิมเพื่อให้เห็นค่าใหม่
-            return RedirectToAction(nameof(CustomerDetail), new { id = vm.Form.Id });
+            return RedirectToAction("CustomerDetail" , "Admin" , new { id = user.Id });
         }
 
 
