@@ -49,8 +49,7 @@ namespace Vex_E_commerce.Controllers
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                var keywordTrim = keyword.Trim();
-
+                var keywordTrim = keyword.Trim().ToLower();
                 q =  q.Where(p => p.Title.Contains(keyword));
             }
 

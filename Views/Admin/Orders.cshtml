@@ -1,10 +1,11 @@
 ﻿@model List<Vex_E_commerce.Models.Order>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var Keyword = ViewBag.keyword;
 }
 
 <div>
-    <div class="mx-5 mb-3 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
+    <div class="mb-3 flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
         <div>
             <h1 class="text-xl font-bold md:text-2xl">Orders Management</h1>
             <p class="text-muted-foreground text-xs md:text-sm">
@@ -13,7 +14,15 @@
         </div>
     </div>
 
-    <div class="my-5 h-px flex-1 border-b border-border"></div>
+    <div class="my-4 h-px flex-1 border-b border-border"></div>
+
+    <div class="my-4 flex justify-start md:w-64">
+        <form asp-action="Orders" class="relative w-full" asp-controller="Admin">
+            <input placeholder="e.g. #ORD-2025-001" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="fill fill-muted-foreground absolute top-2.5 left-2.5 size-4" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+            <a asp-action="Orders" asp-controller="Admin" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
+        </form>
+    </div>
 
     <div>
         <div class="grid grid-cols-1 p-5 md:p-0">
