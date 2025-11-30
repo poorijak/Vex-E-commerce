@@ -11,7 +11,14 @@
     <div class="my-5 h-px border-b border-border"></div>
     @if (Model.Items == null || !Model.Items.Any())
     {
-        <p>Your cart is empty.</p>
+        <div class="flex min-h-[50vh] w-full flex-col items-center justify-center gap-3">
+            <div class="bg-muted-foreground/30 flex items-center justify-center rounded-full">
+                <i class="ph ph-shopping-cart m-6 text-6xl text-white"></i>
+
+            </div>
+            <p class="text-muted-foreground text-lg font-semibold">Your cart is empty.</p>
+            <a asp-controller="Home" asp-action="Index" class="text-sm font-medium underline">Continue Shopping</a>
+        </div>
     }
     else
     {

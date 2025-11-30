@@ -148,20 +148,15 @@
                         <section class="my-2 flex w-full items-center gap-3">
                             <img src="@i.PictureUrl" class="size-13 object-cover" />
                             <div class="flex w-full flex-col gap-2">
-                                <p class="text-muted-foreground">shirt</p>
+                                <p class="text-muted-foreground">@i.ProductCategory</p>
                                 <div class="flex w-full items-center justify-between">
-                                    <p>@i.ProductTitle</p>
-                                    <div class="flex gap-3">
+                                    <p class="text-lg font-semibold">@i.ProductTitle</p>
+                                    <div class="flex items-center justify-center gap-3">
                                         <p>x @i.Quantity</p>
-                                        <p>@i.UnitPrice</p> 
-                                        <form>
-                                            <button class="cursor-pointer">
-                                                <i class="ph ph-trash text-lg text-destructive"></i>
-                                            </button>
-                                        </form>
+                                        <p>@i.UnitPrice</p>
                                     </div>
                                 </div>
-                                <div class="flex gap-3">
+                                <div class="text-muted-foreground flex gap-3 text-sm">
                                     <p>@i.VariantText</p>
     
                                 </div>
@@ -195,6 +190,28 @@
                 </div>
             </div>
 
+            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Update order status</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                    <form asp-action="UpdateOrderStatus" asp-controller="Admin" method="post" class="flex items-end gap-4">
+                        <input type="hidden" name="orderId" value="@Model.OrderId" />
+
+                        <div class="flex flex-col gap-1">
+                            <label class="text-muted-foreground text-xs">Order Status</label>
+
+                            <select name="newStatus"
+                                    asp-items="ViewBag.OrderStatusList"
+                                    class="min-w-[150px] rounded-sm border border-border bg-white px-3 py-2 text-sm uppercase">
+                            </select>
+                        </div>
+
+                        <button type="submit" class="rounded-sm bg-black px-4 py-2 text-sm text-white transition hover:bg-gray-800">
+                            Update
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="col-span-1 gap-3 lg:col-span-2">
@@ -258,17 +275,7 @@
                    </div>
                 </div>
             </div>
-            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
-                <h1 class="text-lg font-bold">Update order status</h1>
-                <div class="my-4 h-px flex-1 border-b border-border"></div>
-                <div class="flex flex-col gap-3">
-                   <div class="flex items-center gap-2">
-                        <i class="ph ph-envelope-simple"></i>
-
-                        <p>@customer.Name</p>
-                   </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

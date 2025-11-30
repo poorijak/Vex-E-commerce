@@ -372,6 +372,9 @@
   .m-5 {
     margin: calc(var(--spacing) * 5);
   }
+  .m-6 {
+    margin: calc(var(--spacing) * 6);
+  }
   .-mx-4 {
     margin-inline: calc(var(--spacing) * -4);
   }
@@ -624,6 +627,9 @@
   .h-20 {
     height: calc(var(--spacing) * 20);
   }
+  .h-\[38px\] {
+    height: 38px;
+  }
   .h-\[76px\] {
     height: 76px;
   }
@@ -644,6 +650,9 @@
   }
   .h-svh {
     height: 100svh;
+  }
+  .min-h-\[50vh\] {
+    min-height: 50vh;
   }
   .min-h-screen {
     min-height: 100vh;
@@ -728,6 +737,12 @@
   }
   .min-w-0 {
     min-width: calc(var(--spacing) * 0);
+  }
+  .min-w-\[120px\] {
+    min-width: 120px;
+  }
+  .min-w-\[150px\] {
+    min-width: 150px;
   }
   .min-w-max {
     min-width: max-content;
@@ -1084,6 +1099,33 @@
   .bg-indigo-500 {
     background-color: var(--color-indigo-500);
   }
+  .bg-muted-foreground {
+    background-color: var(--muted-foreground);
+  }
+  .bg-muted-foreground\/10 {
+    background-color: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      & {
+        background-color: color-mix(in oklab, var(--muted-foreground) 10%, transparent);
+      }
+    }
+  }
+  .bg-muted-foreground\/30 {
+    background-color: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      & {
+        background-color: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
+      }
+    }
+  }
+  .bg-muted-foreground\/50 {
+    background-color: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      & {
+        background-color: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+      }
+    }
+  }
   .bg-neutral-900 {
     background-color: var(--color-neutral-900);
   }
@@ -1344,6 +1386,10 @@
     font-size: var(--text-5xl);
     line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
+  .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
+  }
   .text-7xl {
     font-size: var(--text-7xl);
     line-height: var(--tw-leading, var(--text-7xl--line-height));
@@ -1404,6 +1450,9 @@
   }
   .text-destructive {
     color: var(--destructive);
+  }
+  .text-gray-300 {
+    color: var(--color-gray-300);
   }
   .text-gray-400 {
     color: var(--color-gray-400);
@@ -1698,6 +1747,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-gray-200);
+      }
+    }
+  }
+  .hover\:bg-gray-800 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-800);
       }
     }
   }
