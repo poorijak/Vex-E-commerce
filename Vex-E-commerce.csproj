@@ -26,4 +26,15 @@
 		<Folder Include="wwwroot\Icon\" />
 	</ItemGroup>
 
+	<Target Name="TailwindBuild" BeforeTargets="Build">
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. Please install Node.js from https://nodejs.org/" />
+
+		<Exec Command="npm install" />
+
+		<Exec Command="npm run tw:build" />
+	</Target>
+
 </Project>

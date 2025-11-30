@@ -17,7 +17,7 @@
             {
                 label = "T-Shirt",
                 imgHover = "/images/Categories/T-Shirt-Hover.webp",
-                path = "T-shirt",
+                path = "T-Shirt",
                 img = "/images/Categories/T-Shirt.webp"
 
             },
@@ -47,14 +47,14 @@
     }
     <div class="bg-[#fafafa] pt-16 md:pt-[76px]">
         <section class="relative h-svh w-full">
-            <img class="h-full w-full object-cover object-[50%_25%]" loading="lazy" src="/Images/HomeImage/BackgroundImage.webp" />
+            <img alt="Bg-image" class="size-full object-cover object-[50%_25%]" loading="lazy" src="/Images/HomeImage/BackgroundImage.webp" />
                 <div class="absolute bottom-32 w-full">
                     <partial name="HomePagePartial/marquee" />
                 </div>
                 <div class="absolute right-2 bottom-36 md:right-40 md:bottom-64">
-                <div class="flex items-center gap-4 rounded-full bg-white px-6 py-3 transition-colors duration-300 hover:cursor-pointer hover:bg-primary hover:text-white md:px-12 md:py-4">
+                <div class="group flex items-center gap-4 rounded-full bg-white px-6 py-3 transition-colors duration-300 hover:cursor-pointer hover:bg-primary hover:text-white md:px-12 md:py-4">
                     <a class="text-lg font-semibold md:text-xl">Shop Now!</a>
-                    <i class="ph-bold ph-arrow-up-right text-2xl md:text-3xl"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6 transition-colors duration-300 group-hover:fill-white md:size-7" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"></path></svg>
                   </div>
                 </div>
         </section>
@@ -75,7 +75,7 @@
                                 </div>
 
                                 <div class="my-4 flex items-center justify-center overflow-hidden">
-                                    <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                                    <img alt="Product-Image" src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
                                 </div>
 
                                 <div class="flex flex-col gap-1">
@@ -122,10 +122,10 @@
                         <a class="hover:cursor-pointer" asp-action="CategoryProduct" asp-controller="Home" asp-route-category="@i.path">
                             <div class="flex items-center justify-center overflow-hidden border border-border p-5">
                                 <div class="relative size-28 md:size-52">
-                                    <img src="@i.imgHover" loading="lazy" class="absolute inset-0 z-10 h-full w-full object-cover opacity-0
+                                    <img alt="Image-Hover" src="@i.imgHover" loading="lazy" class="absolute inset-0 z-10 h-full w-full object-cover opacity-0
                                 transition-opacity duration-300 ease-in-out
                                 group-hover:opacity-100" />
-                                    <img src="@i.img" loading="lazy" class="absolute inset-0 h-full w-full object-contain
+                                    <img src="@i.img" alt="Category-Image" loading="lazy" class="absolute inset-0 h-full w-full object-contain
                                 transition-opacity duration-300 ease-in-out
                                 group-hover:opacity-0" />
                                 </div>
@@ -161,7 +161,7 @@
                                 </div>
 
                                 <div class="my-4 flex items-center justify-center overflow-hidden">
-                                    <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                                    <img alt="Product-Image" src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
                                 </div>
 
                                 <div class="flex flex-col gap-1">
@@ -208,7 +208,7 @@
                                 </div>
 
                                 <div class="my-4 flex items-center justify-center overflow-hidden">
-                                    <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                                    <img alt="Product-Image" src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
                                 </div>
 
                                 <div class="flex flex-col gap-1">

@@ -1,5 +1,9 @@
 ﻿@model Vex_E_commerce.Models.ProductFormVm
 
+@{
+    var profilePicture = "/images/Avatar/Avatar.webp";
+}
+
 <div class="z-0">
     <h2 class="my-3 font-semibold">
         Product Image URL <span class="text-red-500">*</span>
@@ -20,7 +24,7 @@
 
 
     <div class="relative mt-4 hidden size-52 w-full rounded-sm border-2 border-border p-3" id="previewArea">
-        <img id="productImagePreview" class="h-full w-full rounded-sm object-contain" src="" alt="Product Image Preview" />
+        <img id="productImagePreview" class="h-full w-full rounded-sm object-contain" src="@profilePicture" alt="Product Image Preview" />
         <button type="button" id="removeImageButton" class="absolute top-3 right-4 h-5 w-5 rounded-full bg-red-500 text-white">
             <i class="ph ph-x text-sm"></i>
         </button>

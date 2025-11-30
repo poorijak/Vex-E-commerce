@@ -14,66 +14,6 @@
     };
 
 
-    var orderId = "#ORD7176220874";
-    var createdAt = "2024-05-31 03:24";
-    var status = "Shipping";
-
-    var items = new[]
-    {
-        new {
-            Title = "MEN’s Shirt Backpink in your area",
-            Size = "L",
-            Color = "White",
-            Quantity = 3,
-            Price = 1399,
-            Total = 195,
-            Picture = "https://img.lazcdn.com/g/p/53fa921ef83a0742fa78461353c131b2.jpg_720x720q80.jpg"
-        },
-        new {
-            Title = "MEN’s Shirt Backpink in your area",
-            Size = "L",
-            Color = "Red",
-            Quantity = 3,
-            Price = 1399,
-            Total = 195,
-            Picture = "https://img.lazcdn.com/g/p/53fa921ef83a0742fa78461353c131b2.jpg_720x720q80.jpg"
-
-        },
-        new {
-            Title = "MEN’s Shirt Backpink in your area",
-            Size = "L",
-            Color = "Black",
-            Quantity = 3,
-            Price = 1399,
-            Total = 195,
-            Picture = "https://img.lazcdn.com/g/p/53fa921ef83a0742fa78461353c131b2.jpg_720x720q80.jpg"
-        }
-    };
-
-    var customer = new {
-        Name = "Freddie Mercury",
-        TotalOrder = 1
-    };
-
-    var contact = new {
-        Email = "Freddie91@queen.god"
-    };
-
-      var shippingInfo = new {
-        Name = "Freddie Mercury",
-        Phone = "089-123-4567",
-        AddressDetails = "128/45 อาคารบ้านสุขใจ อพาร์ตเมนต์ ชั้น 3 ห้อง 305, ซอยสุขุมวิท 71",
-        ProvinceDistrict = "กรุงเทพมหานคร, เขตวัฒนา, พระโขนงเหนือ",
-        PostalCode = "10110",
-        Note = "ฝากพนักงานส่งไวๆ หน่อยครับ"
-    };
-    
-    var subtotal = 2421;
-    var discount = -213;
-    var shippingFee = 43;
-    var total = 43.00m;
-
-
     var statusList = new[] { "Pending", "Paid", "Shipping", "Completed", "Cancelled" };
 
     string statusBadgeClass = "";
@@ -225,7 +165,7 @@
                    </div>
                    <div class="flex items-center gap-2">
                         <i class="ph text-muted-foreground ph-bag"></i>
-                        <p class="font-medium text-primary">@customer.TotalOrder</p>
+                        <p class="font-medium text-primary">@Model.CustomerName</p>
                    </div>
                 </div>
             </div>

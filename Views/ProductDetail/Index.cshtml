@@ -15,16 +15,15 @@
 <div class="mx-10 pt-40 md:mx-40 md:pt-24">
 
     <div class="mt-5 flex items-center pb-6 text-sm">
-        <i class="ph ph-arrow-left text-muted-foreground group"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" class="fill-muted-foreground size-3" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
         <a asp-action="Index" asp-controller="Home" class="text-muted-foreground px-2 group-hover::text-black">Home</a>
-        <img src="~/Icon/right_Icon.svg" class="h-3 w-3" />
         <a asp-action="Index" asp-controller="ProductDetail" class="px-2 font-medium">@Model.Product.Title</a>
     </div>
 
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
+    <div class="grid grid-cols-1 gap-8 md:gap-10 lg:grid-cols-2">
 
         @* Product image: ให้ภาพแสดงเต็มพื้นที่ในมือถือ *@
-        <img src="@Model.Product.PictureUrl" class="h-auto w-full border border-border object-cover" />
+        <img src="@Model.Product.PictureUrl" alt="Product-Image" loading="lazy" class="size-full border border-border object-cover" />
 
         <div class="md:pl-10">
             @* ลด padding บน desktop และใช้ได้ดีใน mobile *@
@@ -121,7 +120,7 @@
                         </div>
 
                         <div class="my-4 flex items-center justify-center overflow-hidden">
-                            <img src="@i.PictureUrl" class="size-24 object-cover md:size-28" />
+                            <img src="@i.PictureUrl" alt="Relate-Product" class="size-24 object-cover md:size-28" />
                         </div>
 
                         <div class="flex flex-col gap-1">

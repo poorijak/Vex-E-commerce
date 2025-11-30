@@ -7,8 +7,6 @@
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
-    @* <link href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css" rel="stylesheet" type="text/css"> *@
-    @* <link rel="stylesheet" href="~/site/nohemi.css" asp-append-version="true" /> *@
 
 </head>
 <body>
@@ -21,7 +19,7 @@
             <div class="relative hidden w-80 flex-col items-center justify-center gap-5 md:flex">
                     <form class="w-full" asp-action="Index" asp-controller="Discover">
                     <input placeholder="Search Product Title" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
-                        <i class="ph ph-magnifying-glass text-muted-foreground absolute top-2.5 left-2.5"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="fill fill-muted-foreground absolute top-2.5 left-2.5 size-4" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
                         <a asp-action="Index" asp-controller="Discover" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
                     </form>
 
@@ -33,7 +31,7 @@
             <div class="relative my-4 flex w-80 flex-col items-center justify-center gap-5 md:hidden">
                 <form class="w-full" asp-action="Index" asp-controller="Discover">
                     <input placeholder="Search Product Title" name="keyword" value="@Context.Request.Query["keyword"]" class="h-9 w-full rounded-full border-[#D9D9D9] border-[0.5px] bg-white pl-8 text-sm placeholder:text-sm placeholder:text-[#D9D9D9]" />
-                    <i class="ph ph-magnifying-glass text-muted-foreground absolute top-2.5 left-2.5"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="fill fill-muted-foreground absolute top-2.5 left-2.5 size-4" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
                     <a asp-action="Index" asp-controller="Discover" class="absolute top-2.5 right-2.5 @(string.IsNullOrWhiteSpace(ViewBag.keyword as string) ? "hidden" : "")"><i class="ph ph-x"></i></a>
                 </form>
 

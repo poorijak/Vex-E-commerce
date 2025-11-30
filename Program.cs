@@ -118,6 +118,12 @@ await SeedRole(app);
 app.Run();
 
 
+using (var scope = app.Services.CreateScope())
+{
+    // เรียกใช้ class ที่เราสร้าง
+    Vex_E_commerce.Data.DbInitializer.Seed(app);
+}
+
 async Task SeedRole(IHost app)
 {
     using (var scope = app.Services.CreateScope())
