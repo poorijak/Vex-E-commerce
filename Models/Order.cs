@@ -85,6 +85,7 @@ namespace Vex_E_commerce.Models
         public int Quantity { get; set; }
 
         public decimal UnitPrice { get; set; }
+        public string? ProductCategory { get; set; }
 
         public decimal LineTotal => UnitPrice * Quantity;
     }
@@ -138,7 +139,7 @@ namespace Vex_E_commerce.Models
     public class ThankyouPageVm
     {
         public List<ProductCardVm> RelateProduct { get; set; } = new List<ProductCardVm>();
-        public string OrderId { get; set; } = string.Empty;
+        public string OrderNumber { get; set; } = string.Empty;
     }
 
 }

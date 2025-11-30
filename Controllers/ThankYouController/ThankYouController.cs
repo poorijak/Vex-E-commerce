@@ -58,7 +58,7 @@ namespace Vex_E_commerce.Controllers
             var vm = new ThankyouPageVm
             {
                 RelateProduct = relateProduct,
-                OrderId = order.OrderNumber
+                OrderNumber = order.OrderNumber
             };
             return View(vm);
         }

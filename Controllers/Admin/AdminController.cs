@@ -93,6 +93,8 @@ namespace Vex_E_commerce.Controllers.Admin
             var totalPages = (int)Math.Ceiling(total / (double)pageSize);
 
             var orders = await ordersQuery
+                .Include(o => o.customer)
+                .AsNoTracking()
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -143,22 +145,61 @@ namespace Vex_E_commerce.Controllers.Admin
                     Note = order.address.Note
                 },
 
-                Items = order.Items.Select(i => new OrderItemVm
+                Items = order.Items
+            .Select(i =>
+            {
+                var variant = i.variant;
+                var product = variant?.Product;
+                var category = product?.Category;   // ถ้า Category เป็น entity
+
+                return new OrderItemVm
                 {
                     OrderItemId = i.Id,
-                    PictureUrl = i.variant.Product.PictureUrl,
-                    ProductTitle = i.variant.Product.Title,
-                    VariantText = $"{i.variant.Color} / {i.variant.Size}",
+                    PictureUrl = product?.PictureUrl ?? "",                // fallback เป็น "" ถ้า null
+                    ProductTitle = product?.Title ?? "(Unknown product)",
+                    ProductCategory = category?.Title ?? "Unknown",              // หรือ category?.ToString() ?? ...
+                    VariantText = variant == null
+                                        ? "-"
+                                        : $"{variant.Color} / {variant.Size}",
                     Quantity = i.quantity,
                     UnitPrice = i.price
-                }).ToList()
+                };
+            })
+            .ToList()
             };
 
             vm.ItemsTotal = vm.Items.Sum(i => i.LineTotal);
-            ViewBag.SubTotal = order.totalAmount ;
+            ViewBag.SubTotal = order.totalAmount;
             ViewBag.Total = order.totalAmount + vm.ShippingFee;
+
+            ViewBag.OrderStatusList = Enum.GetValues(typeof(OrderStatus))
+        .Cast<OrderStatus>()
+        .Select(s => new SelectListItem
+        {
+            Text = s.ToString(),
+            Value = s.ToString(),
+            Selected = s == order.status
+        })
+        .ToList();
             return View(vm);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateOrderStatus(Guid orderId, OrderStatus newStatus)
+        {
+            var order = await _db.orders.FindAsync(orderId);
+            if (order == null) return NotFound();
+
+            order.status = newStatus;
+
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(OrderDetail), new { id = orderId });
+        }
+
 
 
         public async Task<IActionResult> Customer(int page = 1, int pageSize = 5)
@@ -239,18 +280,22 @@ namespace Vex_E_commerce.Controllers.Admin
             var user = await _userManager.FindByIdAsync(vm.Form.Id);
             if (user == null) return NotFound();
 
-            if (vm.Form.Status == user.Status)
-                ModelState.AddModelError("Form.Status", "Existing Status");
-
-            if (vm.Form.Role == user.Role)
-                ModelState.AddModelError("Form.Role", "Existing Role");
-
             if (!ModelState.IsValid)
             {
-                return NotFound();
+                ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
+                    .Cast<UserRole>()
+                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString(), Selected = x == user.Role })
+                    .ToList();
+
+                ViewBag.StatusList = Enum.GetValues(typeof(UserStatus))
+                    .Cast<UserStatus>()
+                    .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString(), Selected = x == user.Status })
+                    .ToList();
+
+                vm.User ??= user;
+                return View(vm);
             }
 
-            // 3) อัปเดตจริง
             user.Role = vm.Form.Role;
             user.Status = vm.Form.Status;
 
@@ -260,7 +305,6 @@ namespace Vex_E_commerce.Controllers.Admin
                 var errors = string.Join("; ", result.Errors.Select(e => e.Description));
                 ModelState.AddModelError("", errors);
 
-                // เติม dropdown กลับก่อน return
                 ViewBag.RoleList = Enum.GetValues(typeof(UserRole))
                     .Cast<UserRole>()
                     .Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString() })
@@ -275,7 +319,8 @@ namespace Vex_E_commerce.Controllers.Admin
                 return View(vm);
             }
 
-            return RedirectToAction("Customer", "Admin");
+            // บันทึกสำเร็จ Redirect กลับมาหน้าเดิมเพื่อให้เห็นค่าใหม่
+            return RedirectToAction(nameof(CustomerDetail), new { id = vm.Form.Id });
         }
 
 

@@ -115,13 +115,13 @@
 
 
 <div class="mx-3">
-   <div class="flex items-center justify-between">
+   <div class="flex flex-col items-start justify-start gap-3 md:flex-row md:items-center md:justify-between">
         <div class="flex gap-3">
-            <a asp-action="Customer" asp-controller="Admin" class="flex size-11 items-center justify-center rounded-sm border border-border bg-transparent hover:bg-muted-foreground/10 hover:cursor-pointer">
+            <a asp-action="Orders" asp-controller="Admin" class="hidden size-11 items-center justify-center rounded-sm border border-border bg-transparent hover:bg-muted-foreground/10 hover:cursor-pointer md:flex">
                 <i class="ph ph-arrow-left text-muted-foreground"></i>
             </a>
             <div>
-                <p class="text-muted-foreground text-sm font-semibold">Back to customer</p>
+                <p class="text-muted-foreground hidden text-sm font-semibold md:flex">Back to Order Management</p>
                 <h1 class="text-lg font-bold">@Model.OrderNumber</h1>
             </div>
         </div>
@@ -137,8 +137,8 @@
         </div>
    </div>
 
-    <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-5">
-        <div class="col-span-3">
+    <div class="mt-4 grid gap-3 md:grid-cols-1 lg:grid-cols-5">
+        <div class="col-span-1 lg:col-span-3">
             <div class="rounded-md border border-border bg-white px-5 py-5">
                 <h1 class="text-lg font-bold">Order Item</h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
@@ -148,20 +148,15 @@
                         <section class="my-2 flex w-full items-center gap-3">
                             <img src="@i.PictureUrl" class="size-13 object-cover" />
                             <div class="flex w-full flex-col gap-2">
-                                <p class="text-muted-foreground">shirt</p>
+                                <p class="text-muted-foreground">@i.ProductCategory</p>
                                 <div class="flex w-full items-center justify-between">
-                                    <p>@i.ProductTitle</p>
-                                    <div class="flex gap-3">
+                                    <p class="text-lg font-semibold">@i.ProductTitle</p>
+                                    <div class="flex items-center justify-center gap-3">
                                         <p>x @i.Quantity</p>
-                                        <p>@i.UnitPrice</p> 
-                                        <form>
-                                            <button class="cursor-pointer">
-                                                <i class="ph ph-trash text-lg text-destructive"></i>
-                                            </button>
-                                        </form>
+                                        <p>@i.UnitPrice</p>
                                     </div>
                                 </div>
-                                <div class="flex gap-3">
+                                <div class="text-muted-foreground flex gap-3 text-sm">
                                     <p>@i.VariantText</p>
     
                                 </div>
@@ -172,7 +167,7 @@
             </div>
 
             <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
-             <h1 class="text-lg font-bold">
+             <h1 class="flex gap-3 text-lg font-bold">
                     Order Summary
                     <span class="rounded-full border px-3 py-1 text-xs font-semibold @statusBadgeClass">
                         @statusLabel
@@ -195,20 +190,42 @@
                 </div>
             </div>
 
+            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
+                <h1 class="text-lg font-bold">Update order status</h1>
+                <div class="my-4 h-px flex-1 border-b border-border"></div>
+                <div class="flex flex-col gap-3">
+                    <form asp-action="UpdateOrderStatus" asp-controller="Admin" method="post" class="flex items-end gap-4">
+                        <input type="hidden" name="orderId" value="@Model.OrderId" />
+
+                        <div class="flex flex-col gap-1">
+                            <label class="text-muted-foreground text-xs">Order Status</label>
+
+                            <select name="newStatus"
+                                    asp-items="ViewBag.OrderStatusList"
+                                    class="min-w-[150px] rounded-sm border border-border bg-white px-3 py-2 text-sm uppercase">
+                            </select>
+                        </div>
+
+                        <button type="submit" class="rounded-sm bg-black px-4 py-2 text-sm text-white transition hover:bg-gray-800">
+                            Update
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <div class="col-span-2 gap-3">
+        <div class="col-span-1 gap-3 lg:col-span-2">
             <div class="rounded-md border border-border bg-white px-5 py-5">
                 <h1 class="text-lg font-bold">Customer</h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
                 <div class="flex flex-col gap-3">
                    <div class="flex items-center gap-2">
-                        <i class="ph ph-user"></i>
-                        <p>@Model.CustomerName</p>
+                        <i class="ph text-muted-foreground ph-user"></i>
+                        <p class="font-medium text-primary">@Model.CustomerEmail</p>
                    </div>
                    <div class="flex items-center gap-2">
-                        <i class="ph ph-bag"></i>
-                        <p>@customer.TotalOrder</p>
+                        <i class="ph text-muted-foreground ph-bag"></i>
+                        <p class="font-medium text-primary">@customer.TotalOrder</p>
                    </div>
                 </div>
             </div>
@@ -217,12 +234,12 @@
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
                 <div class="flex flex-col gap-3">
                    <div class="flex items-center gap-2">
-                        <i class="ph ph-envelope-simple"></i>
-                        <p>@Model.CustomerEmail</p>
+                        <i class="ph text-muted-foreground ph-envelope-simple"></i>
+                        <p class="font-medium text-primary">@Model.CustomerEmail</p>
                    </div>
-                   <div class="flex items-center gap-2">
-                        <i class="ph ph-phone"></i>
-                        <p>@Model.Address.Phone</p>
+                    <div class="text-muted-foreground flex items-center gap-2">
+                        <i class="ph text-muted-foreground ph-phone"></i>
+                        <p class="font-medium text-primary">@Model.Address.Phone</p>
                    </div>
                 </div>
             </div>
@@ -258,17 +275,7 @@
                    </div>
                 </div>
             </div>
-            <div class="my-2 rounded-md border border-border bg-white px-5 py-5">
-                <h1 class="text-lg font-bold">Update order status</h1>
-                <div class="my-4 h-px flex-1 border-b border-border"></div>
-                <div class="flex flex-col gap-3">
-                   <div class="flex items-center gap-2">
-                        <i class="ph ph-envelope-simple"></i>
-
-                        <p>@customer.Name</p>
-                   </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
