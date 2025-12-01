@@ -99,6 +99,12 @@ namespace Vex_E_commerce.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+            _logger.LogInformation("ExternalLogins count: {Count}", ExternalLogins?.Count ?? 0);
+            foreach (var scheme in ExternalLogins)
+            {
+                _logger.LogInformation("External scheme: {Name} ({DisplayName})", scheme.Name, scheme.DisplayName);
+            }
+
             ReturnUrl = returnUrl;
         }
 

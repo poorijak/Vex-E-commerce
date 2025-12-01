@@ -11,41 +11,57 @@ using Vex_E_commerce.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
-builder.Services.AddAuthentication().AddGoogle(googleOption =>
+var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+string Mask(string value)
 {
-    googleOption.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-    googleOption.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    if (string.IsNullOrEmpty(value)) return "NULL";
+    if (value.Length <= 5) return "*****";
+    return value.Substring(0, 5) + "*****";
+}
 
-    googleOption.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
-    googleOption.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+Console.WriteLine($"Google ClientId (masked): {Mask(googleClientId)}");
+Console.WriteLine($"Google ClientSecret (masked): {Mask(googleClientSecret)}");
 
 
-    googleOption.ClaimActions.MapJsonKey("picture", "picture", "url");
 
-});
+if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
+{
+    builder.Services.AddAuthentication().AddGoogle(googleOption =>
+    {
+        googleOption.ClientId = googleClientId;
+        googleOption.ClientSecret = googleClientSecret;
+        googleOption.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+        googleOption.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+        googleOption.ClaimActions.MapJsonKey("picture", "picture", "url");
+    });
+}
 
-// หาบรรทัดนี้ใน Program.cs
 builder.Services.AddHttpClient<CatboxServices>(client =>
 {
-    // เพิ่มบรรทัดนี้: ปลอมตัวเป็น Chrome
     client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
-
-    // (Optional) เพิ่ม Timeout เผื่อไฟล์ใหญ่ (เช่น 2 นาที)
     client.Timeout = TimeSpan.FromMinutes(2);
 });
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -61,10 +77,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
-
-
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -75,55 +87,66 @@ app.Use(async (context, next) =>
     {
         if (!context.User.Identity?.IsAuthenticated ?? true)
         {
-            context.Response.Redirect("/Account/login");
+            context.Response.Redirect("/Account/Login");
             return;
         }
 
         using var scope = context.RequestServices.CreateScope();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Customer>>();
-
         var user = await userManager.GetUserAsync(context.User);
 
         if (user == null)
         {
-            context.Response.Redirect("/Identity/Accout/login");
+            context.Response.Redirect("/Identity/Account/Login");
             return;
         }
-        var role = user.Role;
 
-
-
-
-        if (user.Role.ToString() != "Admin")
+        if (user.Role != UserRole.Admin)
         {
             context.Response.Redirect("/");
             return;
         }
     }
-    await next();
 
+    await next();
 });
 
-
+// 3. Database Migration (Run ก่อน App start เสมอ)
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        // ระวัง: บน Azure ถ้า Database ยังไม่พร้อมหรือ Firewall บล็อค บรรทัดนี้จะใช้เวลานานจน Timeout ได้
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+// 4. Seed Role (Run ก่อน App start)
 await SeedRole(app);
 
-
-
-app.Run();
-
-
+// 5. Seed Data (Run ก่อน App start) - ย้ายมาจากข้างล่าง
 using (var scope = app.Services.CreateScope())
 {
-    // เรียกใช้ class ที่เราสร้าง
     Vex_E_commerce.Data.DbInitializer.Seed(app);
 }
 
+// 6. บรรทัดสุดท้ายต้องเป็น Run เสมอ
+app.Run();
+
+
+// --- Helper Methods ---
 async Task SeedRole(IHost app)
 {
     using (var scope = app.Services.CreateScope())
@@ -141,5 +164,3 @@ async Task SeedRole(IHost app)
         }
     }
 }
-
-
