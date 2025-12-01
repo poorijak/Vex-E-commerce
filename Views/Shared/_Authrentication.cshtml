@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vex_E_commerce</title>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+
+</head>
+<body>
+
+    <header class="fixed z-40 min-w-svw border-b border-border bg-[#fafafa] shadow-sm">
+        <div class="flex h-[76px] items-center justify-between p-5">
+            <div class="text-3xl font-bold">
+                <a href="/">Vex</a>
+            </div>
+            <partial name="_LoginPartial" />
+        </div>
+
+
+
+
+    </header>
+        @RenderBody()
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

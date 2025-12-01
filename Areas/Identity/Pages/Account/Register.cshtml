@@ -1,10 +1,11 @@
 ﻿@page
 @model RegisterModel
 @{
+    Layout = "~/Views/Shared/_Authrentication.cshtml";
     ViewData["Title"] = "Register";
 }
 
-<div class="flex min-h-svh w-full items-center justify-center">
+<div class="flex min-h-svh w-full items-center justify-center pt-28 md:pt-0">
 
 
     <div class="mx-5 flex max-w-md flex-col gap-5 bg-white px-9 py-9 shadow-sm md:mx-0 md:max-w-lg md:px-8">
@@ -83,7 +84,7 @@
 
         </div>
         <div class="flex items-center justify-center">
-            <p class="text-muted-foreground text-sm">Don't have an account? <a class="font-semibold text-primary" asp-page="/Account/Login">Sign up</a></p>
+            <p class="text-muted-foreground text-sm">Don't have an account? <a class="font-semibold text-primary" asp-page="/Account/Login">Sign in</a></p>
         </div>
     </div>
 </div>
