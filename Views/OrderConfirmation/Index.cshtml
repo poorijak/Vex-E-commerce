@@ -2,6 +2,9 @@
 
 @{
 
+    ViewData["Title"] = "Order Confirmation";
+
+
     int index = 1;
 
     Layout = "~/Views/Shared/_ProtectLayout.cshtml";
@@ -44,7 +47,7 @@
 }
 
 
-<div class="font-geist mx-5 pt-44 md:mx-30 md:pt-30">
+<div class="font-geist mx-5 pt-44 md:mx-10 md:pt-30 lg:mx-30">
     <div>
         <div class="flex flex-col gap-2">
             <h1 class="text-xl font-bold md:text-2xl">OrderId - #@Model.OrderNumber</h1>

@@ -4,6 +4,9 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+
+    ViewData["Title"] = "Edit Product";
+
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var profilePicture = "/images/Avatar/Avatar.webp";
 
@@ -143,9 +146,6 @@
                                 for (int i = 0; i < Model.Variants.Count; i++)
                                 {
                                     <tr>
-                                        <!-- ชื่อคอลัมน์ใน header ของคุณมีซ้ำ "Price" สองช่อง
-                                             ด้านล่างผมใช้คอลัมน์: SKU | Price | Color | Size | Stock | Action -->
-
                                         <td class="px-3 py-2">
                                             <input asp-for="Variants[i].Sku"
                                                    class="w-44 rounded-sm border border-border px-2 py-1" />
