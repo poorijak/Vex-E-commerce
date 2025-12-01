@@ -4,6 +4,8 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Order Detail";
+
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
     var colorList = new[]
@@ -83,26 +85,37 @@
                 <h1 class="text-lg font-bold">Order Item</h1>
                 <div class="my-4 h-px flex-1 border-b border-border"></div>
               <div class="my-4 flex flex-col gap-3">
-                    @foreach (var i in Model.Items)
+                    @if (Model?.Items != null && Model.Items.Any())
                     {
-                        <section class="my-2 flex w-full items-center gap-3">
-                            <img src="@i.PictureUrl" class="size-13 object-cover" />
-                            <div class="flex w-full flex-col gap-2">
-                                <p class="text-muted-foreground">@i.ProductCategory</p>
-                                <div class="flex w-full items-center justify-between">
-                                    <p class="text-lg font-semibold">@i.ProductTitle</p>
-                                    <div class="flex items-center justify-center gap-3">
-                                        <p>x @i.Quantity</p>
-                                        <p>@i.UnitPrice</p>
+                        foreach (var i in Model.Items)
+                        {
+                            <section class="my-2 flex w-full items-center gap-3">
+                                <img src="@i.PictureUrl" class="size-13 object-cover" />
+
+                                <div class="flex w-full flex-col gap-2">
+                                    <p class="text-muted-foreground">@i.ProductCategory</p>
+
+                                    <div class="flex w-full items-center justify-between">
+                                        <p class="text-lg font-semibold">@i.ProductTitle</p>
+
+                                        <div class="flex items-center justify-center gap-3">
+                                            <p>x @i.Quantity</p>
+                                            <p>@i.UnitPrice</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-muted-foreground flex gap-3 text-sm">
+                                        <p>@i.VariantText</p>
                                     </div>
                                 </div>
-                                <div class="text-muted-foreground flex gap-3 text-sm">
-                                    <p>@i.VariantText</p>
-    
-                                </div>
-                            </div>
-                        </section>
+                            </section>
+                        }
                     }
+                    else
+                    {
+                        <p class="text-muted-foreground text-sm">ไม่มีรายการสินค้า</p>
+                    }
+
               </div>
             </div>
 

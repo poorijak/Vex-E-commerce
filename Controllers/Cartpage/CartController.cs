@@ -77,7 +77,7 @@ namespace Vex_E_commerce.Controllers.Cartpage
             }
 
             await _db.SaveChangesAsync();
-            return RedirectToAction("index" , "ProductDetail" , new { id = dto.ProductId});
+            return Ok(new { success = true, message = "Added to cart", cartId = cart.Id });
         }
         [HttpGet("view/{id}")]
         public async Task<IActionResult> ViewCart(Guid id)
@@ -188,9 +188,18 @@ namespace Vex_E_commerce.Controllers.Cartpage
         }
 
 
+        [HttpGet("GetCartCount")]
+        public async Task<IActionResult> GetCartCount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Json(new { count = 0 });
 
+            var count = _db.CartItems
+                           .Where(ci => ci.Cart.UserId == user.Id)
+                           .Sum(ci => ci.Quantity);
 
-
+            return Json(new { count = count });
+        }
     }
 
     public class AddToCartDto

@@ -1,6 +1,8 @@
 ﻿@model Vex_E_commerce.Models.ProductDetailDTO;
 
 @{
+
+
     ViewData["Title"] = "รายการสินค้า";
 
     var colorList = new[]
@@ -12,7 +14,7 @@
 
 }
 
-<div class="mx-10 pt-40 md:mx-40 md:pt-24">
+<div class="mx-10 pt-40 md:mx-10 md:pt-24 lg:mx-40">
 
     <div class="mt-5 flex items-center pb-6 text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="fill-muted-foreground size-3" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
@@ -69,7 +71,7 @@
 
                            <div>
                                 <input type="radio" id="size-@size.ToLower()" name="Size" value="@size" class="peer hidden" @(stock <= 0 ? "disabled" : "") />
-                                <label for="size-@size.ToLower()" class="duration- 50 flex w-16 cursor-pointer items-center justify-center rounded
+                                <label for="size-@size.ToLower()" class="duration- 50 flex w-20 cursor-pointer items-center justify-center rounded
                                             border border-black bg-white px-1
                                             py-2 text-center text-sm
                                             text-black transition peer-checked:border-black peer-checked:bg-black
@@ -217,47 +219,33 @@
             });
 
         });
-
-
-
-
-
-        // Highlight size เมื่อเลือก (Tailwind peer-checked ใช้แล้ว)
-
-
-
-        // Submit form เดิม
-
-        document.getElementById("addToCartForm").addEventListener("submit", async function (e) {
-
+               document.getElementById("addToCartForm").addEventListener("submit", async function (e) {
             e.preventDefault();
-
-
 
             const formData = new FormData(this);
 
+            try {
+                const res = await fetch("/cart/add", { 
+                    method: "POST",
+                    body: formData
+                });
 
+                const contentType = res.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Server did not return JSON. Probably 404 or 500 error.");
+                }
 
-            const res = await fetch("/cart/add", {
+                const json = await res.json();
 
-                method: "POST",
+                if (res.ok && json.success) {
+                    refreshCartCount();
 
-                body: formData
-
-            });
-
-
-
-            const json = await res.json();
-
-
-
-            if (json.ok) {
-
-                window.location.href = "/cart/view/" + json.cartId;
-
+                } else {
+                    return
+                }
+            } catch (error) {
+                console.error("Error adding to cart:", error);
             }
-
         });
 
     </script>
