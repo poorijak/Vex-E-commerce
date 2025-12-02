@@ -27,12 +27,19 @@
 
         <div class="flex items-center justify-center gap-4">
 
-            @* --- ส่วนตะกร้าสินค้า (Cart) --- *@
+
+            <div>
+                <button type="button" id="header-search-toggle" class="flex items-center justify-center md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 256 256">
+                        <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                    </svg>
+                </button>
+            </div>
+
             <div class="relative">
                 <a href="/cart" class="flex items-center justify-center" aria-label="Link to Cart Page">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-6 fill-primary" viewBox="0 0 256 256"><path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"></path></svg>
-
-                    @* ✅ Badge: ใช้ Class hidden แทน if เพื่อให้ Element ยังคงอยู่ให้ JS หาเจอ *@
+                                                                                                                         
                     <div id="cart-badge"
                          class="@(cartCount > 0 ? "" : "hidden") absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-red-600">
                         <span id="cart-count-text" class="flex items-center justify-center font-medium text-[9px] text-white">
@@ -41,11 +48,8 @@
                     </div>
                 </a>
             </div>
-
-            @* --- ส่วน Wishlist --- *@
-            <a href="/wishlist" class="flex items-center justify-center" aria-label="Link to Wishlist page">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-6 fill-primary" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
-            </a>
+           
+          
 
             @* --- ส่วน Profile Dropdown --- *@
             <div class="relative inline-block text-left transition-all duration-150">
@@ -73,6 +77,16 @@
 
                         <div class="mt-3">
                             <div class="mb-3 ml-2"><p class="text-sm underline">Menu</p></div>
+                            <a href="/MyOrder" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 hover:text-black">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                <span class="font-medium">My Orders</span>
+                            </a>
+                            <a href="/wishlist" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100" aria-label="Link to Wishlist page">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 fill-primary" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
+                                Wishlist
+                            </a>
                             @if (user.Role.ToString() == "Admin")
                             {
                                 <a asp-controller="Admin" asp-action="Index" class="flex items-center gap-2 rounded-sm px-4 py-2 text-sm hover:bg-gray-100">
@@ -82,8 +96,8 @@
                             }
                             <div class="my-1 h-px flex-1 bg-border"></div>
                             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="block w-full">
-                                <button type="submit" class="flex w-full items-center gap-2 rounded-sm px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 256 256"><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
+                                <button type="submit" class="flex w-full items-center gap-2 rounded-sm px-4 py-2 text-left text-sm text-primary hover:bg-gray-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 256 256"><path d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"></path></svg>
                                     Sign out
                                 </button>
                             </form>
